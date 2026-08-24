@@ -22,6 +22,12 @@ export const metadata = {
     icon: '/marca/icone-32.png',
     apple: '/marca/icone-180.png',
   },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  openGraph: {
+    description: 'Site institucional em preparacao.',
+    images: ['/og.png'],
+    title: 'Site institucional',
+  },
   title: 'Site institucional',
 }
 

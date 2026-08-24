@@ -21,6 +21,9 @@ export default async function HomePage() {
         <nav aria-label="Navegacao principal">
           <a href="#orientacao">Orientacao</a>
           <a href="#contato">Contato</a>
+          <a className="nav-action" href="/ir/whatsapp">
+            WhatsApp
+          </a>
         </nav>
       </header>
 
@@ -32,6 +35,11 @@ export default async function HomePage() {
             Cada caso e unico. O primeiro contato pode ser feito de forma simples e
             com linguagem clara.
           </p>
+          <div className="hero-tags" aria-label="Pontos do atendimento">
+            <span>Escuta inicial</span>
+            <span>Analise tecnica</span>
+            <span>Comunicação simples</span>
+          </div>
           <div className="actions">
             <a className="button button-primary" href="/ir/whatsapp">
               Abrir WhatsApp
@@ -41,35 +49,60 @@ export default async function HomePage() {
             </a>
           </div>
         </div>
-        <div className="hero-mark" aria-hidden="true">
-          <Image alt="" height={420} priority src="/marca/dp-vertical.png" unoptimized width={420} />
+        <div className="hero-visual" aria-hidden="true">
+          <Image
+            alt=""
+            className="hero-photo"
+            height={900}
+            priority
+            src="/imagens/hero-consultoria-dp.webp"
+            unoptimized
+            width={1350}
+          />
+          <div className="hero-visual-badge">
+            <Image alt="" height={92} src="/marca/dp-simbolo.png" unoptimized width={92} />
+          </div>
         </div>
+      </section>
+
+      <section className="feature-rail" aria-label="Resumo do atendimento">
+        <article>
+          <span>01</span>
+          <strong>Primeiro contato acessivel</strong>
+        </article>
+        <article>
+          <span>02</span>
+          <strong>Leitura cuidadosa do caso</strong>
+        </article>
+        <article>
+          <span>03</span>
+          <strong>Proximas etapas explicadas com clareza</strong>
+        </article>
       </section>
 
       <section className="band dark-band" id="orientacao" aria-labelledby="titulo-orientacao">
         <div className="section-inner">
-          <p className="eyebrow">Orientacao</p>
-          <h2 id="titulo-orientacao">Informacao clara para uma primeira conversa.</h2>
+          <div className="section-heading">
+            <p className="eyebrow">Orientacao</p>
+            <h2 id="titulo-orientacao">Informacao clara para uma primeira conversa.</h2>
+          </div>
           <div className="principles">
-            <article>
-              <span>01</span>
-              <h3>Escuta inicial</h3>
-              <p>O relato e recebido para entender o contexto antes de qualquer encaminhamento.</p>
+            <article className="principle-large">
+              <span>Escuta</span>
+              <h3>O relato vem primeiro.</h3>
+              <p>O contexto do caso orienta quais documentos e caminhos podem ser avaliados.</p>
             </article>
             <article>
-              <span>02</span>
-              <h3>Analise tecnica</h3>
-              <p>Documentos e datas ajudam a verificar quais caminhos podem ser avaliados.</p>
+              <span>Documentos</span>
+              <h3>Organizacao desde o inicio.</h3>
+              <p>Datas, comprovantes e historico ajudam a tornar a conversa mais objetiva.</p>
             </article>
             <article>
-              <span>03</span>
-              <h3>Comunicação simples</h3>
-              <p>As proximas etapas sao explicadas com cuidado, conforme as particularidades do caso.</p>
+              <span>Clareza</span>
+              <h3>Sem excesso de formalidade.</h3>
+              <p>As proximas etapas sao explicadas conforme as particularidades da situacao.</p>
             </article>
           </div>
-          <a className="button button-gold" href="/ir/whatsapp">
-            Abrir WhatsApp
-          </a>
         </div>
       </section>
 
@@ -78,8 +111,18 @@ export default async function HomePage() {
           <div>
             <p className="eyebrow">Contato</p>
             <h2 id="titulo-contato">Entenda se o atendimento se aplica ao seu caso.</h2>
+            <p className="section-copy">
+              O WhatsApp e o caminho mais simples para iniciar a conversa.
+            </p>
           </div>
           <div className="contact-panel">
+            <Image
+              alt=""
+              height={76}
+              src="/marca/dp-simbolo.png"
+              unoptimized
+              width={76}
+            />
             <p>Use o WhatsApp para iniciar uma conversa sobre a sua situacao.</p>
             <a className="button button-primary" href="/ir/whatsapp">
               Abrir WhatsApp
