@@ -9,9 +9,11 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { LeadSubmissions } from './collections/LeadSubmissions'
 import { SiteConfig } from './globals/SiteConfig'
+import { assertExpectedDatabase } from './lib/dbGuard'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+assertExpectedDatabase()
 
 export default buildConfig({
   admin: {
@@ -31,6 +33,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
   sharp,
   plugins: [],
