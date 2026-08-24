@@ -1,4 +1,4 @@
-export const CAMPAIGN_CODE_REGEX = /^[A-Z]{2,6}(-[A-Z0-9]{2,10})+-\d{2}$/
+export const CAMPAIGN_CODE_REGEX = /^[A-Z]{2,6}(-[A-Z0-9]{2,12}){1,3}$/
 
 export const UTM_COOKIE = 'utm_first'
 

@@ -13,12 +13,17 @@ sozinho. Se um dos roteiros exigir mudança aqui, pare e escale ao usuário.
 
 ## 1. Código de campanha
 
-Formato: `<AREA>-<PUBLICO>-<NN>` — maiúsculas, sem acento, sem espaço.
+Formato: `<AREA>-<SEGMENTO...>` — maiúsculas, sem acento, sem espaço. O
+código aceita de 1 a 3 segmentos após a área, porque as campanhas reais já
+existem no EspoCRM e nem todas usam sufixo numérico.
 
 ```
-regex: ^[A-Z]{2,6}(-[A-Z0-9]{2,10})+-\d{2}$
-exemplos: PREV-RURAL-01  BPC-PCD-01  DIG-CONTA-01  PEN-URGENCIA-01
+regex: ^[A-Z]{2,6}(-[A-Z0-9]{2,12}){1,3}$
+exemplos: PREV-BPC  TRAB-JUSTACAUSA  PREV-INCAPACIDADE  PREV-RURAL-01
 ```
+
+Esta mudança de regex precisa valer também para o site de Cavalcante
+Albuquerque; o contrato é compartilhado entre os dois sites.
 
 **A campanha nasce no EspoCRM.** O código é criado lá, depois copiado para o
 CMS, depois para o `utm_campaign` do anúncio. Landing publicada com código que

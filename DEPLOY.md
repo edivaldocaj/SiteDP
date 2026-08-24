@@ -79,3 +79,15 @@ pnpm migrate:status
 Nunca rode migrations se `EXPECTED_DB_NAME` nao estiver como `site_dp`. O
 guardiao bloqueia divergencia entre `DATABASE_URI` e `EXPECTED_DB_NAME` antes
 do Payload abrir conexao.
+
+## Seed de campanhas
+
+Depois da migration, sincronize os codigos ja criados no EspoCRM:
+
+```bash
+pnpm seed:campanhas
+```
+
+O seed cria as campanhas como `rascunho`. Apenas `PREV-BPC`, `PREV-RURAL` e
+`TRAB-RESCISAO` ficam com `temLanding=true`, ainda com conteudo marcado como
+`[A FORNECER]` ate a Dra. Deila revisar e publicar.

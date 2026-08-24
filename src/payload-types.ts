@@ -69,6 +69,8 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    'lead-submissions': LeadSubmission;
+    campaigns: Campaign;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,17 +80,23 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'lead-submissions': LeadSubmissionsSelect<false> | LeadSubmissionsSelect<true>;
+    campaigns: CampaignsSelect<false> | CampaignsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-config': SiteConfig;
+  };
+  globalsSelect: {
+    'site-config': SiteConfigSelect<false> | SiteConfigSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -122,7 +130,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -147,7 +155,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -163,10 +171,122 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-submissions".
+ */
+export interface LeadSubmission {
+  id: number;
+  idempotencia: string;
+  enviadoEm: string;
+  escritorio: 'DP';
+  telefone: string;
+  nome?: string | null;
+  email?: string | null;
+  campanha?: string | null;
+  origem: 'landing' | 'contato' | 'calculadora';
+  utm?: {
+    source?: string | null;
+    medium?: string | null;
+    campaign?: string | null;
+    content?: string | null;
+    term?: string | null;
+  };
+  referrer?: string | null;
+  respostas?:
+    | {
+        pergunta: string;
+        resposta: string;
+        id?: string | null;
+      }[]
+    | null;
+  consentAceito?: boolean | null;
+  consentVersao?: string | null;
+  consentEm?: string | null;
+  consentIp?: string | null;
+  status: 'pendente' | 'entregue' | 'rejeitada' | 'falha';
+  tentativas?: number | null;
+  ultimoErro?: string | null;
+  leadIdCrm?: string | null;
+  /**
+   * Registro criado pela etapa 1 do formulario, antes do consentimento.
+   */
+  capturaParcial?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns".
+ */
+export interface Campaign {
+  id: number;
+  /**
+   * Código criado primeiro no EspoCRM. Copie de lá.
+   */
+  campaignCode: string;
+  slug: string;
+  temLanding?: boolean | null;
+  titulo?: string | null;
+  subtitulo?: string | null;
+  midiaTopo?: (number | null) | Media;
+  blocoDor?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  blocoProva?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  perguntas?:
+    | {
+        pergunta: string;
+        tipo: 'texto' | 'data' | 'opcoes';
+        opcoes?:
+          | {
+              opcao: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  mensagemWhatsapp?: string | null;
+  seo?: {
+    titulo?: string | null;
+    descricao?: string | null;
+    ogImage?: (number | null) | Media;
+  };
+  status: 'rascunho' | 'publicada';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,20 +303,28 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'lead-submissions';
+        value: number | LeadSubmission;
+      } | null)
+    | ({
+        relationTo: 'campaigns';
+        value: number | Campaign;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -206,10 +334,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -229,7 +357,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -277,6 +405,86 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-submissions_select".
+ */
+export interface LeadSubmissionsSelect<T extends boolean = true> {
+  idempotencia?: T;
+  enviadoEm?: T;
+  escritorio?: T;
+  telefone?: T;
+  nome?: T;
+  email?: T;
+  campanha?: T;
+  origem?: T;
+  utm?:
+    | T
+    | {
+        source?: T;
+        medium?: T;
+        campaign?: T;
+        content?: T;
+        term?: T;
+      };
+  referrer?: T;
+  respostas?:
+    | T
+    | {
+        pergunta?: T;
+        resposta?: T;
+        id?: T;
+      };
+  consentAceito?: T;
+  consentVersao?: T;
+  consentEm?: T;
+  consentIp?: T;
+  status?: T;
+  tentativas?: T;
+  ultimoErro?: T;
+  leadIdCrm?: T;
+  capturaParcial?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns_select".
+ */
+export interface CampaignsSelect<T extends boolean = true> {
+  campaignCode?: T;
+  slug?: T;
+  temLanding?: T;
+  titulo?: T;
+  subtitulo?: T;
+  midiaTopo?: T;
+  blocoDor?: T;
+  blocoProva?: T;
+  perguntas?:
+    | T
+    | {
+        pergunta?: T;
+        tipo?: T;
+        opcoes?:
+          | T
+          | {
+              opcao?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  mensagemWhatsapp?: T;
+  seo?:
+    | T
+    | {
+        titulo?: T;
+        descricao?: T;
+        ogImage?: T;
+      };
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -314,6 +522,112 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-config".
+ */
+export interface SiteConfig {
+  id: number;
+  razaoSocial: string;
+  titular: string;
+  oab: string;
+  cnpj?: string | null;
+  endereco?:
+    | {
+        cidade?: string | null;
+        uf?: string | null;
+        logradouro?: string | null;
+        bairro?: string | null;
+        cep?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  telefoneWhatsapp: string;
+  telefoneFixo?: string | null;
+  emails?:
+    | {
+        email: string;
+        id?: string | null;
+      }[]
+    | null;
+  instagram?: string | null;
+  facebook?: string | null;
+  areasDeAtuacao?:
+    | {
+        nome: string;
+        id?: string | null;
+      }[]
+    | null;
+  horarioAtendimento?: string | null;
+  textoConsentimento: string;
+  consentimentoVersao: string;
+  /**
+   * Texto exibido no atalho fixo para /ir/whatsapp?c=PREV-EXIGENCIA.
+   */
+  urgenciaTexto?: string | null;
+  /**
+   * Aviso sobre senhas do gov.br, Meu INSS, banco e codigos de SMS. Texto fornecido pelo escritorio.
+   */
+  avisoGolpeTexto?: string | null;
+  marca?: {
+    logo?: (number | null) | Media;
+    logoClaro?: (number | null) | Media;
+    favicon?: (number | null) | Media;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-config_select".
+ */
+export interface SiteConfigSelect<T extends boolean = true> {
+  razaoSocial?: T;
+  titular?: T;
+  oab?: T;
+  cnpj?: T;
+  endereco?:
+    | T
+    | {
+        cidade?: T;
+        uf?: T;
+        logradouro?: T;
+        bairro?: T;
+        cep?: T;
+        id?: T;
+      };
+  telefoneWhatsapp?: T;
+  telefoneFixo?: T;
+  emails?:
+    | T
+    | {
+        email?: T;
+        id?: T;
+      };
+  instagram?: T;
+  facebook?: T;
+  areasDeAtuacao?:
+    | T
+    | {
+        nome?: T;
+        id?: T;
+      };
+  horarioAtendimento?: T;
+  textoConsentimento?: T;
+  consentimentoVersao?: T;
+  urgenciaTexto?: T;
+  avisoGolpeTexto?: T;
+  marca?:
+    | T
+    | {
+        logo?: T;
+        logoClaro?: T;
+        favicon?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

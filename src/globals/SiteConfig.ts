@@ -130,6 +130,23 @@ export const SiteConfig: GlobalConfig = {
       required: true,
     },
     {
+      name: 'urgenciaTexto',
+      label: 'Texto do atalho de urgencia',
+      type: 'textarea',
+      admin: {
+        description: 'Texto exibido no atalho fixo para /ir/whatsapp?c=PREV-EXIGENCIA.',
+      },
+    },
+    {
+      name: 'avisoGolpeTexto',
+      label: 'Texto do aviso de golpe',
+      type: 'textarea',
+      admin: {
+        description:
+          'Aviso sobre senhas do gov.br, Meu INSS, banco e codigos de SMS. Texto fornecido pelo escritorio.',
+      },
+    },
+    {
       name: 'marca',
       label: 'Marca',
       type: 'group',

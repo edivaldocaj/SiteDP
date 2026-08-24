@@ -14,6 +14,9 @@ type UntypedPayload = {
 
 type LeadRecord = {
   id: string | number
+  capturaParcial?: boolean | null
+  consentAceito?: boolean | null
+  nome?: string | null
   tentativas?: number | null
 }
 
@@ -38,7 +41,14 @@ export async function deliverLead(id: string | number) {
     id,
   })
 
-  if (!record || record.status === 'entregue' || record.status === 'rejeitada') {
+  if (
+    !record ||
+    record.status === 'entregue' ||
+    record.status === 'rejeitada' ||
+    record.capturaParcial ||
+    !record.consentAceito ||
+    !record.nome
+  ) {
     return
   }
 

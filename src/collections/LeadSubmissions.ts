@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-const campaignCodeRegex = /^[A-Z]{2,6}(-[A-Z0-9]{2,10})+-\d{2}$/
+import { CAMPAIGN_CODE_REGEX } from '../lib/integration/constants'
 
 const adminOnly = ({ req }: { req: { user?: unknown } }) => Boolean(req.user)
 
@@ -51,7 +51,6 @@ export const LeadSubmissions: CollectionConfig = {
     {
       name: 'nome',
       type: 'text',
-      required: true,
     },
     {
       name: 'email',
@@ -62,9 +61,9 @@ export const LeadSubmissions: CollectionConfig = {
       type: 'text',
       validate: (value: unknown) => {
         if (!value) return true
-        return typeof value === 'string' && campaignCodeRegex.test(value)
+        return typeof value === 'string' && CAMPAIGN_CODE_REGEX.test(value)
           ? true
-          : 'Use o formato do contrato, como PREV-RURAL-01.'
+          : 'Use o formato do contrato, como PREV-BPC.'
       },
     },
     {
@@ -103,17 +102,14 @@ export const LeadSubmissions: CollectionConfig = {
     {
       name: 'consentAceito',
       type: 'checkbox',
-      required: true,
     },
     {
       name: 'consentVersao',
       type: 'text',
-      required: true,
     },
     {
       name: 'consentEm',
       type: 'date',
-      required: true,
     },
     {
       name: 'consentIp',
@@ -144,6 +140,14 @@ export const LeadSubmissions: CollectionConfig = {
     {
       name: 'leadIdCrm',
       type: 'text',
+    },
+    {
+      name: 'capturaParcial',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Registro criado pela etapa 1 do formulario, antes do consentimento.',
+      },
     },
   ],
 }

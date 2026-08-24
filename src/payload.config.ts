@@ -8,6 +8,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { LeadSubmissions } from './collections/LeadSubmissions'
+import { Campaigns } from './collections/Campaigns'
 import { SiteConfig } from './globals/SiteConfig'
 import { assertExpectedDatabase } from './lib/dbGuard'
 
@@ -22,7 +23,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, LeadSubmissions],
+  collections: [Users, Media, LeadSubmissions, Campaigns],
   globals: [SiteConfig],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

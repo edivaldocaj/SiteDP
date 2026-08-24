@@ -1,8 +1,10 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
+import { getCampaignByCode } from '@/lib/campaigns'
 import { notifyWhatsappClick } from '@/lib/integration/n8n'
 import { getReferrer } from '@/lib/integration/request'
 import { getUtmFromRequest, normalizeCampaign, resolveCampaign } from '@/lib/integration/utm'
+import { getPublicText } from '@/lib/siteConfig'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,13 +23,15 @@ function generateClickToken() {
   return Array.from(bytes, (byte) => alphabet[byte % alphabet.length]).join('')
 }
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const token = generateClickToken()
   const urlCampaign = normalizeCampaign(request.nextUrl.searchParams.get('c'))
   const origem = request.nextUrl.searchParams.get('o') || 'site'
   const utm = getUtmFromRequest(request)
   const campanha = resolveCampaign({ current: utm, fallback: urlCampaign })
   const em = new Date().toISOString()
+  const campaign = campanha ? await getCampaignByCode(campanha) : null
+  const campaignMessage = getPublicText(campaign?.mensagemWhatsapp)
 
   void notifyWhatsappClick({
     campanha,
@@ -39,7 +43,7 @@ export function GET(request: NextRequest) {
     utm,
   })
 
-  const mensagem = encodeURIComponent(`Vamos conversar sobre o seu direito? [${token}]`)
+  const mensagem = encodeURIComponent(`${campaignMessage || 'Vamos conversar sobre o seu direito?'} [${token}]`)
   const numero = getRequiredEnv('WHATSAPP_NUMERO')
 
   return NextResponse.redirect(`https://wa.me/${numero}?text=${mensagem}`, 302)

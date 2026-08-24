@@ -44,6 +44,11 @@ export async function POST(request: NextRequest) {
             less_than: 6,
           },
         },
+        {
+          capturaParcial: {
+            not_equals: true,
+          },
+        },
       ],
     },
   })

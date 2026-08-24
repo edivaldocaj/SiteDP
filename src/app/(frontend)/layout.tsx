@@ -2,6 +2,8 @@ import React from 'react'
 import { Cormorant_Garamond, Montserrat } from 'next/font/google'
 import './styles.css'
 import { UtmTracker } from './UtmTracker'
+import { SiteFooter } from '@/components/SiteFooter'
+import { UrgencyShortcut } from '@/components/UrgencyShortcut'
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -40,6 +42,8 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       <body className={`${cormorant.variable} ${montserrat.variable}`}>
         <UtmTracker />
         <main>{children}</main>
+        <SiteFooter />
+        <UrgencyShortcut />
       </body>
     </html>
   )

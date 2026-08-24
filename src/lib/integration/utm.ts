@@ -52,12 +52,15 @@ export function parseUtmCookie(value?: string) {
 
 export function getUtmFromRequest(request: NextRequest) {
   const current = getUtmFromSearchParams(request.nextUrl.searchParams)
+  const stored = parseUtmCookie(request.cookies.get(UTM_COOKIE)?.value)
 
-  if (hasAnyUtm(current)) {
-    return current
+  return {
+    source: current.source || stored.source || null,
+    medium: current.medium || stored.medium || null,
+    campaign: current.campaign || stored.campaign || null,
+    content: current.content || stored.content || null,
+    term: current.term || stored.term || null,
   }
-
-  return parseUtmCookie(request.cookies.get(UTM_COOKIE)?.value)
 }
 
 export function resolveCampaign({

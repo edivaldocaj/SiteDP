@@ -60,6 +60,27 @@ Por campanha, e nunca reaproveitado entre campanhas:
 **O sistema bloqueia campanha com texto igual ao de outra.** Texto de template
 repetido derruba conversão e o índice de qualidade do anúncio.
 
+Campanhas criadas em rascunho pelo seed, com campos editoriais marcados como
+`[A FORNECER]` quando `temLanding=true`:
+
+- [ ] PREV-EXIGENCIA — codigo para urgencia, sem landing
+- [ ] PREV-BPC — titulo, subtitulo, dor, prova, 2 a 4 perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] PREV-RURAL — titulo, subtitulo, dor, prova, 2 a 4 perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] PREV-INCAPACIDADE — sem landing
+- [ ] TRAB-RESCISAO — titulo, subtitulo, dor, prova, primeira pergunta obrigatoria como data de saida, demais perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] PREV-PENSAO — sem landing
+- [ ] PREV-MATERNIDADE — sem landing
+- [ ] TRAB-HORAS — sem landing
+- [ ] TRAB-JUSTACAUSA — sem landing
+- [ ] TRAB-INDIRETA — sem landing
+- [ ] TRAB-INSALUBRE — sem landing
+- [ ] PREV-REVISAO — sem landing
+
+Textos globais pendentes no `SiteConfig`:
+
+- [ ] Texto do atalho de urgencia para `/ir/whatsapp?c=PREV-EXIGENCIA`
+- [ ] Aviso de golpe sobre senhas do gov.br, Meu INSS, banco e codigos de SMS
+
 ---
 
 ## Sobre a redação

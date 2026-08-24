@@ -2,6 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
+import { FraudWarning } from '@/components/FraudWarning'
+
 import './styles.css'
 
 export default async function HomePage() {
@@ -127,20 +129,10 @@ export default async function HomePage() {
             <a className="button button-primary" href="/ir/whatsapp">
               Abrir WhatsApp
             </a>
+            <FraudWarning />
           </div>
         </div>
       </section>
-
-      <footer className="site-footer">
-        <Image
-          alt="Marca do escritorio"
-          height={54}
-          src="/marca/dp-horizontal-claro.png"
-          unoptimized
-          width={240}
-        />
-        <p>Publicidade advocaticia informativa.</p>
-      </footer>
     </div>
   )
 }
