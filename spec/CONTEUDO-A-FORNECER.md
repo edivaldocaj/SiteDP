@@ -12,8 +12,8 @@ O agente mantém esta lista atualizada conforme os campos forem criados.
 ## Bloqueia a Fase 0
 
 - [ ] **Cidades.** Só Natal, ou Goianinha e Natal? Fontes divergem.
-- [ ] **Áreas de atuação.** Confirmar a lista. Divergência entre as fontes:
-      salário-maternidade aparece em uma, Trabalhista em outra.
+- [x] **Áreas de atuação confirmadas.** Previdenciário, Assistencial e
+      Trabalhista.
 - [ ] Endereço completo de cada unidade, com CEP
 - [ ] CNPJ e razão social exata
 - [ ] Telefone fixo, se houver, e e-mails de contato
