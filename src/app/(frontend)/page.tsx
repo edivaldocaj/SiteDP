@@ -14,6 +14,7 @@ export default async function HomePage() {
             height={64}
             priority
             src="/marca/dp-horizontal.png"
+            unoptimized
             width={284}
           />
         </Link>
@@ -41,7 +42,7 @@ export default async function HomePage() {
           </div>
         </div>
         <div className="hero-mark" aria-hidden="true">
-          <Image alt="" height={420} priority src="/marca/dp-vertical.png" width={420} />
+          <Image alt="" height={420} priority src="/marca/dp-vertical.png" unoptimized width={420} />
         </div>
       </section>
 
@@ -92,6 +93,7 @@ export default async function HomePage() {
           alt="Marca do escritorio"
           height={54}
           src="/marca/dp-horizontal-claro.png"
+          unoptimized
           width={240}
         />
         <p>Publicidade advocaticia informativa.</p>

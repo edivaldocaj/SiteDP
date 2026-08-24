@@ -78,7 +78,7 @@ export default function StyleGuidePage() {
               className={file.includes('claro') || file.includes('simbolo') ? 'logo-card dark' : 'logo-card'}
               key={file}
             >
-              <Image alt={label} height={130} src={`/marca/${file}`} width={280} />
+              <Image alt={label} height={130} src={`/marca/${file}`} unoptimized width={280} />
               <p>{label}</p>
             </article>
           ))}
