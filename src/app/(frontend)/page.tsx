@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 
 import { FraudWarning } from '@/components/FraudWarning'
+import { WhatsAppIcon } from '@/components/WhatsAppIcon'
 import { getPublishedLandingCampaigns, type PublicCampaign } from '@/lib/campaigns'
 import { getPublicText } from '@/lib/siteConfig'
 
@@ -68,6 +69,7 @@ export default async function HomePage() {
           </div>
           <div className="actions">
             <a className="button button-primary" href="/ir/whatsapp">
+              <WhatsAppIcon />
               Abrir WhatsApp
             </a>
             <a className="button button-secondary button-on-dark" href="#campanhas">
@@ -97,26 +99,6 @@ export default async function HomePage() {
                 <p>{area.description}</p>
               </article>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="trust-band" aria-label="Resumo do atendimento">
-        <div className="trust-inner">
-          <p>Atendimento pensado para conversa direta, documentos organizados e linguagem clara.</p>
-          <div className="trust-grid">
-            <div>
-              <strong>{campaigns.length || 11}</strong>
-              <span>campanhas estruturadas</span>
-            </div>
-            <div>
-              <strong>3</strong>
-              <span>frentes de atendimento</span>
-            </div>
-            <div>
-              <strong>1</strong>
-              <span>conversa objetiva desde o inicio</span>
-            </div>
           </div>
         </div>
       </section>
@@ -184,13 +166,14 @@ export default async function HomePage() {
             <p className="eyebrow">Contato</p>
             <h2 id="titulo-contato">Inicie pelo caminho mais simples.</h2>
             <p className="section-copy">
-              O WhatsApp direciona a conversa e preserva os códigos de campanha usados pelo CRM.
+              O WhatsApp preserva o assunto escolhido e facilita a continuidade da conversa.
             </p>
           </div>
           <div className="contact-panel">
             <Image alt="" height={76} src="/marca/dp-simbolo.png" unoptimized width={76} />
             <p>Use o WhatsApp para iniciar uma conversa sobre a sua situação.</p>
             <a className="button button-primary" href="/ir/whatsapp">
+              <WhatsAppIcon />
               Abrir WhatsApp
             </a>
             <FraudWarning />

@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 
 import { FraudWarning } from '@/components/FraudWarning'
+import { WhatsAppIcon } from '@/components/WhatsAppIcon'
 
 export default function ContactPage() {
   return (
@@ -15,6 +16,7 @@ export default function ContactPage() {
           <div className="contact-panel">
             <Image alt="" height={76} src="/marca/dp-simbolo.png" unoptimized width={76} />
             <a className="button button-primary" href="/ir/whatsapp?o=contato">
+              <WhatsAppIcon />
               Abrir WhatsApp
             </a>
             <FraudWarning />

@@ -1,10 +1,12 @@
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
 import { CampaignLeadForm } from '@/components/CampaignLeadForm'
 import { FraudWarning } from '@/components/FraudWarning'
 import { RichTextBlock } from '@/components/RichTextBlock'
+import { WhatsAppIcon } from '@/components/WhatsAppIcon'
 import { getPublishedCampaignBySlug, isPublicLandingCampaign } from '@/lib/campaigns'
 import { richTextToPlainText } from '@/lib/richText'
 import { getPublicSiteConfig, getPublicText } from '@/lib/siteConfig'
@@ -25,6 +27,36 @@ function campaignArea(campaignCode: string) {
   if (campaignCode === 'PREV-BPC') return 'Assistencial'
   if (campaignCode.startsWith('TRAB-')) return 'Trabalhista'
   return 'Previdenciario'
+}
+
+export async function generateMetadata({ params }: CampaignPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const campaign = await getPublishedCampaignBySlug(slug)
+
+  if (!campaign || !isPublicLandingCampaign(campaign)) {
+    return {
+      title: 'Campanha nao encontrada',
+    }
+  }
+
+  const title = getPublicText(campaign.seo?.titulo) || getPublicText(campaign.titulo) || campaign.campaignCode
+  const description = getPublicText(campaign.seo?.descricao) || getPublicText(campaign.subtitulo) || undefined
+
+  return {
+    description,
+    openGraph: {
+      description,
+      title,
+      type: 'website',
+      url: `/campanhas/${campaign.slug}`,
+    },
+    title,
+    twitter: {
+      card: 'summary_large_image',
+      description,
+      title,
+    },
+  }
 }
 
 export default async function CampaignPage({ params }: CampaignPageProps) {
@@ -49,12 +81,18 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
     <div className="site-shell campaign-page">
       <section className="campaign-hero" aria-labelledby="campaign-title">
         <div className="campaign-copy">
-          <p className="eyebrow">{currentCampaign.campaignCode}</p>
+          <p className="eyebrow">{campaignArea(currentCampaign.campaignCode)} · {currentCampaign.campaignCode}</p>
           {titulo ? <h1 id="campaign-title">{titulo}</h1> : null}
           {subtitulo ? <p>{subtitulo}</p> : null}
-          <a className="button button-primary" href={whatsappHref}>
-            Abrir WhatsApp
-          </a>
+          <div className="campaign-hero-actions">
+            <a className="button button-primary" href={whatsappHref}>
+              <WhatsAppIcon />
+              Abrir WhatsApp
+            </a>
+            <a className="button button-secondary button-on-dark" href="#formulario">
+              Responder perguntas
+            </a>
+          </div>
         </div>
         {mediaUrl ? (
           <Image
@@ -73,16 +111,33 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
         )}
       </section>
 
+      <section className="campaign-intro-strip" aria-label="Como funciona o primeiro contato">
+        <div>
+          <strong>1</strong>
+          <span>Informe telefone</span>
+        </div>
+        <div>
+          <strong>2</strong>
+          <span>Responda poucas perguntas</span>
+        </div>
+        <div>
+          <strong>3</strong>
+          <span>Envie pelo WhatsApp</span>
+        </div>
+      </section>
+
       {hasDor || hasProva ? (
-        <section className="band light-band">
+        <section className="campaign-content-band">
           <div className="section-inner campaign-blocks">
             {hasDor ? (
-              <article>
+              <article className="campaign-text-panel">
+                <span>Contexto</span>
                 <RichTextBlock value={currentCampaign.blocoDor} />
               </article>
             ) : null}
             {hasProva ? (
-              <article>
+              <article className="campaign-text-panel campaign-text-panel-accent">
+                <span>Documentos</span>
                 <RichTextBlock value={currentCampaign.blocoProva} />
               </article>
             ) : null}
@@ -90,8 +145,8 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
         </section>
       ) : null}
 
-      <section className="band dark-band">
-        <div className="section-inner split">
+      <section className="campaign-form-band" id="formulario">
+        <div className="section-inner campaign-form-layout">
           <CampaignLeadForm
             campaignCode={currentCampaign.campaignCode}
             consentimentoTexto={getPublicText(siteConfig?.textoConsentimento)}
@@ -100,6 +155,7 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
           />
           <div className="landing-side">
             <a className="button button-gold" href={whatsappHref}>
+              <WhatsAppIcon />
               {mensagemWhatsapp || 'Abrir WhatsApp'}
             </a>
             <FraudWarning />

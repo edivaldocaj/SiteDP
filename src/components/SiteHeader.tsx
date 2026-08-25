@@ -2,6 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
+import { WhatsAppIcon } from './WhatsAppIcon'
+
 export function SiteHeader() {
   return (
     <header className="site-header">
@@ -21,6 +23,7 @@ export function SiteHeader() {
         <Link href="/campanhas">Campanhas</Link>
         <Link href="/contato">Contato</Link>
         <Link className="nav-action" href="/ir/whatsapp">
+          <WhatsAppIcon />
           WhatsApp
         </Link>
       </nav>

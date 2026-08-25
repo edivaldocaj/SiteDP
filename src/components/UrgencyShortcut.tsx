@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { getPublicSiteConfig, getPublicText } from '@/lib/siteConfig'
+import { WhatsAppIcon } from './WhatsAppIcon'
 
 export async function UrgencyShortcut() {
   const config = await getPublicSiteConfig()
@@ -10,6 +11,7 @@ export async function UrgencyShortcut() {
 
   return (
     <a className="urgency-shortcut" href="/ir/whatsapp?c=PREV-EXIGENCIA">
+      <WhatsAppIcon />
       {text}
     </a>
   )

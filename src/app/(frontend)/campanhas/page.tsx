@@ -1,10 +1,17 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import React from 'react'
 
 import { getPublishedLandingCampaigns, type PublicCampaign } from '@/lib/campaigns'
 import { getPublicText } from '@/lib/siteConfig'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  description:
+    'Campanhas de orientacao inicial sobre temas previdenciarios, assistenciais e trabalhistas.',
+  title: 'Campanhas | Deila Pinto Advocacia',
+}
 
 function campaignArea(campaign: PublicCampaign) {
   if (campaign.campaignCode === 'PREV-BPC') return 'Assistencial'
