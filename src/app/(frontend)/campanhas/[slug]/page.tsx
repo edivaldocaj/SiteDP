@@ -21,6 +21,12 @@ function getMediaUrl(value: unknown) {
   return media.url || null
 }
 
+function campaignArea(campaignCode: string) {
+  if (campaignCode === 'PREV-BPC') return 'Assistencial'
+  if (campaignCode.startsWith('TRAB-')) return 'Trabalhista'
+  return 'Previdenciario'
+}
+
 export default async function CampaignPage({ params }: CampaignPageProps) {
   const { slug } = await params
   const campaign = await getPublishedCampaignBySlug(slug)
@@ -59,7 +65,12 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
             src={mediaUrl}
             width={1350}
           />
-        ) : null}
+        ) : (
+          <div className="campaign-visual-fallback" aria-hidden="true">
+            <Image alt="" height={180} src="/marca/dp-simbolo.png" unoptimized width={180} />
+            <span>{campaignArea(currentCampaign.campaignCode)}</span>
+          </div>
+        )}
       </section>
 
       {hasDor || hasProva ? (

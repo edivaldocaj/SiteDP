@@ -103,15 +103,19 @@ p {
 
 .site-header {
   align-items: center;
+  backdrop-filter: blur(18px);
+  background: rgba(250, 248, 243, 0.92);
+  border-bottom: 1px solid var(--borda);
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-  margin: 0 auto;
-  max-width: 1240px;
+  margin: 0;
+  max-width: none;
   padding: 1.25rem clamp(1rem, 4vw, 2rem);
-  position: relative;
+  position: sticky;
+  top: 0;
   width: 100%;
-  z-index: 2;
+  z-index: 30;
 }
 
 .brand {
@@ -148,6 +152,91 @@ p {
   padding-inline: 1rem;
 }
 
+.hero-premium {
+  align-items: center;
+  background: var(--preto);
+  color: var(--creme);
+  display: grid;
+  isolation: isolate;
+  margin: 0;
+  max-width: none;
+  min-height: calc(100vh - 91px);
+  overflow: hidden;
+  padding: clamp(4rem, 9vw, 7rem) clamp(1rem, 8vw, 6rem);
+  position: relative;
+}
+
+.hero-background,
+.hero-shade,
+.hero-mark {
+  inset: 0;
+  position: absolute;
+}
+
+.hero-background {
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.34;
+  width: 100%;
+  z-index: -3;
+}
+
+.hero-shade {
+  background:
+    linear-gradient(90deg, rgba(10, 10, 10, 0.94), rgba(10, 10, 10, 0.76) 46%, rgba(10, 10, 10, 0.38)),
+    linear-gradient(180deg, transparent 72%, rgba(201, 169, 97, 0.22));
+  z-index: -2;
+}
+
+.hero-mark {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  opacity: 0.16;
+  padding-right: clamp(1rem, 8vw, 6rem);
+  z-index: -1;
+}
+
+.hero-mark img {
+  filter: grayscale(1) brightness(2);
+  max-width: min(420px, 52vw);
+}
+
+.hero-premium .hero-copy {
+  max-width: 720px;
+}
+
+.hero-premium h1 {
+  font-size: clamp(3.4rem, 9vw, 6.8rem);
+  max-width: 10ch;
+}
+
+.hero-premium .eyebrow {
+  color: var(--ouro);
+}
+
+.hero-premium .hero-copy > p:not(.eyebrow) {
+  color: rgba(245, 241, 232, 0.88);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  max-width: 43rem;
+}
+
+.hero-premium .hero-tags span {
+  border-color: rgba(232, 201, 118, 0.32);
+  color: var(--creme);
+}
+
+.hero-premium .button-primary {
+  background: var(--ouro);
+  color: var(--preto);
+}
+
+.button-on-dark {
+  background: rgba(245, 241, 232, 0.08);
+  border-color: rgba(245, 241, 232, 0.28);
+  color: var(--creme);
+}
+
 .hero {
   align-items: center;
   display: grid;
@@ -158,6 +247,14 @@ p {
   min-height: calc(100vh - 100px);
   padding: clamp(2.2rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem) 3.5rem;
   width: 100%;
+}
+
+.hero.hero-premium {
+  grid-template-columns: 1fr;
+  margin: 0;
+  max-width: none;
+  min-height: calc(100vh - 91px);
+  padding: clamp(4rem, 9vw, 7rem) clamp(1rem, 8vw, 6rem);
 }
 
 .hero-copy {
@@ -320,6 +417,111 @@ p {
   justify-content: space-between;
 }
 
+.section-lead {
+  max-width: 34rem;
+}
+
+.practice-section,
+.campaign-showcase {
+  padding: clamp(4rem, 8vw, 6rem) clamp(1rem, 4vw, 2rem);
+}
+
+.practice-section {
+  background: var(--papel);
+}
+
+.practice-grid {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.practice-card {
+  background: var(--creme);
+  border: 1px solid var(--borda);
+  display: grid;
+  gap: 0.8rem;
+  min-height: 280px;
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+}
+
+.practice-card h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  font-weight: 500;
+  line-height: 1.04;
+}
+
+.practice-card p {
+  color: rgba(10, 10, 10, 0.74);
+}
+
+.practice-index {
+  color: var(--ouro-escuro);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.trust-band {
+  background: var(--preto);
+  color: var(--creme);
+  padding: 1.4rem clamp(1rem, 4vw, 2rem);
+}
+
+.trust-inner {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(260px, 0.86fr) minmax(0, 1fr);
+  margin: 0 auto;
+  max-width: 1240px;
+}
+
+.trust-inner > p {
+  color: rgba(245, 241, 232, 0.82);
+  font-weight: 700;
+}
+
+.trust-grid {
+  display: grid;
+  gap: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.trust-grid div {
+  border-left: 1px solid rgba(232, 201, 118, 0.28);
+  display: grid;
+  gap: 0.1rem;
+  min-height: 88px;
+  padding: 0.5rem 1rem;
+}
+
+.trust-grid strong {
+  color: var(--ouro);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.trust-grid span {
+  color: rgba(245, 241, 232, 0.78);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.campaign-showcase {
+  background:
+    linear-gradient(180deg, rgba(201, 169, 97, 0.12), transparent 28%),
+    var(--creme);
+}
+
+.campaign-showcase-list {
+  padding-top: 0;
+}
+
 .dark-band {
   background: var(--preto-suave);
   color: var(--creme);
@@ -338,6 +540,104 @@ p {
   display: grid;
   gap: 0.85rem;
   grid-template-columns: 1.1fr 0.95fr 0.95fr;
+}
+
+.campaign-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.campaign-grid-featured {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.campaign-card {
+  background:
+    linear-gradient(160deg, rgba(201, 169, 97, 0.16), transparent 42%),
+    var(--papel);
+  border: 1px solid var(--borda);
+  display: grid;
+  gap: 0.7rem;
+  min-height: 318px;
+  padding: clamp(1rem, 2.5vw, 1.35rem);
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.campaign-card:hover {
+  border-color: rgba(138, 115, 57, 0.48);
+  transform: translateY(-3px);
+}
+
+.campaign-card span {
+  color: var(--ouro-escuro);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.campaign-card h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1.55rem, 2.5vw, 2.15rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.campaign-card p {
+  color: rgba(10, 10, 10, 0.76);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.campaign-card a {
+  align-items: center;
+  align-self: end;
+  background: var(--preto);
+  color: var(--creme);
+  display: inline-flex;
+  font-weight: 800;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.65rem 0.85rem;
+  text-decoration: none;
+}
+
+.listing-page {
+  background: var(--creme);
+}
+
+.listing-hero {
+  background: var(--preto);
+  color: var(--creme);
+  display: grid;
+  gap: 1rem;
+  padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 8vw, 6rem);
+}
+
+.listing-hero .eyebrow {
+  color: var(--ouro);
+}
+
+.listing-hero h1 {
+  font-size: clamp(3rem, 8vw, 5.6rem);
+  max-width: 11ch;
+}
+
+.listing-hero p:not(.eyebrow) {
+  color: rgba(245, 241, 232, 0.84);
+  max-width: 44rem;
+}
+
+.empty-state {
+  background: var(--papel);
+  border: 1px solid var(--borda);
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 4vw, 2rem);
 }
 
 .principles article,
@@ -449,6 +749,8 @@ p {
 
 .campaign-hero {
   align-items: stretch;
+  background: var(--preto);
+  color: var(--creme);
   display: grid;
   grid-template-columns: minmax(0, 0.84fr) minmax(320px, 1fr);
   min-height: min(760px, calc(100vh - 4rem));
@@ -466,7 +768,18 @@ p {
 }
 
 .campaign-copy > p:not(.eyebrow) {
+  color: rgba(245, 241, 232, 0.84);
   max-width: 34rem;
+}
+
+.campaign-copy .eyebrow {
+  color: var(--ouro);
+}
+
+.campaign-copy .button-primary {
+  background: var(--ouro);
+  color: var(--preto);
+  justify-self: start;
 }
 
 .campaign-media {
@@ -474,6 +787,32 @@ p {
   min-height: 420px;
   object-fit: cover;
   width: 100%;
+}
+
+.campaign-visual-fallback {
+  align-content: center;
+  background:
+    linear-gradient(145deg, rgba(201, 169, 97, 0.22), transparent 56%),
+    var(--preto-suave);
+  border-left: 1px solid rgba(232, 201, 118, 0.22);
+  display: grid;
+  gap: 1.25rem;
+  justify-items: center;
+  min-height: 420px;
+  padding: clamp(2rem, 6vw, 4rem);
+}
+
+.campaign-visual-fallback img {
+  filter: grayscale(1) brightness(2);
+  opacity: 0.64;
+}
+
+.campaign-visual-fallback span {
+  color: var(--ouro);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .campaign-blocks {
@@ -664,11 +1003,20 @@ code {
   }
 
   .principles,
+  .campaign-grid,
+  .practice-grid,
   .feature-rail,
   .campaign-hero,
   .campaign-blocks,
-  .site-footer {
+  .site-footer,
+  .trust-inner,
+  .trust-grid {
     grid-template-columns: 1fr;
+  }
+
+  .trust-grid div {
+    border-left: 0;
+    border-top: 1px solid rgba(232, 201, 118, 0.28);
   }
 
   .feature-rail article + article {

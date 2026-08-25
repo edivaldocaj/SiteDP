@@ -31,6 +31,7 @@ type CampaignPayload = {
     depth?: number
     limit: number
     overrideAccess?: boolean
+    sort?: string
     where: Record<string, unknown>
   }) => Promise<{ docs: PublicCampaign[] }>
 }
@@ -76,6 +77,41 @@ export async function getPublishedCampaignBySlug(slug: string) {
     return result.docs[0] || null
   } catch {
     return null
+  }
+}
+
+export async function getPublishedLandingCampaigns() {
+  if (!process.env.DATABASE_URI || !process.env.EXPECTED_DB_NAME) {
+    return []
+  }
+
+  try {
+    const payload = await getPayload()
+    const result = await payload.find({
+      collection: 'campaigns',
+      depth: 0,
+      limit: 50,
+      overrideAccess: true,
+      sort: 'campaignCode',
+      where: {
+        and: [
+          {
+            status: {
+              equals: 'publicada',
+            },
+          },
+          {
+            temLanding: {
+              equals: true,
+            },
+          },
+        ],
+      },
+    })
+
+    return result.docs
+  } catch {
+    return []
   }
 }
 

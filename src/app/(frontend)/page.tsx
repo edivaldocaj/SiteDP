@@ -3,106 +3,176 @@ import Link from 'next/link'
 import React from 'react'
 
 import { FraudWarning } from '@/components/FraudWarning'
+import { getPublishedLandingCampaigns, type PublicCampaign } from '@/lib/campaigns'
+import { getPublicText } from '@/lib/siteConfig'
 
 import './styles.css'
 
+export const dynamic = 'force-dynamic'
+
+const practiceAreas = [
+  {
+    description: 'Beneficios do INSS, revisoes, incapacidade, pensao e aposentadoria rural.',
+    index: '01',
+    title: 'Previdenciario',
+  },
+  {
+    description: 'BPC/LOAS, CadUnico, documentos de renda e situacoes de vulnerabilidade.',
+    index: '02',
+    title: 'Assistencial',
+  },
+  {
+    description: 'Rescisao, jornada, justa causa, ambiente nocivo e problemas graves no trabalho.',
+    index: '03',
+    title: 'Trabalhista',
+  },
+]
+
+function campaignArea(campaign: PublicCampaign) {
+  if (campaign.campaignCode === 'PREV-BPC') return 'Assistencial'
+  if (campaign.campaignCode.startsWith('TRAB-')) return 'Trabalhista'
+  return 'Previdenciario'
+}
+
 export default async function HomePage() {
+  const campaigns = await getPublishedLandingCampaigns()
+  const featuredCampaigns = campaigns.slice(0, 6)
+
   return (
     <div className="site-shell">
-      <header className="site-header">
-        <Link className="brand" href="/" aria-label="Pagina inicial">
-          <Image
-            alt="Marca do escritorio"
-            height={64}
-            priority
-            src="/marca/dp-horizontal.png"
-            unoptimized
-            width={284}
-          />
-        </Link>
-        <nav aria-label="Navegacao principal">
-          <a href="#orientacao">Orientacao</a>
-          <a href="#contato">Contato</a>
-          <a className="nav-action" href="/ir/whatsapp">
-            WhatsApp
-          </a>
-        </nav>
-      </header>
-
-      <section className="hero" aria-labelledby="titulo-home">
+      <section className="hero hero-premium" aria-labelledby="titulo-home">
+        <Image
+          alt=""
+          className="hero-background"
+          fill
+          priority
+          sizes="100vw"
+          src="/imagens/hero-consultoria-dp.webp"
+          unoptimized
+        />
+        <div className="hero-shade" aria-hidden="true" />
+        <div className="hero-mark" aria-hidden="true">
+          <Image alt="" height={420} src="/marca/dp-simbolo.png" unoptimized width={420} />
+        </div>
         <div className="hero-copy">
-          <p className="eyebrow">Advocacia e consultoria</p>
+          <p className="eyebrow">Advocacia e consultoria no RN</p>
           <h1 id="titulo-home">Vamos conversar sobre o seu direito?</h1>
           <p>
-            Cada caso e unico. O primeiro contato pode ser feito de forma simples e
-            com linguagem clara.
+            Atendimento em Goianinha, com orientação também para quem está em Natal.
+            Uma conversa inicial clara ajuda a organizar datas, documentos e próximos passos.
           </p>
           <div className="hero-tags" aria-label="Pontos do atendimento">
-            <span>Escuta inicial</span>
-            <span>Analise tecnica</span>
-            <span>Comunicação simples</span>
+            <span>Previdenciario</span>
+            <span>Assistencial</span>
+            <span>Trabalhista</span>
           </div>
           <div className="actions">
             <a className="button button-primary" href="/ir/whatsapp">
               Abrir WhatsApp
             </a>
-            <a className="button button-secondary" href="#contato">
-              Ver contato
+            <a className="button button-secondary button-on-dark" href="#campanhas">
+              Ver campanhas
             </a>
           </div>
         </div>
-        <div className="hero-visual" aria-hidden="true">
-          <Image
-            alt=""
-            className="hero-photo"
-            height={900}
-            priority
-            src="/imagens/hero-consultoria-dp.webp"
-            unoptimized
-            width={1350}
-          />
-          <div className="hero-visual-badge">
-            <Image alt="" height={92} src="/marca/dp-simbolo.png" unoptimized width={92} />
+      </section>
+
+      <section className="practice-section" id="orientacao" aria-labelledby="titulo-orientacao">
+        <div className="section-inner">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Orientacao</p>
+              <h2 id="titulo-orientacao">Áreas de atendimento</h2>
+            </div>
+            <p className="section-lead">
+              As situações mais comuns ficam organizadas para um primeiro contato simples,
+              com foco em datas, documentos e contexto.
+            </p>
+          </div>
+          <div className="practice-grid">
+            {practiceAreas.map((area) => (
+              <article className="practice-card" key={area.title}>
+                <span className="practice-index">{area.index}</span>
+                <h3>{area.title}</h3>
+                <p>{area.description}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="feature-rail" aria-label="Resumo do atendimento">
-        <article>
-          <span>01</span>
-          <strong>Primeiro contato acessivel</strong>
-        </article>
-        <article>
-          <span>02</span>
-          <strong>Leitura cuidadosa do caso</strong>
-        </article>
-        <article>
-          <span>03</span>
-          <strong>Proximas etapas explicadas com clareza</strong>
-        </article>
+      <section className="trust-band" aria-label="Resumo do atendimento">
+        <div className="trust-inner">
+          <p>Atendimento pensado para conversa direta, documentos organizados e linguagem clara.</p>
+          <div className="trust-grid">
+            <div>
+              <strong>{campaigns.length || 11}</strong>
+              <span>campanhas estruturadas</span>
+            </div>
+            <div>
+              <strong>3</strong>
+              <span>frentes de atendimento</span>
+            </div>
+            <div>
+              <strong>1</strong>
+              <span>conversa objetiva desde o inicio</span>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="band dark-band" id="orientacao" aria-labelledby="titulo-orientacao">
+      {featuredCampaigns.length ? (
+        <section className="campaign-showcase" id="campanhas" aria-labelledby="titulo-campanhas">
+          <div className="section-inner">
+            <div className="section-heading">
+              <div>
+                <p className="eyebrow">Campanhas</p>
+                <h2 id="titulo-campanhas">Situações que merecem atenção desde o início.</h2>
+              </div>
+              <Link className="button button-secondary" href="/campanhas">
+                Ver todas
+              </Link>
+            </div>
+            <div className="campaign-grid campaign-grid-featured">
+              {featuredCampaigns.map((campaign) => {
+                const titulo = getPublicText(campaign.titulo) || campaign.campaignCode
+                const subtitulo = getPublicText(campaign.subtitulo)
+
+                return (
+                  <article className="campaign-card" key={campaign.id}>
+                    <span>{campaignArea(campaign)}</span>
+                    <h3>{titulo}</h3>
+                    {subtitulo ? <p>{subtitulo}</p> : null}
+                    <Link href={`/campanhas/${campaign.slug}`}>Abrir orientação</Link>
+                  </article>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="band dark-band" aria-labelledby="titulo-processo">
         <div className="section-inner">
           <div className="section-heading">
-            <p className="eyebrow">Orientacao</p>
-            <h2 id="titulo-orientacao">Informacao clara para uma primeira conversa.</h2>
+            <p className="eyebrow">Primeiro contato</p>
+            <h2 id="titulo-processo">O relato vem primeiro.</h2>
           </div>
           <div className="principles">
             <article className="principle-large">
               <span>Escuta</span>
-              <h3>O relato vem primeiro.</h3>
-              <p>O contexto do caso orienta quais documentos e caminhos podem ser avaliados.</p>
+              <h3>Conte o que aconteceu.</h3>
+              <p>Datas, respostas do INSS, mensagens da empresa e documentos ajudam a orientar a conversa.</p>
             </article>
             <article>
               <span>Documentos</span>
-              <h3>Organizacao desde o inicio.</h3>
-              <p>Datas, comprovantes e historico ajudam a tornar a conversa mais objetiva.</p>
+              <h3>Separe o que tiver.</h3>
+              <p>Mesmo quando falta algum papel, o primeiro passo é organizar o que já existe.</p>
             </article>
             <article>
               <span>Clareza</span>
               <h3>Sem excesso de formalidade.</h3>
-              <p>As proximas etapas sao explicadas conforme as particularidades da situacao.</p>
+              <p>As próximas etapas são explicadas conforme as particularidades da situação.</p>
             </article>
           </div>
         </div>
@@ -112,20 +182,14 @@ export default async function HomePage() {
         <div className="section-inner split">
           <div>
             <p className="eyebrow">Contato</p>
-            <h2 id="titulo-contato">Entenda se o atendimento se aplica ao seu caso.</h2>
+            <h2 id="titulo-contato">Inicie pelo caminho mais simples.</h2>
             <p className="section-copy">
-              O WhatsApp e o caminho mais simples para iniciar a conversa.
+              O WhatsApp direciona a conversa e preserva os códigos de campanha usados pelo CRM.
             </p>
           </div>
           <div className="contact-panel">
-            <Image
-              alt=""
-              height={76}
-              src="/marca/dp-simbolo.png"
-              unoptimized
-              width={76}
-            />
-            <p>Use o WhatsApp para iniciar uma conversa sobre a sua situacao.</p>
+            <Image alt="" height={76} src="/marca/dp-simbolo.png" unoptimized width={76} />
+            <p>Use o WhatsApp para iniciar uma conversa sobre a sua situação.</p>
             <a className="button button-primary" href="/ir/whatsapp">
               Abrir WhatsApp
             </a>

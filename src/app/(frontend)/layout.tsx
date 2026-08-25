@@ -2,6 +2,7 @@ import React from 'react'
 import { Cormorant_Garamond, Montserrat } from 'next/font/google'
 import './styles.css'
 import { UtmTracker } from './UtmTracker'
+import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { UrgencyShortcut } from '@/components/UrgencyShortcut'
 
@@ -41,6 +42,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     <html lang="pt-BR">
       <body className={`${cormorant.variable} ${montserrat.variable}`}>
         <UtmTracker />
+        <SiteHeader />
         <main>{children}</main>
         <SiteFooter />
         <UrgencyShortcut />
