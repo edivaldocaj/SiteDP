@@ -1,9 +1,25 @@
 import { isRenderableText } from './richText'
 
 export type PublicSiteConfig = {
+  areasDeAtuacao?: Array<{ id?: string | null; nome?: string | null }> | null
   avisoGolpeTexto?: string | null
   consentimentoVersao?: string | null
+  emails?: Array<{ email?: string | null; id?: string | null }> | null
+  endereco?: Array<{
+    bairro?: string | null
+    cep?: string | null
+    cidade?: string | null
+    id?: string | null
+    logradouro?: string | null
+    uf?: string | null
+  }> | null
+  horarioAtendimento?: string | null
+  instagram?: string | null
+  oab?: string | null
+  razaoSocial?: string | null
+  telefoneWhatsapp?: string | null
   textoConsentimento?: string | null
+  titular?: string | null
   urgenciaTexto?: string | null
 }
 
