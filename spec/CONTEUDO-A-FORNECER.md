@@ -1,9 +1,7 @@
 # CONTEUDO-A-FORNECER.md
 
-O agente não escreve texto jurídico nem institucional. Tudo abaixo vem da
-Dra. Deila. Enquanto faltar, o campo fica `[A FORNECER]` e o bloco **não é
-publicado** — placeholder em rota pública de advogado é problema de
-publicidade, não só de estética.
+Os textos definitivos precisam ser revisados pela Dra. Deila. Enquanto faltar
+revisao final, o conteudo gerado para teste fica marcado aqui como provisiorio.
 
 O agente mantém esta lista atualizada conforme os campos forem criados.
 
@@ -60,26 +58,26 @@ Por campanha, e nunca reaproveitado entre campanhas:
 **O sistema bloqueia campanha com texto igual ao de outra.** Texto de template
 repetido derruba conversão e o índice de qualidade do anúncio.
 
-Campanhas criadas em rascunho pelo seed, com campos editoriais marcados como
-`[A FORNECER]` quando `temLanding=true`:
+Campanhas com texto provisiorio de teste gerado pelo seed. Revisar antes de
+trafego publico:
 
 - [ ] PREV-EXIGENCIA — codigo para urgencia, sem landing
-- [ ] PREV-BPC — titulo, subtitulo, dor, prova, 2 a 4 perguntas, mensagem de WhatsApp, SEO e midia de topo
-- [ ] PREV-RURAL — titulo, subtitulo, dor, prova, 2 a 4 perguntas, mensagem de WhatsApp, SEO e midia de topo
-- [ ] PREV-INCAPACIDADE — sem landing
-- [ ] TRAB-RESCISAO — titulo, subtitulo, dor, prova, primeira pergunta obrigatoria como data de saida, demais perguntas, mensagem de WhatsApp, SEO e midia de topo
-- [ ] PREV-PENSAO — sem landing
-- [ ] PREV-MATERNIDADE — sem landing
-- [ ] TRAB-HORAS — sem landing
-- [ ] TRAB-JUSTACAUSA — sem landing
-- [ ] TRAB-INDIRETA — sem landing
-- [ ] TRAB-INSALUBRE — sem landing
-- [ ] PREV-REVISAO — sem landing
+- [ ] PREV-BPC — revisar titulo, subtitulo, dor, prova, perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] PREV-RURAL — revisar titulo, subtitulo, dor, prova, perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] PREV-INCAPACIDADE — revisar titulo, subtitulo, dor, prova, perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] TRAB-RESCISAO — revisar titulo, subtitulo, dor, prova, primeira pergunta obrigatoria como data de saida, demais perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] PREV-PENSAO — revisar titulo, subtitulo, dor, prova, perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] PREV-MATERNIDADE — revisar titulo, subtitulo, dor, prova, perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] TRAB-HORAS — revisar titulo, subtitulo, dor, prova, perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] TRAB-JUSTACAUSA — revisar titulo, subtitulo, dor, prova, perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] TRAB-INDIRETA — revisar titulo, subtitulo, dor, prova, perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] TRAB-INSALUBRE — revisar titulo, subtitulo, dor, prova, perguntas, mensagem de WhatsApp, SEO e midia de topo
+- [ ] PREV-REVISAO — revisar titulo, subtitulo, dor, prova, perguntas, mensagem de WhatsApp, SEO e midia de topo
 
 Textos globais pendentes no `SiteConfig`:
 
-- [ ] Texto do atalho de urgencia para `/ir/whatsapp?c=PREV-EXIGENCIA`
-- [ ] Aviso de golpe sobre senhas do gov.br, Meu INSS, banco e codigos de SMS
+- [ ] Revisao final do texto do atalho de urgencia para `/ir/whatsapp?c=PREV-EXIGENCIA`
+- [ ] Revisao final do aviso de golpe sobre senhas do gov.br, Meu INSS, banco e codigos de SMS
 
 ---
 

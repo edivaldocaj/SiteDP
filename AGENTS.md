@@ -44,21 +44,6 @@ com telefone antigo. Sem carrossel, sem modal, sem rolagem infinita. WhatsApp
 visível em toda seção. Se uma decisão pressupõe usuário confortável com
 formulário longo, está errada.
 
-## Regras que valem sempre
-
-1. **Uma fase por sessão.** Terminar, rodar o critério de aceite, parar.
-2. `pnpm build` passa antes de encerrar. Sem exceção.
-3. **Não criar credencial, segredo, domínio ou chave de API.** Se faltar, pare
-   e pergunte.
-4. **Não escrever texto jurídico nem institucional.** Copy de campanha, texto
-   de área do direito, depoimento e biografia são da Dra. Deila. Você cria o
-   campo, valida, bloqueia publicação sem conteúdo — nunca preenche. Use
-   `[A FORNECER]` como marcador e liste em `spec/CONTEUDO-A-FORNECER.md`.
-5. **Nada de placeholder em rota pública.** Se o dado faltar, ocultar o bloco.
-6. Migração de banco: sempre gerar migration.
-7. Se o roteiro parecer contradizer o contrato de integração, o contrato ganha.
-   Se a contradição for real, pare e escale.
-
 ## Publicidade advocatícia — Provimento 205/2021 do CFOAB
 
 Vale para **todo texto de interface**, incluindo rótulo de botão e microcópia.

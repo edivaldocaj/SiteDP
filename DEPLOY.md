@@ -28,6 +28,8 @@ DATABASE_URI=
 EXPECTED_DB_NAME=site_dp
 EXPECTED_DB_USER=
 DB_BOOTSTRAP_ON_START=true
+SEED_CAMPAIGNS_ON_START=true
+SEED_SITE_TEXTS_ON_START=true
 PAYLOAD_SECRET=
 NEXT_PUBLIC_SITE_URL=
 N8N_BASE_URL=
@@ -42,6 +44,11 @@ se ficar vazio, o guardiao valida apenas o nome do banco.
 `DB_BOOTSTRAP_ON_START=true` aplica as migrations versionadas no boot, antes do
 `node server.js`. O bootstrap e idempotente: migrations ja registradas em
 `payload_migrations` sao ignoradas.
+
+`SEED_CAMPAIGNS_ON_START=true` sincroniza as campanhas apos as migrations.
+Use `false` apenas quando quiser impedir atualizacao automatica dos textos no
+proximo restart/deploy. `SEED_SITE_TEXTS_ON_START=true` atualiza o aviso de
+golpe e o texto do atalho de urgencia se o `SiteConfig` ja existir.
 
 ## DATABASE_URI com `$`
 
@@ -89,12 +96,40 @@ do Payload abrir conexao.
 
 ## Seed de campanhas
 
-Depois da migration, sincronize os codigos ja criados no EspoCRM:
+O deploy sincroniza as campanhas automaticamente quando
+`SEED_CAMPAIGNS_ON_START=true`. O seed faz upsert pelo `campaignCode`, portanto
+pode rodar mais de uma vez.
+
+As landings publicadas pelo seed sao:
+
+```text
+PREV-BPC
+PREV-RURAL
+PREV-INCAPACIDADE
+TRAB-RESCISAO
+PREV-PENSAO
+PREV-MATERNIDADE
+TRAB-HORAS
+TRAB-JUSTACAUSA
+TRAB-INDIRETA
+TRAB-INSALUBRE
+PREV-REVISAO
+```
+
+`PREV-EXIGENCIA` permanece sem landing publica. Ele existe como codigo de
+urgencia para `/ir/whatsapp?c=PREV-EXIGENCIA`.
+
+Para sincronizar manualmente pelo Payload, use:
 
 ```bash
 pnpm seed:campanhas
 ```
 
-O seed cria as campanhas como `rascunho`. Apenas `PREV-BPC`, `PREV-RURAL` e
-`TRAB-RESCISAO` ficam com `temLanding=true`, ainda com conteudo marcado como
-`[A FORNECER]` ate a Dra. Deila revisar e publicar.
+Para atualizar os textos globais pelo Payload:
+
+```bash
+pnpm seed:site-textos
+```
+
+Os textos de campanha sao provisiorios de teste e devem ser revisados antes de
+trafego publico.

@@ -15,6 +15,7 @@
     "migrate:status": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:status",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "seed:campanhas": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed-campanhas.ts",
+    "seed:site-textos": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed-site-textos.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "e2e:local": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/e2e-local.ts",
     "test": "pnpm run test:int && pnpm run test:e2e",
