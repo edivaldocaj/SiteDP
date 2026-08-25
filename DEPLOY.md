@@ -27,6 +27,7 @@ ESCRITORIO=DP
 DATABASE_URI=
 EXPECTED_DB_NAME=site_dp
 EXPECTED_DB_USER=
+DB_BOOTSTRAP_ON_START=true
 PAYLOAD_SECRET=
 NEXT_PUBLIC_SITE_URL=
 N8N_BASE_URL=
@@ -37,6 +38,10 @@ NEXT_TELEMETRY_DISABLED=1
 
 `EXPECTED_DB_USER` esta preparado para uma checagem futura. Hoje ele e opcional:
 se ficar vazio, o guardiao valida apenas o nome do banco.
+
+`DB_BOOTSTRAP_ON_START=true` aplica as migrations versionadas no boot, antes do
+`node server.js`. O bootstrap e idempotente: migrations ja registradas em
+`payload_migrations` sao ignoradas.
 
 ## DATABASE_URI com `$`
 
@@ -60,11 +65,13 @@ DATABASE_URI=postgres://postgres:senha$$com$$cifrao@postgres:5432/site_dp?sslmod
 
 ## Migration
 
-As migrations sao passo separado de deploy. Elas nao rodam no entrypoint para
-evitar alteracao de schema em todo restart e para deixar falhas de schema
-visiveis antes de trocar a versao em producao.
+As migrations rodam no entrypoint por causa do deploy no EasyPanel, onde o
+hostname interno do Postgres so resolve dentro da rede Docker do projeto.
+O script valida `DATABASE_URI` contra `EXPECTED_DB_NAME` antes de abrir
+conexao e aplica apenas migrations ainda nao registradas.
 
-Com as variaveis de runtime corretas carregadas, rode uma vez:
+Para rodar manualmente no console do EasyPanel, com as variaveis de runtime
+corretas carregadas:
 
 ```bash
 pnpm migrate
