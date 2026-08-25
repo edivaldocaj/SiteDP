@@ -66,6 +66,7 @@ export function CampaignLeadForm({
   })
 
   const visibleQuestions = useMemo(() => perguntas.slice(0, 4), [perguntas])
+  const totalSteps = visibleQuestions.length ? 4 : 3
 
   useEffect(() => {
     sessionStorage.setItem(storageKey, JSON.stringify(form))
@@ -125,7 +126,7 @@ export function CampaignLeadForm({
       return
     }
 
-    setStep(3)
+    setStep(visibleQuestions.length ? 3 : 4)
   }
 
   function advanceFromQuestions() {
@@ -162,6 +163,7 @@ export function CampaignLeadForm({
   return (
     <section className="lead-form" aria-labelledby="form-title">
       <h2 id="form-title">Vamos conversar sobre o seu direito?</h2>
+      <p className="form-progress">Etapa {Math.min(step, totalSteps)} de {totalSteps}</p>
       <input
         name="empresa"
         tabIndex={-1}
@@ -173,6 +175,9 @@ export function CampaignLeadForm({
 
       {step === 1 && (
         <div className="form-step">
+          <p className="form-step-lead">
+            Comece pelo telefone. Depois aparecem as perguntas da campanha.
+          </p>
           <label htmlFor="telefone">Telefone</label>
           <input
             autoComplete="tel"
@@ -192,6 +197,7 @@ export function CampaignLeadForm({
 
       {step === 2 && (
         <div className="form-step">
+          <p className="form-step-lead">Agora, informe seu nome para continuar.</p>
           <label htmlFor="nome">Nome</label>
           <input
             autoComplete="name"
@@ -218,6 +224,7 @@ export function CampaignLeadForm({
 
       {step === 3 && (
         <div className="form-step">
+          <p className="form-step-lead">Responda as perguntas abaixo com calma.</p>
           {visibleQuestions.map((question, index) => (
             <label className="question-field" key={question.id || `${question.pergunta}-${index}`}>
               <span>{question.pergunta}</span>

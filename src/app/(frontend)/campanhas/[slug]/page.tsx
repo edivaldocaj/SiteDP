@@ -29,6 +29,12 @@ function campaignArea(campaignCode: string) {
   return 'Previdenciario'
 }
 
+function questionTypeLabel(type?: string | null) {
+  if (type === 'data') return 'Data'
+  if (type === 'opcoes') return 'Opcoes'
+  return 'Resposta curta'
+}
+
 export async function generateMetadata({ params }: CampaignPageProps): Promise<Metadata> {
   const { slug } = await params
   const campaign = await getPublishedCampaignBySlug(slug)
@@ -75,6 +81,9 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
   const hasDor = getPublicText(richTextToPlainText(currentCampaign.blocoDor))
   const hasProva = getPublicText(richTextToPlainText(currentCampaign.blocoProva))
   const mensagemWhatsapp = getPublicText(currentCampaign.mensagemWhatsapp)
+  const qualificationQuestions = (currentCampaign.perguntas || [])
+    .filter((question) => getPublicText(question.pergunta))
+    .slice(0, 4)
   const whatsappHref = `/ir/whatsapp?c=${encodeURIComponent(currentCampaign.campaignCode)}&o=landing`
 
   return (
@@ -89,8 +98,8 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
               <WhatsAppIcon />
               Abrir WhatsApp
             </a>
-            <a className="button button-secondary button-on-dark" href="#formulario">
-              Responder perguntas
+            <a className="button button-secondary button-on-dark" href="#perguntas">
+              Ver perguntas
             </a>
           </div>
         </div>
@@ -118,11 +127,11 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
         </div>
         <div>
           <strong>2</strong>
-          <span>Responda poucas perguntas</span>
+          <span>Veja perguntas curtas</span>
         </div>
         <div>
           <strong>3</strong>
-          <span>Envie pelo WhatsApp</span>
+          <span>Continue pelo WhatsApp</span>
         </div>
       </section>
 
@@ -153,7 +162,27 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
             consentimentoVersao={siteConfig?.consentimentoVersao || undefined}
             perguntas={currentCampaign.perguntas || []}
           />
-          <div className="landing-side">
+          <div className="landing-side" id="perguntas">
+            {qualificationQuestions.length ? (
+              <article className="question-preview">
+                <span>Triagem inicial</span>
+                <h2>Perguntas desta campanha</h2>
+                <ol>
+                  {qualificationQuestions.map((question, index) => (
+                    <li key={question.id || `${question.pergunta}-${index}`}>
+                      <strong>{question.pergunta}</strong>
+                      <small>{questionTypeLabel(question.tipo)}</small>
+                    </li>
+                  ))}
+                </ol>
+              </article>
+            ) : (
+              <article className="question-preview">
+                <span>Triagem inicial</span>
+                <h2>Comece pelo WhatsApp</h2>
+                <p>O atendimento fará as perguntas necessárias conforme o relato enviado.</p>
+              </article>
+            )}
             <a className="button button-gold" href={whatsappHref}>
               <WhatsAppIcon />
               {mensagemWhatsapp || 'Abrir WhatsApp'}
