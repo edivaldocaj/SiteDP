@@ -11,8 +11,8 @@ O agente mantém esta lista atualizada conforme os campos forem criados.
 
 - [x] **Cidades confirmadas.** Escritório físico em Goianinha, com atendimento
       também em Natal.
-- [x] **Áreas de atuação confirmadas.** Previdenciário, Assistencial e
-      Trabalhista.
+- [x] **Áreas de atuação confirmadas.** Previdenciário, Assistencial,
+      Trabalhista e Licitações e Contratos.
 - [ ] Endereço completo de cada unidade, com CEP
 - [ ] CNPJ e razão social exata
 - [ ] Telefone fixo, se houver, e e-mails de contato

@@ -12,14 +12,16 @@ export function SiteHeader() {
           alt="Marca do escritorio"
           height={64}
           priority
-          src="/marca/dp-horizontal.png"
+          src="/marca/dp-horizontal-claro.png"
           unoptimized
           width={284}
         />
       </Link>
       <nav aria-label="Navegacao principal">
         <Link href="/">Inicio</Link>
-        <Link href="/#orientacao">Orientacao</Link>
+        <Link href="/#sobre">Sobre</Link>
+        <Link href="/#areas">Areas de Atuacao</Link>
+        <Link href="/#como-funciona">Como Funciona</Link>
         <Link href="/campanhas">Campanhas</Link>
         <Link href="/contato">Contato</Link>
         <Link className="nav-action" href="/ir/whatsapp">

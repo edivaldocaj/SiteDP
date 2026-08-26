@@ -114,8 +114,19 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
           />
         ) : (
           <div className="campaign-visual-fallback" aria-hidden="true">
-            <Image alt="" height={180} src="/marca/dp-simbolo.png" unoptimized width={180} />
-            <span>{campaignArea(currentCampaign.campaignCode)}</span>
+            <Image
+              alt=""
+              className="campaign-fallback-photo"
+              height={760}
+              priority
+              src="/imagens/deila/deila-livro.webp"
+              unoptimized
+              width={760}
+            />
+            <div className="campaign-fallback-seal">
+              <Image alt="" height={72} src="/marca/dp-simbolo.png" unoptimized width={72} />
+              <span>{campaignArea(currentCampaign.campaignCode)}</span>
+            </div>
           </div>
         )}
       </section>

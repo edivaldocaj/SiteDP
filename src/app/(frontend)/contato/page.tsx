@@ -8,6 +8,8 @@ import { getPublicSiteConfig, getPublicText, type PublicSiteConfig } from '@/lib
 
 export const dynamic = 'force-dynamic'
 
+const fallbackAreas = ['Previdenciario', 'Assistencial', 'Trabalhista', 'Licitacoes e Contratos']
+
 export const metadata: Metadata = {
   description: 'Canais de contato da Deila Pinto Advocacia e Consultoria.',
   title: 'Contato | Deila Pinto Advocacia',
@@ -33,9 +35,11 @@ export default async function ContactPage() {
   const primaryAddress = config?.endereco?.find((address) => getPublicText(formatAddress(address)))
   const addressText = primaryAddress ? formatAddress(primaryAddress) : null
   const horario = getPublicText(config?.horarioAtendimento)
-  const areas = (config?.areasDeAtuacao || [])
-    .map((area) => getPublicText(area.nome))
-    .filter(Boolean)
+  const configuredAreas =
+    config?.areasDeAtuacao
+      ?.map((area) => getPublicText(area.nome))
+      .filter((area): area is string => Boolean(area)) || []
+  const areas = configuredAreas.length ? configuredAreas : fallbackAreas
 
   return (
     <div className="site-shell contact-page">
@@ -60,7 +64,14 @@ export default async function ContactPage() {
           </div>
         </div>
         <div className="contact-hero-card" aria-label="Dados do escritorio">
-          <Image alt="" height={92} src="/marca/dp-simbolo.png" unoptimized width={92} />
+          <Image
+            alt=""
+            className="contact-portrait"
+            height={760}
+            src="/imagens/deila/deila-livro.webp"
+            unoptimized
+            width={760}
+          />
           <div>
             <strong>{title}</strong>
             {titular || oab ? <span>{[titular, oab].filter(Boolean).join(' · ')}</span> : null}

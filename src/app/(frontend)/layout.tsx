@@ -21,18 +21,24 @@ const montserrat = Montserrat({
 })
 
 export const metadata = {
-  description: 'Site institucional em preparacao.',
+  description:
+    'Atendimento juridico em Direito Previdenciario, BPC/LOAS, Direito do Trabalho, Licitacoes e Contratos.',
   icons: {
     icon: '/marca/icone-32.png',
     apple: '/marca/icone-180.png',
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   openGraph: {
-    description: 'Site institucional em preparacao.',
+    description:
+      'Orientacao juridica com clareza, atencao e responsabilidade.',
     images: ['/og.png'],
-    title: 'Site institucional',
+    siteName: 'Deila Pinto Advocacia',
+    title: 'Deila Pinto Advocacia e Consultoria',
   },
-  title: 'Site institucional',
+  title: {
+    default: 'Deila Pinto Advocacia e Consultoria',
+    template: '%s | Deila Pinto Advocacia',
+  },
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
