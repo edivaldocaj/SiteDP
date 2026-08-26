@@ -2,8 +2,11 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 import React from 'react'
 
+import { BrandIcon } from '@/components/BrandIcons'
+import { ContactForm } from '@/components/ContactForm'
+import { FaqAccordion } from '@/components/FaqAccordion'
 import { FraudWarning } from '@/components/FraudWarning'
-import { WhatsAppIcon } from '@/components/WhatsAppIcon'
+import { Container, Eyebrow, WhatsAppButton } from '@/components/Marketing'
 import { getPublicSiteConfig, getPublicText, type PublicSiteConfig } from '@/lib/siteConfig'
 
 export const dynamic = 'force-dynamic'
@@ -28,9 +31,6 @@ function formatAddress(address: NonNullable<PublicSiteConfig['endereco']>[number
 
 export default async function ContactPage() {
   const config = await getPublicSiteConfig()
-  const title = getPublicText(config?.razaoSocial) || 'Deila Pinto Advocacia e Consultoria'
-  const titular = getPublicText(config?.titular)
-  const oab = getPublicText(config?.oab)
   const primaryEmail = getPublicText(config?.emails?.[0]?.email)
   const primaryAddress = config?.endereco?.find((address) => getPublicText(formatAddress(address)))
   const addressText = primaryAddress ? formatAddress(primaryAddress) : null
@@ -44,74 +44,79 @@ export default async function ContactPage() {
   return (
     <div className="site-shell contact-page">
       <section className="contact-hero" aria-labelledby="contact-title">
-        <div className="contact-hero-copy">
-          <p className="eyebrow">Contato</p>
-          <h1 id="contact-title">Vamos conversar sobre o seu direito?</h1>
-          <p>
-            O primeiro contato pode ser feito pelo WhatsApp. Envie uma mensagem simples
-            contando o que aconteceu e, se tiver, separe datas e documentos.
-          </p>
-          <div className="actions">
-            <a className="button button-primary" href="/ir/whatsapp?o=contato">
-              <WhatsAppIcon />
-              Abrir WhatsApp
-            </a>
-            {primaryEmail ? (
-              <a className="button button-secondary button-on-dark" href={`mailto:${primaryEmail}`}>
-                Enviar e-mail
-              </a>
-            ) : null}
+        <Container className="contact-hero-inner">
+          <div className="contact-hero-copy">
+            <Eyebrow>Vamos conversar?</Eyebrow>
+            <h1 id="contact-title">Contato</h1>
+            <p>Estamos aqui para ouvir você e encontrar o melhor caminho para o seu caso.</p>
+            <div className="actions">
+              <WhatsAppButton href="/ir/whatsapp?o=contato" />
+              <span className="hero-note">Atendimento humanizado e sigiloso.</span>
+            </div>
           </div>
-        </div>
-        <div className="contact-hero-card" aria-label="Dados do escritorio">
-          <Image
-            alt=""
-            className="contact-portrait"
-            height={760}
-            src="/imagens/deila/deila-livro.webp"
-            unoptimized
-            width={760}
-          />
-          <div>
-            <strong>{title}</strong>
-            {titular || oab ? <span>{[titular, oab].filter(Boolean).join(' · ')}</span> : null}
+          <div className="contact-hero-photo" aria-hidden="true">
+            <Image
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 900px) 100vw, 48vw"
+              src="/imagens/deila/deila-hero.webp"
+              unoptimized
+            />
           </div>
-        </div>
+        </Container>
       </section>
 
-      <section className="contact-details" aria-label="Canais de contato">
-        <div className="section-inner contact-grid">
-          <article className="contact-method contact-method-primary">
-            <span>WhatsApp</span>
-            <h2>Canal principal de atendimento</h2>
-            <p>Use para enviar seu relato inicial e receber orientação sobre os próximos passos.</p>
-            <a className="button button-primary" href="/ir/whatsapp?o=contato">
-              <WhatsAppIcon />
-              Abrir WhatsApp
+      <section className="section-white">
+        <Container className="contact-main-grid">
+          <ContactForm
+            consentimentoTexto={getPublicText(config?.textoConsentimento)}
+            consentimentoVersao={getPublicText(config?.consentimentoVersao)}
+          />
+
+          <aside className="contact-methods">
+            <h2>Outras formas de contato</h2>
+            <a className="contact-method-row" href="/ir/whatsapp?o=contato">
+              <BrandIcon name="phone" />
+              <span>
+                <strong>Atendimento via WhatsApp</strong>
+                <small>Iniciar conversa</small>
+              </span>
+              <b aria-hidden="true">→</b>
             </a>
-          </article>
-
-          <article className="contact-method">
-            <span>Atendimento</span>
-            <h2>Presencial mediante agendamento</h2>
-            {addressText ? <p>{addressText}</p> : <p>O endereço completo será confirmado pelo atendimento.</p>}
-            {horario ? <p>{horario}</p> : null}
-          </article>
-
-          <article className="contact-method">
-            <span>Documentos</span>
-            <h2>O que ajuda no primeiro contato</h2>
-            <p>Datas, cartas do INSS, prints, carteira de trabalho, laudos e comprovantes podem ajudar na conversa.</p>
-          </article>
-        </div>
+            {primaryEmail ? (
+              <a className="contact-method-row" href={`mailto:${primaryEmail}`}>
+                <BrandIcon name="email" />
+                <span>
+                  <strong>E-mail</strong>
+                  <small>{primaryEmail}</small>
+                </span>
+              </a>
+            ) : null}
+            <div className="contact-method-row">
+              <BrandIcon name="location" />
+              <span>
+                <strong>Localização</strong>
+                <small>{addressText || 'Endereço confirmado pelo atendimento.'}</small>
+              </span>
+            </div>
+            <div className="contact-method-row">
+              <BrandIcon name="clock" />
+              <span>
+                <strong>Horário de atendimento</strong>
+                <small>{horario || 'Mediante agendamento.'}</small>
+              </span>
+            </div>
+          </aside>
+        </Container>
       </section>
 
       {areas.length ? (
-        <section className="contact-areas" aria-labelledby="contact-areas-title">
-          <div className="section-inner">
+        <section className="section-ivory" aria-labelledby="contact-areas-title">
+          <Container>
             <div className="section-heading">
               <div>
-                <p className="eyebrow">Áreas</p>
+                <Eyebrow>Áreas</Eyebrow>
                 <h2 id="contact-areas-title">Assuntos atendidos</h2>
               </div>
             </div>
@@ -120,18 +125,43 @@ export default async function ContactPage() {
                 <span key={area}>{area}</span>
               ))}
             </div>
-          </div>
+          </Container>
         </section>
       ) : null}
 
-      <section className="contact-security" aria-label="Aviso de seguranca">
-        <div className="section-inner split">
+      <section className="section-white">
+        <Container className="faq-inner">
           <div>
-            <p className="eyebrow">Segurança</p>
+            <Eyebrow>Dúvidas frequentes</Eyebrow>
+            <h2>Antes do primeiro contato</h2>
+          </div>
+          <FaqAccordion
+            items={[
+              {
+                answer: 'O atendimento inicial organiza o relato e os documentos para avaliar os próximos passos.',
+                question: 'Como funciona o atendimento online?',
+              },
+              {
+                answer: 'Nome, telefone, assunto, mensagem e documentos relacionados podem ajudar na conversa.',
+                question: 'Quais informações preciso enviar inicialmente?',
+              },
+              {
+                answer: 'O retorno depende da agenda e da complexidade das informações enviadas.',
+                question: 'Qual o prazo para retorno?',
+              },
+            ]}
+          />
+        </Container>
+      </section>
+
+      <section className="contact-security" aria-label="Aviso de segurança">
+        <Container className="split">
+          <div>
+            <Eyebrow>Segurança</Eyebrow>
             <h2>Antes de enviar qualquer dado sensível.</h2>
           </div>
           <FraudWarning />
-        </div>
+        </Container>
       </section>
     </div>
   )

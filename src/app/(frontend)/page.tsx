@@ -2,55 +2,23 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import { WhatsAppIcon } from '@/components/WhatsAppIcon'
+import {
+  AreaCards,
+  Container,
+  CtaSection,
+  Eyebrow,
+  OutlineButton,
+  ProcessSteps,
+  SectionHeading,
+  WhatsAppButton,
+} from '@/components/Marketing'
 import { getPublishedLandingCampaigns, type PublicCampaign } from '@/lib/campaigns'
+import { homeSteps } from '@/lib/marketingContent'
 import { getPublicText } from '@/lib/siteConfig'
 
 import './styles.css'
 
 export const dynamic = 'force-dynamic'
-
-const practiceAreas = [
-  {
-    description: 'Aposentadorias, auxilios, pensoes, revisoes e beneficios por incapacidade.',
-    href: '/campanhas',
-    icon: 'INSS',
-    title: 'Direito Previdenciario',
-  },
-  {
-    description: 'BPC/LOAS para idosos, pessoas com deficiencia e familias em vulnerabilidade.',
-    href: '/campanhas/prev-bpc',
-    icon: 'BPC',
-    title: 'BPC/LOAS',
-  },
-  {
-    description: 'Rescisao, jornada, justa causa, ambiente nocivo e demais demandas trabalhistas.',
-    href: '/campanhas',
-    icon: 'CLT',
-    title: 'Direito do Trabalho',
-  },
-  {
-    description: 'Orientacao em licitacoes, contratos administrativos e documentos de contratacao.',
-    href: '/ir/whatsapp?o=licitacoes-contratos',
-    icon: 'LC',
-    title: 'Licitacoes e Contratos',
-  },
-]
-
-const steps = [
-  {
-    description: 'Envie uma mensagem pelo WhatsApp ou escolha uma campanha relacionada ao seu caso.',
-    title: 'Fale comigo',
-  },
-  {
-    description: 'Datas, documentos e contexto ajudam a entender qual caminho deve ser avaliado.',
-    title: 'Organize o relato',
-  },
-  {
-    description: 'A orientacao segue conforme as particularidades da situacao apresentada.',
-    title: 'Proximos passos',
-  },
-]
 
 function campaignArea(campaign: PublicCampaign) {
   if (campaign.campaignCode === 'PREV-BPC') return 'Assistencial'
@@ -65,112 +33,87 @@ export default async function HomePage() {
   return (
     <div className="site-shell">
       <section className="home-hero" aria-labelledby="titulo-home">
-        <div className="home-hero-copy">
-          <p className="eyebrow">Advocacia com proposito</p>
-          <h1 id="titulo-home">
-            Orientacao juridica com <span>clareza, atencao</span> e responsabilidade
-          </h1>
-          <p>
-            Atendimento em Direito Previdenciario, BPC/LOAS, Direito do Trabalho,
-            Licitacoes e Contratos para organizar informacoes e proximos passos.
-          </p>
-          <div className="hero-actions">
-            <a className="button button-primary button-whatsapp" href="/ir/whatsapp">
-              <WhatsAppIcon />
-              Fale comigo no WhatsApp
-            </a>
-            <a className="hero-note" href="#sobre">
-              Atendimento em Goianinha e Natal/RN
-            </a>
+        <Container className="home-hero-inner">
+          <div className="home-hero-copy">
+            <Eyebrow>Advocacia com propósito</Eyebrow>
+            <h1 id="titulo-home">
+              <span className="hero-title-line">Orientação jurídica</span>
+              <span className="hero-title-line">
+                com <em>clareza, atenção</em>
+              </span>
+              <span className="hero-title-line">e responsabilidade</span>
+            </h1>
+            <p>
+              Atendimento em Direito Previdenciário, BPC/LOAS, Direito do Trabalho,
+              Licitações e Contratos para organizar informações, orientar decisões e
+              oferecer atendimento jurídico próximo e responsável.
+            </p>
+            <div className="actions">
+              <WhatsAppButton />
+              <span className="hero-note">Atendimento humanizado e sigiloso</span>
+            </div>
           </div>
-        </div>
-        <div className="home-hero-portrait" aria-hidden="true">
-          <Image
-            alt=""
-            fill
-            priority
-            sizes="(max-width: 900px) 90vw, 48vw"
-            src="/imagens/deila/deila-hero.webp"
-            unoptimized
-          />
-        </div>
+          <div className="home-hero-portrait" aria-hidden="true">
+            <Image
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 900px) 96vw, 48vw"
+              src="/imagens/deila/deila-hero.webp"
+              unoptimized
+            />
+          </div>
+        </Container>
       </section>
 
       <section className="home-areas" id="areas" aria-labelledby="areas-title">
-        <div className="section-inner">
-          <div className="section-kicker">
-            <p className="eyebrow">Areas de atuacao</p>
-            <h2 id="areas-title">Como posso te ajudar</h2>
-          </div>
-          <div className="area-card-grid">
-            {practiceAreas.map((area) => (
-              <Link className="area-card" href={area.href} key={area.title}>
-                <span className="area-icon">{area.icon}</span>
-                <div>
-                  <h3>{area.title}</h3>
-                  <p>{area.description}</p>
-                  <small>Saiba mais</small>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        <Container>
+          <SectionHeading eyebrow="Áreas de atuação" title="Como posso te ajudar" />
+          <AreaCards />
+        </Container>
       </section>
 
       <section className="home-about" id="sobre" aria-labelledby="sobre-title">
-        <div className="about-photo">
-          <Image
-            alt="Dra. Deila Pinto"
-            fill
-            sizes="(max-width: 900px) 92vw, 36vw"
-            src="/imagens/deila/deila-perfil.webp"
-            unoptimized
-          />
-        </div>
-        <div className="about-copy">
-          <p className="eyebrow">Quem vai atender voce</p>
-          <h2 id="sobre-title">Prazer, eu sou Deila Pinto</h2>
-          <p>
-            Advogada inscrita na OAB/RN 22.940, com atuacao voltada a demandas
-            previdenciarias, assistenciais, trabalhistas, licitacoes e contratos.
-          </p>
-          <p>
-            A primeira conversa busca entender o caso com linguagem clara, cuidado
-            com documentos e respeito ao momento de cada pessoa.
-          </p>
-          <a className="button button-secondary" href="/contato">
-            Me conhecer melhor
-          </a>
-        </div>
+        <Container className="about-inner">
+          <div className="about-photo">
+            <Image
+              alt="Dra. Deila Pinto"
+              fill
+              sizes="(max-width: 900px) 92vw, 34vw"
+              src="/imagens/deila/deila-perfil.webp"
+              unoptimized
+            />
+          </div>
+          <div className="about-copy">
+            <Eyebrow>Quem vai atender você</Eyebrow>
+            <h2 id="sobre-title">Prazer, eu sou Deila Pinto</h2>
+            <p>
+              Advogada inscrita na OAB/RN 22.940, com atuação voltada a demandas
+              previdenciárias, assistenciais, trabalhistas, licitações e contratos.
+            </p>
+            <p>
+              A primeira conversa busca entender o caso com linguagem clara, cuidado
+              com documentos e respeito ao momento de cada pessoa.
+            </p>
+            <OutlineButton href="/sobre">Me conhecer melhor</OutlineButton>
+          </div>
+        </Container>
       </section>
 
       <section className="home-steps" id="como-funciona" aria-labelledby="steps-title">
-        <div className="section-inner">
-          <div className="section-kicker">
-            <p className="eyebrow">Como funciona</p>
-            <h2 id="steps-title">Um atendimento em 3 passos</h2>
-          </div>
-          <div className="steps-row">
-            {steps.map((step, index) => (
-              <article className="step-card" key={step.title}>
-                <span>{index + 1}</span>
-                <div>
-                  <h3>{step.title}</h3>
-                  <p>{step.description}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
+        <Container>
+          <Eyebrow>Como funciona</Eyebrow>
+          <ProcessSteps items={homeSteps} title="Um atendimento em 3 passos" />
+        </Container>
       </section>
 
       {featuredCampaigns.length ? (
         <section className="campaign-showcase" id="campanhas" aria-labelledby="titulo-campanhas">
-          <div className="section-inner">
+          <Container>
             <div className="section-heading">
               <div>
                 <p className="eyebrow">Campanhas</p>
-                <h2 id="titulo-campanhas">Orientacoes por situacao</h2>
+                <h2 id="titulo-campanhas">Orientações por situação</h2>
               </div>
               <Link className="button button-secondary" href="/campanhas">
                 Ver todas
@@ -186,26 +129,20 @@ export default async function HomePage() {
                     <span>{campaignArea(campaign)}</span>
                     <h3>{titulo}</h3>
                     {subtitulo ? <p>{subtitulo}</p> : null}
-                    <Link href={`/campanhas/${campaign.slug}`}>Abrir orientacao</Link>
+                    <Link href={`/campanhas/${campaign.slug}`}>Abrir orientação</Link>
                   </article>
                 )
               })}
             </div>
-          </div>
+          </Container>
         </section>
       ) : null}
 
-      <section className="home-contact" id="contato" aria-labelledby="contato-title">
-        <div className="home-contact-copy">
-          <p className="eyebrow">Contato</p>
-          <h2 id="contato-title">Inicie pelo caminho mais simples.</h2>
-          <p>O WhatsApp preserva o assunto escolhido e facilita a continuidade da conversa.</p>
-        </div>
-        <a className="button button-primary button-whatsapp" href="/ir/whatsapp">
-          <WhatsAppIcon />
-          Fale no WhatsApp
-        </a>
-      </section>
+      <CtaSection
+        eyebrow="Vamos conversar?"
+        title="Inicie pelo caminho mais simples."
+        text="O WhatsApp preserva o assunto escolhido e facilita a continuidade da conversa."
+      />
     </div>
   )
 }

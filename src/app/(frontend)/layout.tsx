@@ -1,19 +1,19 @@
 import React from 'react'
-import { Cormorant_Garamond, Montserrat } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import './styles.css'
 import { UtmTracker } from './UtmTracker'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { UrgencyShortcut } from '@/components/UrgencyShortcut'
 
-const cormorant = Cormorant_Garamond({
+const playfair = Playfair_Display({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
   variable: '--font-display',
   display: 'swap',
 })
 
-const montserrat = Montserrat({
+const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-body',
@@ -46,7 +46,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="pt-BR">
-      <body className={`${cormorant.variable} ${montserrat.variable}`}>
+      <body className={`${playfair.variable} ${inter.variable}`}>
         <UtmTracker />
         <SiteHeader />
         <main>{children}</main>
