@@ -12,8 +12,9 @@ import {
   SectionHeading,
   WhatsAppButton,
 } from '@/components/Marketing'
+import { BrandIcon } from '@/components/BrandIcons'
 import { getPublishedLandingCampaigns, type PublicCampaign } from '@/lib/campaigns'
-import { homeSteps } from '@/lib/marketingContent'
+import { areaSummaries, homeSteps } from '@/lib/marketingContent'
 import { getPublicText } from '@/lib/siteConfig'
 
 import './styles.css'
@@ -59,7 +60,7 @@ export default async function HomePage() {
               fill
               priority
               sizes="(max-width: 900px) 96vw, 48vw"
-              src="/imagens/deila/deila-hero.webp"
+              src="/imagens/deila/deila-perfil.webp"
               unoptimized
             />
           </div>
@@ -70,6 +71,29 @@ export default async function HomePage() {
         <Container>
           <SectionHeading eyebrow="Áreas de atuação" title="Como posso te ajudar" />
           <AreaCards />
+        </Container>
+      </section>
+
+      <section className="home-area-banners" aria-labelledby="area-banners-title">
+        <Container>
+          <div className="section-title section-title-left">
+            <Eyebrow>Atendimento por área</Eyebrow>
+            <h2 id="area-banners-title">Caminhos de orientação</h2>
+          </div>
+          <div className="area-banner-grid">
+            {areaSummaries.map((area, index) => (
+              <Link
+                className={`area-banner-card ${index % 2 === 0 ? 'area-banner-card-dark' : ''}`}
+                href={area.href}
+                key={area.href}
+              >
+                <span>{area.shortTitle}</span>
+                <h3>{area.title}</h3>
+                <p>{area.description}</p>
+                <BrandIcon name={area.icon} />
+              </Link>
+            ))}
+          </div>
         </Container>
       </section>
 

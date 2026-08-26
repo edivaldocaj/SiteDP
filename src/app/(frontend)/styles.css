@@ -1335,6 +1335,455 @@ code {
   }
 }
 
+/* Ajuste de fidelidade ao painel visual aprovado */
+:root {
+  --stage-width: 1400px;
+  --approved-shadow: 0 28px 90px rgba(35, 25, 13, 0.14);
+  --approved-line: rgba(200, 160, 99, 0.28);
+}
+
+body {
+  background:
+    radial-gradient(circle at 10% -6%, rgba(230, 192, 122, 0.18), transparent 24%),
+    radial-gradient(circle at 94% 0%, rgba(200, 160, 99, 0.12), transparent 27%),
+    linear-gradient(180deg, #f7efe5 0%, #f2ede3 100%);
+  padding-inline: 14px;
+}
+
+main {
+  isolation: isolate;
+}
+
+.site-header {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  margin: 10px auto 0;
+  max-width: var(--stage-width);
+  overflow: visible;
+}
+
+.header-inner {
+  max-width: 1288px;
+  min-height: 78px;
+  padding-inline: 34px;
+}
+
+.site-shell {
+  background: var(--color-white);
+  box-shadow: var(--approved-shadow);
+  margin-inline: auto;
+  max-width: var(--stage-width);
+  overflow: hidden;
+}
+
+.site-footer {
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 22px 70px rgba(20, 20, 20, 0.18);
+  margin: 0 auto 24px;
+  max-width: var(--stage-width);
+}
+
+.home-hero,
+.page-hero,
+.areas-hero,
+.area-detail-hero,
+.contact-hero {
+  background:
+    linear-gradient(90deg, rgba(250, 247, 241, 0.99) 0%, rgba(250, 247, 241, 0.94) 42%, rgba(242, 237, 227, 0.68) 100%),
+    radial-gradient(circle at 82% 22%, rgba(230, 192, 122, 0.2), transparent 26%),
+    var(--color-ivory);
+}
+
+.home-hero-inner,
+.page-hero-inner,
+.contact-hero-inner {
+  max-width: none;
+  min-height: 540px;
+  padding-left: clamp(42px, 6vw, 96px);
+}
+
+.home-hero-copy,
+.page-hero-copy,
+.contact-hero-copy {
+  padding-right: clamp(16px, 3vw, 40px);
+}
+
+.home-hero-copy h1,
+.page-hero-copy h1,
+.contact-hero-copy h1 {
+  color: var(--color-charcoal);
+  text-wrap: balance;
+}
+
+.home-hero-copy > p:not(.eyebrow) {
+  max-width: 35rem;
+}
+
+.home-hero-portrait,
+.page-hero-media,
+.contact-hero-photo {
+  background:
+    linear-gradient(90deg, rgba(250, 247, 241, 0.35), rgba(250, 247, 241, 0.02)),
+    url('/imagens/hero-consultoria-dp.webp') center / cover;
+  min-height: 500px;
+}
+
+.home-hero-portrait::before,
+.page-hero-media::before,
+.contact-hero-photo::before {
+  background:
+    linear-gradient(90deg, var(--color-ivory) 0%, rgba(250, 247, 241, 0.5) 21%, rgba(250, 247, 241, 0.03) 58%),
+    linear-gradient(180deg, transparent 55%, rgba(20, 20, 20, 0.18));
+}
+
+.home-hero-portrait img,
+.page-hero-media img,
+.contact-hero-photo img {
+  filter: saturate(1.02) contrast(1.02);
+  object-fit: contain;
+  object-position: right bottom;
+  padding: 1rem clamp(1rem, 4vw, 3rem) 0 0;
+  transform: none;
+  z-index: 2;
+}
+
+.home-hero-portrait img {
+  object-position: 82% bottom;
+  padding-right: clamp(0.6rem, 2vw, 1.6rem);
+  transform: scale(1.04);
+  transform-origin: right bottom;
+}
+
+.page-hero-media img,
+.contact-hero-photo img {
+  transform: scale(1.02);
+  transform-origin: right bottom;
+}
+
+.home-areas {
+  padding-top: 54px;
+}
+
+.area-grid {
+  gap: 0;
+}
+
+.area-grid:not(.area-grid-compact) {
+  border: 1px solid var(--approved-line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.area-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(250, 247, 241, 0.58));
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  justify-items: center;
+  min-height: 210px;
+  padding: 1.4rem 1.2rem;
+  text-align: center;
+}
+
+.area-grid:not(.area-grid-compact) .area-card + .area-card {
+  border-left: 1px solid var(--approved-line);
+}
+
+.area-card .brand-icon {
+  height: 58px;
+  width: 58px;
+}
+
+.area-card h3 {
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.04;
+}
+
+.home-area-banners {
+  background:
+    linear-gradient(180deg, rgba(250, 247, 241, 0.96), rgba(255, 255, 255, 0.96)),
+    var(--color-ivory);
+  padding-block: 64px;
+}
+
+.area-banner-grid {
+  border: 1px solid var(--approved-line);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+}
+
+.area-banner-card {
+  background:
+    linear-gradient(90deg, rgba(250, 247, 241, 0.96), rgba(250, 247, 241, 0.68)),
+    url('/imagens/hero-consultoria-dp.webp') center / cover;
+  color: var(--color-charcoal);
+  display: grid;
+  gap: 0.6rem;
+  min-height: 220px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  position: relative;
+  text-decoration: none;
+}
+
+.area-banner-card:nth-child(2n) {
+  border-left: 1px solid var(--approved-line);
+}
+
+.area-banner-card:nth-child(n + 3) {
+  border-top: 1px solid var(--approved-line);
+}
+
+.area-banner-card-dark {
+  background:
+    linear-gradient(90deg, rgba(20, 20, 20, 0.92), rgba(20, 20, 20, 0.74)),
+    url('/imagens/hero-consultoria-dp.webp') center / cover;
+  color: var(--color-white);
+}
+
+.area-banner-card span {
+  color: var(--color-gold);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.area-banner-card h3 {
+  font-family: var(--font-display), "Playfair Display", Georgia, serif;
+  font-size: clamp(1.8rem, 3vw, 2.45rem);
+  font-weight: 500;
+  line-height: 1.03;
+  max-width: 10ch;
+}
+
+.area-banner-card p {
+  color: currentColor;
+  max-width: 25rem;
+  opacity: 0.78;
+}
+
+.area-banner-card .brand-icon {
+  bottom: 1.4rem;
+  height: 92px;
+  opacity: 0.95;
+  position: absolute;
+  right: 1.4rem;
+  width: 92px;
+}
+
+.about-photo {
+  background:
+    linear-gradient(180deg, rgba(250, 247, 241, 0.1), rgba(242, 237, 227, 0.88)),
+    url('/imagens/hero-consultoria-dp.webp') center / cover;
+  border-color: var(--approved-line);
+  box-shadow: 0 16px 42px rgba(35, 25, 13, 0.08);
+}
+
+.about-photo img {
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+.service-grid {
+  gap: 0.9rem;
+}
+
+.service-card {
+  box-shadow: 0 10px 32px rgba(35, 25, 13, 0.05);
+}
+
+.service-card .brand-icon {
+  background: rgba(250, 247, 241, 0.68);
+  border: 1px solid var(--approved-line);
+  border-radius: 8px;
+  padding: 0.35rem;
+}
+
+.area-detail-hero-inner,
+.areas-hero-inner {
+  max-width: none;
+  min-height: 460px;
+  padding-left: clamp(42px, 6vw, 96px);
+  padding-right: clamp(42px, 6vw, 96px);
+}
+
+.area-hero-icon,
+.areas-hero-art {
+  background:
+    linear-gradient(90deg, rgba(250, 247, 241, 0.2), rgba(250, 247, 241, 0.9)),
+    url('/imagens/hero-consultoria-dp.webp') center / cover;
+  border-left: 1px solid rgba(200, 160, 99, 0.16);
+}
+
+.area-hero-icon .brand-icon {
+  color: var(--color-gold);
+  filter: drop-shadow(0 10px 24px rgba(200, 160, 99, 0.16));
+  height: min(230px, 34vw);
+  width: min(230px, 34vw);
+}
+
+.process-step {
+  min-height: 132px;
+}
+
+.cta-band {
+  background:
+    linear-gradient(90deg, rgba(20, 20, 20, 0.98), rgba(20, 20, 20, 0.92)),
+    var(--color-charcoal);
+  color: var(--color-white);
+  overflow: hidden;
+  position: relative;
+}
+
+.cta-band::after {
+  color: rgba(200, 160, 99, 0.14);
+  content: 'DP';
+  font-family: var(--font-display), "Playfair Display", Georgia, serif;
+  font-size: clamp(5rem, 13vw, 10rem);
+  line-height: 1;
+  position: absolute;
+  right: clamp(1rem, 6vw, 5rem);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.cta-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-inner .eyebrow {
+  color: var(--color-gold-light);
+}
+
+.contact-main-grid {
+  gap: 1.25rem;
+}
+
+.contact-form-card,
+.contact-method-row,
+.faq-item,
+.mini-cta,
+.document-panel {
+  box-shadow: 0 10px 32px rgba(35, 25, 13, 0.04);
+}
+
+@media (max-width: 1440px) {
+  body {
+    padding-inline: 0;
+  }
+
+  .site-header {
+    border-radius: 0;
+    margin-top: 0;
+  }
+
+  .site-footer {
+    border-radius: 0;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .header-inner {
+    padding-inline: 20px;
+  }
+
+  .home-hero-inner,
+  .page-hero-inner,
+  .contact-hero-inner,
+  .area-detail-hero-inner,
+  .areas-hero-inner {
+    min-height: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .home-hero-portrait,
+  .page-hero-media,
+  .contact-hero-photo {
+    min-height: 380px;
+  }
+
+  .area-grid:not(.area-grid-compact) {
+    border: 0;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .area-grid:not(.area-grid-compact) .area-card + .area-card,
+  .area-banner-card:nth-child(2n),
+  .area-banner-card:nth-child(n + 3) {
+    border-left: 0;
+    border-top: 0;
+  }
+
+  .area-card {
+    border: 1px solid var(--approved-line);
+    border-radius: 8px;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .area-banner-grid {
+    border: 0;
+    gap: 0.8rem;
+    grid-template-columns: 1fr;
+  }
+
+  .area-banner-card {
+    border: 1px solid var(--approved-line);
+    border-radius: 8px;
+  }
+
+  .area-hero-icon,
+  .areas-hero-art {
+    border-left: 0;
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 760px) {
+  .home-hero-copy h1 .hero-title-line {
+    white-space: normal;
+  }
+
+  .home-hero-portrait,
+  .page-hero-media,
+  .contact-hero-photo {
+    min-height: 330px;
+  }
+
+  .home-hero-portrait img,
+  .page-hero-media img,
+  .contact-hero-photo img {
+    object-position: center bottom;
+    padding-right: 0;
+  }
+
+  .area-card {
+    grid-template-columns: 58px minmax(0, 1fr);
+    min-height: 114px;
+  }
+
+  .area-card p {
+    display: none;
+  }
+
+  .area-banner-card {
+    min-height: 210px;
+  }
+
+  .area-banner-card .brand-icon {
+    height: 70px;
+    width: 70px;
+  }
+}
+
 /* Redesign aprovado - camada visual final */
 :root {
   --color-ivory: #faf7f1;
@@ -2486,7 +2935,7 @@ h2 {
   }
 
   .home-hero-copy h1 {
-    font-size: clamp(2.25rem, 10vw, 2.75rem);
+    font-size: clamp(1.86rem, 8.1vw, 2.14rem);
     max-width: 100%;
   }
 
