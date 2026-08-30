@@ -2213,11 +2213,25 @@ h2 {
 }
 
 .home-about {
+  display: block;
+  grid-template-columns: none;
+  margin: 0;
   max-width: none;
+  padding-inline: 0;
 }
 
 .about-photo {
+  align-self: stretch;
+  aspect-ratio: 4 / 5;
   min-height: 320px;
+}
+
+.about-copy {
+  min-width: 0;
+}
+
+.about-copy h2 {
+  max-width: 15ch;
 }
 
 .process-block {
