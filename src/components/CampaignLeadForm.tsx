@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
 import type { CampaignQuestion } from '@/lib/campaigns'
+import { getStoredUtm } from '@/lib/integration/clientUtm'
 
 type CampaignLeadFormProps = {
   campaignCode: string
@@ -23,15 +24,6 @@ const storageKeyPrefix = 'campaign_form:'
 
 function createIdempotencia() {
   return crypto.randomUUID()
-}
-
-function getUtm() {
-  try {
-    const value = sessionStorage.getItem('utm_first')
-    return value ? JSON.parse(value) : {}
-  } catch {
-    return {}
-  }
 }
 
 export function CampaignLeadForm({
@@ -85,7 +77,7 @@ export function CampaignLeadForm({
         campanha: campaignCode,
         consentAceito: parcial ? undefined : consentAceito,
         consentEm: parcial ? undefined : new Date().toISOString(),
-        consentVersao: consentimentoVersao || undefined,
+        consentVersao: consentimentoVersao || 'site-dp-v1',
         email: form.email || undefined,
         empresa: empresa || undefined,
         formularioIniciadoEm,
@@ -95,7 +87,7 @@ export function CampaignLeadForm({
         parcial,
         respostas,
         telefone: form.telefone,
-        utm: getUtm(),
+        utm: getStoredUtm(),
       }),
       headers: {
         'Content-Type': 'application/json',

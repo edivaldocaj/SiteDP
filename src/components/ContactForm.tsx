@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { getStoredUtm } from '@/lib/integration/clientUtm'
 
 type ContactFormProps = {
   consentimentoTexto?: string | null
@@ -21,15 +22,6 @@ const initialForm: FormState = {
   mensagem: '',
   nome: '',
   telefone: '',
-}
-
-function getUtm() {
-  try {
-    const value = sessionStorage.getItem('utm_first')
-    return value ? JSON.parse(value) : {}
-  } catch {
-    return {}
-  }
 }
 
 export function ContactForm({ consentimentoTexto, consentimentoVersao }: ContactFormProps) {
@@ -71,7 +63,7 @@ export function ContactForm({ consentimentoTexto, consentimentoVersao }: Contact
           { pergunta: 'Mensagem', resposta: form.mensagem },
         ],
         telefone: form.telefone,
-        utm: getUtm(),
+        utm: getStoredUtm(),
       }),
       headers: {
         'Content-Type': 'application/json',

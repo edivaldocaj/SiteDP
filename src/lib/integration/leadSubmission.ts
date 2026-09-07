@@ -127,7 +127,8 @@ export async function handleLeadSubmission({
   const parsed = leadSubmissionSchema.safeParse(body)
 
   if (!parsed.success) {
-    return { body: { ok: false, erro: 'Dados invalidos.' }, status: 422 }
+    const field = parsed.error.issues[0]?.path.join('.')
+    return { body: { ok: false, erro: field ? `Revise o campo ${field}.` : 'Dados invalidos.' }, status: 422 }
   }
 
   const data = parsed.data
