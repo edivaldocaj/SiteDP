@@ -26,7 +26,7 @@ const initialForm: FormState = {
 
 export function ContactForm({ consentimentoTexto, consentimentoVersao }: ContactFormProps) {
   const [form, setForm] = useState(initialForm)
-  const [empresa, setEmpresa] = useState('')
+  const [website, setWebsite] = useState('')
   const [formularioIniciadoEm] = useState(() => new Date().toISOString())
   const [idempotencia] = useState(() => crypto.randomUUID())
   const [consentAceito, setConsentAceito] = useState(false)
@@ -52,7 +52,7 @@ export function ContactForm({ consentimentoTexto, consentimentoVersao }: Contact
         consentEm: new Date().toISOString(),
         consentVersao: consentimentoVersao || 'contato-v1',
         email: form.email || undefined,
-        empresa,
+        website,
         formularioIniciadoEm,
         idempotencia,
         nome: form.nome,
@@ -99,10 +99,11 @@ export function ContactForm({ consentimentoTexto, consentimentoVersao }: Contact
       <input
         autoComplete="off"
         className="honeypot"
-        name="empresa"
-        onChange={(event) => setEmpresa(event.target.value)}
+        aria-hidden="true"
+        name="website"
+        onChange={(event) => setWebsite(event.target.value)}
         tabIndex={-1}
-        value={empresa}
+        value={website}
       />
       <div className="contact-form-grid">
         <label>

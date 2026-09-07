@@ -45,13 +45,17 @@ export const leadSubmissionSchema = z.object({
   consentEm: z.string().datetime().optional(),
   consentVersao: z.string().trim().min(1).max(60).optional(),
   email: z.string().trim().email().optional().nullable(),
-  empresa: z.string().trim().max(0).optional(),
+  // `website` is the hidden honeypot used by the public forms. Keep the
+  // legacy `empresa` key permissive so browser autofill cannot turn a valid
+  // submission into a schema error before the honeypot check runs.
+  empresa: z.string().trim().max(160).optional().nullable(),
   formularioIniciadoEm: z.string().datetime().optional(),
   idempotencia: z.string().uuid().optional(),
   nome: z.string().trim().max(160).optional().nullable(),
   origem: z.enum(['landing', 'contato', 'calculadora']),
   parcial: z.boolean().optional().default(false),
   referrer: optionalText,
+  website: z.string().trim().max(0).optional(),
   respostas: z
     .array(
       z.object({
@@ -133,7 +137,7 @@ export async function handleLeadSubmission({
 
   const data = parsed.data
 
-  if (data.empresa) {
+  if (data.website || data.empresa) {
     return { body: { ok: true }, status: 200 }
   }
 

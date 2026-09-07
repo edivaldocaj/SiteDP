@@ -36,7 +36,7 @@ export function CampaignLeadForm({
   const [step, setStep] = useState(1)
   const [formularioIniciadoEm] = useState(() => new Date().toISOString())
   const [consentAceito, setConsentAceito] = useState(false)
-  const [empresa, setEmpresa] = useState('')
+  const [website, setWebsite] = useState('')
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState<StoredForm>(() => {
@@ -79,7 +79,7 @@ export function CampaignLeadForm({
         consentEm: parcial ? undefined : new Date().toISOString(),
         consentVersao: consentimentoVersao || 'site-dp-v1',
         email: form.email || undefined,
-        empresa: empresa || undefined,
+        website: website || undefined,
         formularioIniciadoEm,
         idempotencia: form.idempotencia,
         nome: form.nome || undefined,
@@ -161,12 +161,13 @@ export function CampaignLeadForm({
       <h2 id="form-title">Vamos conversar sobre o seu direito?</h2>
       <p className="form-progress">Etapa {Math.min(step, totalSteps)} de {totalSteps}</p>
       <input
-        name="empresa"
+        aria-hidden="true"
+        name="website"
         tabIndex={-1}
         autoComplete="off"
         className="honeypot"
-        onChange={(event) => setEmpresa(event.target.value)}
-        value={empresa}
+        onChange={(event) => setWebsite(event.target.value)}
+        value={website}
       />
 
       {step === 1 && (
