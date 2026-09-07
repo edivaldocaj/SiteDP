@@ -90,7 +90,7 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
     <div className="site-shell campaign-page">
       <section className="campaign-hero" aria-labelledby="campaign-title">
         <div className="campaign-copy">
-          <p className="eyebrow">{campaignArea(currentCampaign.campaignCode)} · {currentCampaign.campaignCode}</p>
+          <p className="eyebrow">{campaignArea(currentCampaign.campaignCode)} · Informação jurídica</p>
           {titulo ? <h1 id="campaign-title">{titulo}</h1> : null}
           {subtitulo ? <p>{subtitulo}</p> : null}
           <div className="campaign-hero-actions">
@@ -98,10 +98,11 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
               <WhatsAppIcon />
               Abrir WhatsApp
             </a>
-            <a className="button button-secondary button-on-dark" href="#perguntas">
-              Ver perguntas
+            <a className="button button-secondary button-on-dark" href="#formulario">
+              Solicitar atendimento
             </a>
           </div>
+          <p className="campaign-care-note">Uma conversa para entender sua necessidade. Cada caso passa por análise individual.</p>
         </div>
         {mediaUrl ? (
           <Image
@@ -134,15 +135,15 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
       <section className="campaign-intro-strip" aria-label="Como funciona o primeiro contato">
         <div>
           <strong>1</strong>
-          <span>Informe telefone</span>
+          <span>Escolha como conversar</span>
         </div>
         <div>
           <strong>2</strong>
-          <span>Veja perguntas curtas</span>
+          <span>Conte apenas o essencial</span>
         </div>
         <div>
           <strong>3</strong>
-          <span>Continue pelo WhatsApp</span>
+          <span>Receba orientação da equipe</span>
         </div>
       </section>
 
@@ -196,7 +197,7 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
             )}
             <a className="button button-gold" href={whatsappHref}>
               <WhatsAppIcon />
-              {mensagemWhatsapp || 'Abrir WhatsApp'}
+              Conversar com a equipe
             </a>
             <FraudWarning />
           </div>

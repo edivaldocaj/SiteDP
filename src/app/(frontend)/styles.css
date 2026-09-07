@@ -3003,3 +3003,11 @@ h2 {
     width: calc(100vw - 1.5rem);
   }
 }
+
+/* Campanhas: leitura e contato acessiveis */
+.campaign-page .campaign-care-note { font-size: 16px; line-height: 1.7; max-width: 42ch; margin-top: 24px; color: var(--creme, #f5f1e8); }
+.campaign-page .campaign-hero h1 { letter-spacing: -.025em; line-height: 1.12; }
+.campaign-page .campaign-hero-actions { gap: 14px; }
+.campaign-page .campaign-text-panel { border-radius: 12px; }
+.campaign-page #formulario { scroll-margin-top: 100px; }
+@media(max-width: 640px) { .campaign-page .campaign-hero-actions { display: grid; } .campaign-page .button { min-height: 52px; } }

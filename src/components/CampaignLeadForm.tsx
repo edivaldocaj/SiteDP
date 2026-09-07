@@ -109,14 +109,14 @@ export function CampaignLeadForm({
     }
   }
 
-  async function advanceFromPhone() {
+  function advanceFromPhone() {
     setError(null)
-    try {
-      await submit(true)
-      setStep(2)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Telefone invalido.')
+    const digits = (form.telefone || '').replace(/\D/g, '')
+    if (!/^(?:55)?[1-9][0-9][2-9][0-9]{7,8}$/.test(digits)) {
+      setError('Informe um telefone válido com DDD.')
+      return
     }
+    setStep(2)
   }
 
   function advanceFromName() {
@@ -142,6 +142,10 @@ export function CampaignLeadForm({
 
   async function finish() {
     setError(null)
+    if (!consentAceito) {
+      setError('Leia e confirme o uso dos dados para solicitar o atendimento.')
+      return
+    }
     try {
       await submit(false)
       setSent(true)

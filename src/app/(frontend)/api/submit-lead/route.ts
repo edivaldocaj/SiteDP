@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-import { scheduleLeadDelivery } from '@/lib/integration/delivery'
+import { deliverLead } from '@/lib/integration/delivery'
 import { handleLeadSubmission, type LeadSubmissionPayload } from '@/lib/integration/leadSubmission'
 import { getPayloadClient } from '@/lib/integration/payload'
 import { isRateLimited } from '@/lib/integration/rateLimit'
@@ -19,8 +19,12 @@ export async function POST(request: NextRequest) {
     body,
     ip,
     payload,
-    scheduleDelivery: scheduleLeadDelivery,
+    scheduleDelivery: () => undefined,
   })
+
+  if (result.deliveryRecord) {
+    await deliverLead(result.deliveryRecord.id)
+  }
 
   return NextResponse.json(result.body, { status: result.status })
 }

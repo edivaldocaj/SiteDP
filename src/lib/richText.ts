@@ -1,4 +1,5 @@
 type RichTextNode = {
+  root?: RichTextNode
   children?: RichTextNode[]
   text?: string
 }
@@ -7,6 +8,7 @@ function collectText(node: unknown): string {
   if (!node || typeof node !== 'object') return ''
 
   const current = node as RichTextNode
+  if (current.root) return collectText(current.root)
   const ownText = typeof current.text === 'string' ? current.text : ''
   const childText = Array.isArray(current.children)
     ? current.children.map((child) => collectText(child)).join(' ')
