@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import React from 'react'
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 function campaignArea(campaign: PublicCampaign) {
   if (campaign.campaignCode === 'PREV-BPC') return 'Assistencial'
   if (campaign.campaignCode.startsWith('TRAB-')) return 'Trabalhista'
-  return 'Previdenciario'
+  return 'Previdenciário'
 }
 
 export default async function CampaignsPage() {
@@ -25,32 +26,57 @@ export default async function CampaignsPage() {
   return (
     <div className="site-shell listing-page">
       <section className="listing-hero" aria-labelledby="titulo-campanhas">
-        <p className="eyebrow">Campanhas</p>
-        <h1 id="titulo-campanhas">Orientações por situação</h1>
-        <p>
-          Escolha o assunto mais próximo do seu caso para iniciar com perguntas simples
-          e direcionamento correto para o WhatsApp.
-        </p>
+        <div className="listing-hero-inner">
+          <div className="listing-hero-copy">
+            <p className="eyebrow">Campanhas para começar</p>
+            <h1 id="titulo-campanhas">Encontre uma orientação para a sua situação</h1>
+            <p>
+              Escolha um tema, veja as informações iniciais e decida se quer continuar
+              pelo formulário ou pelo WhatsApp.
+            </p>
+          </div>
+          <div className="listing-hero-mark" aria-hidden="true">
+            <Image alt="" height={360} priority src="/marca/dp-simbolo.png" unoptimized width={360} />
+          </div>
+        </div>
       </section>
 
       <section className="campaign-showcase campaign-showcase-list" aria-label="Campanhas publicadas">
         <div className="section-inner">
           {campaigns.length ? (
-            <div className="campaign-grid">
+            <>
+              <div className="campaign-list-heading">
+                <div>
+                  <p className="eyebrow">Campanhas publicadas</p>
+                  <h2>Escolha o tema que mais se aproxima do seu momento</h2>
+                </div>
+                <p>
+                  Cada orientação explica o que observar e reúne perguntas curtas para
+                  organizar o primeiro contato com cuidado e clareza.
+                </p>
+              </div>
+              <div className="campaign-grid">
               {campaigns.map((campaign) => {
                 const titulo = getPublicText(campaign.titulo) || campaign.campaignCode
                 const subtitulo = getPublicText(campaign.subtitulo)
 
                 return (
                   <article className="campaign-card" key={campaign.id}>
-                    <span>{campaignArea(campaign)}</span>
+                    <div className="campaign-card-meta">
+                      <span>{campaignArea(campaign)}</span>
+                      <small>Primeiro contato</small>
+                    </div>
                     <h3>{titulo}</h3>
                     {subtitulo ? <p>{subtitulo}</p> : null}
-                    <Link href={`/campanhas/${campaign.slug}`}>Abrir orientação</Link>
+                    <Link href={`/campanhas/${campaign.slug}`}>
+                      <span>Ver campanha e começar</span>
+                      <span aria-hidden="true">→</span>
+                    </Link>
                   </article>
                 )
               })}
-            </div>
+              </div>
+            </>
           ) : (
             <div className="empty-state">
               <h2>Nenhuma campanha publicada no momento.</h2>

@@ -26,7 +26,7 @@ function getMediaUrl(value: unknown) {
 function campaignArea(campaignCode: string) {
   if (campaignCode === 'PREV-BPC') return 'Assistencial'
   if (campaignCode.startsWith('TRAB-')) return 'Trabalhista'
-  return 'Previdenciario'
+  return 'Previdenciário'
 }
 
 function questionTypeLabel(type?: string | null) {
