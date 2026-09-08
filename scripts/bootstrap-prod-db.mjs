@@ -138,6 +138,7 @@ async function seedCampaigns(client) {
             subtitulo,
             bloco_dor,
             bloco_prova,
+            bloco_orientacao,
             mensagem_whatsapp,
             seo_titulo,
             seo_descricao,
@@ -145,19 +146,8 @@ async function seedCampaigns(client) {
             updated_at,
             created_at
           )
-          values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, now(), now())
-          on conflict (campaign_code) do update set
-            slug = excluded.slug,
-            tem_landing = excluded.tem_landing,
-            titulo = excluded.titulo,
-            subtitulo = excluded.subtitulo,
-            bloco_dor = excluded.bloco_dor,
-            bloco_prova = excluded.bloco_prova,
-            mensagem_whatsapp = excluded.mensagem_whatsapp,
-            seo_titulo = excluded.seo_titulo,
-            seo_descricao = excluded.seo_descricao,
-            status = excluded.status,
-            updated_at = now()
+          values ($1, $2, $3, $4, $5, $6, $7, $12, $8, $9, $10, $11, now(), now())
+          on conflict (campaign_code) do nothing
           returning id
         `,
         [
@@ -172,11 +162,16 @@ async function seedCampaigns(client) {
           campaign.temLanding ? campaign.seo?.titulo || null : null,
           campaign.temLanding ? campaign.seo?.descricao || null : null,
           campaign.status,
+          campaign.blocoOrientacao ? JSON.stringify(nullableRichText(campaign.blocoOrientacao)) : null,
         ],
       )
 
       const campaignId = result.rows[0]?.id
-      await client.query('delete from campaigns_perguntas where _parent_id = $1', [campaignId])
+      if (!campaignId) continue // Conteúdo existente pertence ao CMS.
+      for (const [index, item] of (campaign.faq || []).entries()) {
+        await client.query('insert into campaigns_faq (_order, _parent_id, id, pergunta, resposta) values ($1,$2,$3,$4,$5)',
+          [index + 1, campaignId, `${campaign.campaignCode.toLowerCase()}-editorial-faq-${index}`, item.pergunta, item.resposta])
+      }
 
       if (!campaign.temLanding || !campaign.perguntas?.length) {
         console.log(`campanha sem landing: ${campaign.campaignCode}`)
@@ -219,8 +214,8 @@ async function seedSiteTexts(client) {
     `
       update site_config
       set
-        urgencia_texto = $1,
-        aviso_golpe_texto = $2,
+        urgencia_texto = coalesce(urgencia_texto, $1),
+        aviso_golpe_texto = coalesce(aviso_golpe_texto, $2),
         updated_at = now()
       where id = (
         select id
@@ -260,6 +255,7 @@ async function run() {
   const client = await pool.connect()
 
   try {
+    await client.query('select pg_advisory_lock(26090801)')
     const applied = await getAppliedMigrations(client)
     const latestBatchResult = await (await migrationExistsTable(client)
       ? client.query('select coalesce(max(batch), 0) as batch from payload_migrations')
@@ -297,6 +293,7 @@ async function run() {
       await seedSiteTexts(client)
     }
   } finally {
+    await client.query('select pg_advisory_unlock(26090801)')
     client.release()
     await pool.end()
   }

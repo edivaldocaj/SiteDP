@@ -16,6 +16,8 @@ function campaignData(campaign: CampaignContent) {
       ? {
           blocoDor: richTextFromText(campaign.blocoDor),
           blocoProva: richTextFromText(campaign.blocoProva),
+          blocoOrientacao: campaign.blocoOrientacao ? richTextFromText(campaign.blocoOrientacao) : undefined,
+          faq: campaign.faq,
           perguntas: campaign.perguntas,
           seo: campaign.seo,
           subtitulo: campaign.subtitulo,

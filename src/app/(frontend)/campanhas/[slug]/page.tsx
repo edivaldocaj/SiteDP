@@ -5,9 +5,10 @@ import React from 'react'
 
 import { CampaignLeadForm } from '@/components/CampaignLeadForm'
 import { FraudWarning } from '@/components/FraudWarning'
-import { RichTextBlock } from '@/components/RichTextBlock'
+import { CampaignRichText } from '@/components/CampaignRichText'
 import { WhatsAppIcon } from '@/components/WhatsAppIcon'
 import { getPublishedCampaignBySlug, isPublicLandingCampaign } from '@/lib/campaigns'
+import { getVideoEmbedUrl } from '@/lib/campaignVideo'
 import { richTextToPlainText } from '@/lib/richText'
 import { getPublicSiteConfig, getPublicText } from '@/lib/siteConfig'
 
@@ -31,7 +32,7 @@ function campaignArea(campaignCode: string) {
 
 function questionTypeLabel(type?: string | null) {
   if (type === 'data') return 'Data'
-  if (type === 'opcoes') return 'Opcoes'
+  if (type === 'opcoes') return 'Opções'
   return 'Resposta curta'
 }
 
@@ -47,20 +48,24 @@ export async function generateMetadata({ params }: CampaignPageProps): Promise<M
 
   const title = getPublicText(campaign.seo?.titulo) || getPublicText(campaign.titulo) || campaign.campaignCode
   const description = getPublicText(campaign.seo?.descricao) || getPublicText(campaign.subtitulo) || undefined
+  const ogImage = getMediaUrl(campaign.seo?.ogImage) || getMediaUrl(campaign.midiaTopo)
 
   return {
+    alternates: { canonical: `/campanhas/${campaign.slug}` },
     description,
     openGraph: {
       description,
       title,
       type: 'website',
       url: `/campanhas/${campaign.slug}`,
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
     },
     title,
     twitter: {
       card: 'summary_large_image',
       description,
       title,
+      ...(ogImage ? { images: [ogImage] } : {}),
     },
   }
 }
@@ -80,7 +85,18 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
   const mediaUrl = getMediaUrl(currentCampaign.midiaTopo)
   const hasDor = getPublicText(richTextToPlainText(currentCampaign.blocoDor))
   const hasProva = getPublicText(richTextToPlainText(currentCampaign.blocoProva))
-  const mensagemWhatsapp = getPublicText(currentCampaign.mensagemWhatsapp)
+  const hasOrientacao = getPublicText(richTextToPlainText(currentCampaign.blocoOrientacao))
+  const urgencyText = getPublicText(currentCampaign.textoUrgencia)
+  const videoFileUrl = getMediaUrl(currentCampaign.videoFile)
+  const videoEmbedUrl = getVideoEmbedUrl(currentCampaign.videoUrl)
+  const faqItems = (currentCampaign.faq || [])
+    .map((item) => ({
+      pergunta: getPublicText(item.pergunta),
+      resposta: getPublicText(item.resposta),
+    }))
+    .filter((item) => item.pergunta && item.resposta)
+    .slice(0, 8)
+  const showForm = currentCampaign.mostrarFormulario !== false
   const qualificationQuestions = (currentCampaign.perguntas || [])
     .filter((question) => getPublicText(question.pergunta))
     .slice(0, 4)
@@ -98,9 +114,9 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
               <WhatsAppIcon />
               Abrir WhatsApp
             </a>
-            <a className="button button-secondary button-on-dark" href="#formulario">
+            {showForm ? <a className="button button-secondary button-on-dark" href="#formulario">
               Solicitar atendimento
-            </a>
+            </a> : null}
           </div>
           <p className="campaign-care-note">Uma conversa para entender sua necessidade. Cada caso passa por análise individual.</p>
         </div>
@@ -118,11 +134,11 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
             <Image
               alt=""
               className="campaign-fallback-photo"
-              height={760}
+              height={899}
               priority
-              src="/imagens/deila/deila-livro.webp"
+              src="/imagens/deila/deila-hero.webp"
               unoptimized
-              width={760}
+              width={989}
             />
             <div className="campaign-fallback-seal">
               <Image alt="" height={72} src="/marca/dp-simbolo.png" unoptimized width={72} />
@@ -131,6 +147,13 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
           </div>
         )}
       </section>
+
+      {urgencyText ? (
+        <aside className="campaign-urgency-bar" aria-label="Aviso da campanha">
+          <span aria-hidden="true">!</span>
+          <p>{urgencyText}</p>
+        </aside>
+      ) : null}
 
       <section className="campaign-intro-strip" aria-label="Como funciona o primeiro contato">
         <div>
@@ -147,33 +170,99 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
         </div>
       </section>
 
-      {hasDor || hasProva ? (
+      {hasDor || hasProva || hasOrientacao ? (
         <section className="campaign-content-band">
           <div className="section-inner campaign-blocks">
             {hasDor ? (
               <article className="campaign-text-panel">
-                <span>Contexto</span>
-                <RichTextBlock value={currentCampaign.blocoDor} />
+                <h2>Entenda a situação</h2>
+                <CampaignRichText value={currentCampaign.blocoDor} />
               </article>
             ) : null}
             {hasProva ? (
               <article className="campaign-text-panel campaign-text-panel-accent">
-                <span>Documentos</span>
-                <RichTextBlock value={currentCampaign.blocoProva} />
+                <h2>O que ajuda na análise</h2>
+                <CampaignRichText value={currentCampaign.blocoProva} />
+              </article>
+            ) : null}
+            {hasOrientacao ? (
+              <article className="campaign-text-panel campaign-text-panel-guidance">
+                <h2>Como podemos orientar</h2>
+                <CampaignRichText value={currentCampaign.blocoOrientacao} />
               </article>
             ) : null}
           </div>
         </section>
       ) : null}
 
+      {videoEmbedUrl || videoFileUrl ? (
+        <section className="campaign-video-band" aria-labelledby="campaign-video-title">
+          <div className="section-inner campaign-video-layout">
+            <div>
+              <span className="eyebrow">Conteúdo da campanha</span>
+              <h2 id="campaign-video-title">Uma explicação rápida para começar</h2>
+              <p>Veja a explicação e anote suas dúvidas para conversar com a equipe.</p>
+            </div>
+            <div className="campaign-video-frame">
+              {!videoFileUrl && videoEmbedUrl ? (
+                <iframe
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  src={videoEmbedUrl}
+                  title={`Vídeo da campanha ${titulo || currentCampaign.campaignCode}`}
+                />
+              ) : (
+                <video controls preload="metadata" src={videoFileUrl || undefined}>
+                  Seu navegador não consegue reproduzir este vídeo.
+                </video>
+              )}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {faqItems.length ? (
+        <section className="campaign-faq-band" aria-labelledby="campaign-faq-title">
+          <div className="section-inner campaign-faq-layout">
+            <div>
+              <span className="eyebrow">Dúvidas comuns</span>
+              <h2 id="campaign-faq-title">Perguntas frequentes</h2>
+              <p>As respostas são gerais. A análise do seu caso depende das informações e documentos apresentados.</p>
+            </div>
+            <div className="campaign-faq-list">
+              {faqItems.map((item, index) => (
+                <details key={`${item.pergunta}-${index}`}>
+                  <summary>{item.pergunta}</summary>
+                  <p>{item.resposta}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="campaign-form-band" id="formulario">
         <div className="section-inner campaign-form-layout">
-          <CampaignLeadForm
-            campaignCode={currentCampaign.campaignCode}
-            consentimentoTexto={getPublicText(siteConfig?.textoConsentimento)}
-            consentimentoVersao={siteConfig?.consentimentoVersao || undefined}
-            perguntas={currentCampaign.perguntas || []}
-          />
+          {showForm ? (
+            <CampaignLeadForm
+              campaignCode={currentCampaign.campaignCode}
+              consentimentoTexto={getPublicText(siteConfig?.textoConsentimento)}
+              consentimentoVersao={siteConfig?.consentimentoVersao || undefined}
+              perguntas={currentCampaign.perguntas || []}
+            />
+          ) : (
+            <article className="campaign-contact-card">
+              <span>Primeiro contato</span>
+              <h2>Conte o que aconteceu pelo WhatsApp</h2>
+              <p>Informe apenas o essencial para a primeira conversa. A equipe orientará os próximos passos.</p>
+              <a className="button button-gold" href={whatsappHref}>
+                <WhatsAppIcon />
+                Conversar com a equipe
+              </a>
+            </article>
+          )}
           <div className="landing-side" id="perguntas">
             {qualificationQuestions.length ? (
               <article className="question-preview">
@@ -195,10 +284,12 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
                 <p>O atendimento fará as perguntas necessárias conforme o relato enviado.</p>
               </article>
             )}
-            <a className="button button-gold" href={whatsappHref}>
-              <WhatsAppIcon />
-              Conversar com a equipe
-            </a>
+            {showForm ? (
+              <a className="button button-gold" href={whatsappHref}>
+                <WhatsAppIcon />
+                Conversar com a equipe
+              </a>
+            ) : null}
             <FraudWarning />
           </div>
         </div>

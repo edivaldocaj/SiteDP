@@ -1,10 +1,12 @@
+import { editorialCopy, editorialQuestions } from './campaign-editorial-copy.mjs'
+
 export const siteTexts = {
   avisoGolpeTexto:
     'O escritorio nunca pede senha do gov.br, do Meu INSS ou do banco. Tambem nao pede codigo de SMS. Se receber esse tipo de pedido, interrompa o contato e confirme pelos canais oficiais.',
   urgenciaTexto: 'Recebeu carta do INSS, teve beneficio cortado ou tem pericia marcada?',
 }
 
-export const campaigns = [
+export const legacyCampaigns = [
   {
     campaignCode: 'PREV-EXIGENCIA',
     slug: 'prev-exigencia',
@@ -295,6 +297,20 @@ export const campaigns = [
     },
   },
 ]
+
+export const campaigns = legacyCampaigns.map((campaign) => ({
+  ...campaign,
+  ...editorialCopy[campaign.campaignCode],
+  ...(campaign.perguntas ? { perguntas: campaign.perguntas.map((question, index) => ({
+    ...question, pergunta: editorialQuestions[campaign.campaignCode]?.[index] || question.pergunta,
+  })) } : {}),
+  ...(editorialCopy[campaign.campaignCode] ? {
+    seo: {
+      titulo: editorialCopy[campaign.campaignCode].titulo,
+      descricao: editorialCopy[campaign.campaignCode].subtitulo,
+    },
+  } : {}),
+}))
 
 export function richTextFromText(text) {
   return {

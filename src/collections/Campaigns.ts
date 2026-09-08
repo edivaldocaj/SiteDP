@@ -1,12 +1,14 @@
 import type { CollectionConfig, PayloadRequest } from 'payload'
 
 import { CAMPAIGN_CODE_REGEX } from '../lib/integration/constants'
+import { getVideoEmbedUrl } from '../lib/campaignVideo'
 import { hasRenderableRichText, richTextToPlainText } from '../lib/richText'
 
 const campaignCodeDescription = 'Código criado primeiro no EspoCRM. Copie de lá.'
 
 type CampaignDraft = {
   blocoDor?: unknown
+  blocoOrientacao?: unknown
   blocoProva?: unknown
   campaignCode?: string
   id?: string | number
@@ -14,6 +16,12 @@ type CampaignDraft = {
   slug?: string
   status?: string
   temLanding?: boolean
+  videoUrl?: string
+}
+
+function validateVideoUrl(value: unknown) {
+  if (value == null || value === '') return true
+  return getVideoEmbedUrl(value) ? true : 'Use o link HTTPS de um vídeo do YouTube ou Vimeo.'
 }
 
 function normalizeSlug(value?: string | null) {
@@ -44,6 +52,7 @@ async function assertNoDuplicateLandingText({
 
   const result = await req.payload.find({
     collection: 'campaigns',
+    req,
     depth: 0,
     limit: 200,
     where: candidate.id
@@ -172,16 +181,85 @@ export const Campaigns: CollectionConfig = {
     },
     {
       name: 'midiaTopo',
+      label: 'Imagem principal da campanha',
       type: 'upload',
       relationTo: 'media',
+      filterOptions: { mimeType: { contains: 'image/' } },
     },
     {
       name: 'blocoDor',
+      label: 'Entenda a situação',
       type: 'richText',
     },
     {
       name: 'blocoProva',
+      label: 'O que ajuda na análise',
       type: 'richText',
+    },
+    {
+      name: 'blocoOrientacao',
+      label: 'Como podemos orientar',
+      type: 'richText',
+      admin: {
+        description: 'Como a equipe pode orientar a análise inicial, sem prometer resultado.',
+      },
+    },
+    {
+      name: 'videoUrl',
+      label: 'Link do vídeo (YouTube ou Vimeo)',
+      type: 'text',
+      admin: {
+        description: 'Link opcional de vídeo do YouTube ou Vimeo para a campanha.',
+      },
+      validate: validateVideoUrl,
+    },
+    {
+      name: 'videoFile',
+      label: 'Vídeo por upload',
+      type: 'upload',
+      relationTo: 'media',
+      filterOptions: { mimeType: { contains: 'video/' } },
+      admin: {
+        description: 'Vídeo curto em MP4. Se preenchido, aparece no bloco de vídeo da página.',
+      },
+    },
+    {
+      name: 'textoUrgencia',
+      label: 'Aviso sobre prazo ou documento',
+      type: 'text',
+      admin: {
+        description: 'Aviso objetivo sobre prazo ou documento. Evite pressão artificial.',
+      },
+    },
+    {
+      name: 'mostrarFormulario',
+      label: 'Exibir formulário',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        description: 'Exibe o formulário de primeiro contato nesta campanha.',
+      },
+    },
+    {
+      name: 'faq',
+      label: 'Perguntas frequentes da página',
+      type: 'array',
+      maxRows: 8,
+      admin: {
+        description: 'Dúvidas frequentes específicas desta campanha.',
+      },
+      fields: [
+        {
+          name: 'pergunta',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'resposta',
+          type: 'textarea',
+          required: true,
+        },
+      ],
     },
     {
       name: 'perguntas',

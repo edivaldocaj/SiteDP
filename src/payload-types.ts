@@ -258,6 +258,50 @@ export interface Campaign {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Como a equipe pode orientar a análise inicial, sem prometer resultado.
+   */
+  blocoOrientacao?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Link opcional de vídeo do YouTube ou Vimeo para a campanha.
+   */
+  videoUrl?: string | null;
+  /**
+   * Vídeo curto em MP4. Se preenchido, aparece no bloco de vídeo da página.
+   */
+  videoFile?: (number | null) | Media;
+  /**
+   * Aviso objetivo sobre prazo ou documento. Evite pressão artificial.
+   */
+  textoUrgencia?: string | null;
+  /**
+   * Exibe o formulário de primeiro contato nesta campanha.
+   */
+  mostrarFormulario?: boolean | null;
+  /**
+   * Dúvidas frequentes específicas desta campanha.
+   */
+  faq?:
+    | {
+        pergunta: string;
+        resposta: string;
+        id?: string | null;
+      }[]
+    | null;
   perguntas?:
     | {
         pergunta: string;
@@ -458,6 +502,18 @@ export interface CampaignsSelect<T extends boolean = true> {
   midiaTopo?: T;
   blocoDor?: T;
   blocoProva?: T;
+  blocoOrientacao?: T;
+  videoUrl?: T;
+  videoFile?: T;
+  textoUrgencia?: T;
+  mostrarFormulario?: T;
+  faq?:
+    | T
+    | {
+        pergunta?: T;
+        resposta?: T;
+        id?: T;
+      };
   perguntas?:
     | T
     | {

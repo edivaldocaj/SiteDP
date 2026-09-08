@@ -5,14 +5,23 @@ export type CampaignQuestion = {
   tipo?: 'texto' | 'data' | 'opcoes' | null
 }
 
+export type CampaignFaq = {
+  id?: string | null
+  pergunta?: string | null
+  resposta?: string | null
+}
+
 export type PublicCampaign = {
   blocoDor?: unknown
+  blocoOrientacao?: unknown
   blocoProva?: unknown
   campaignCode: string
+  faq?: CampaignFaq[] | null
   id: string | number
   mensagemWhatsapp?: string | null
   midiaTopo?: unknown
   perguntas?: CampaignQuestion[] | null
+  mostrarFormulario?: boolean | null
   seo?: {
     descricao?: string | null
     ogImage?: unknown
@@ -23,6 +32,9 @@ export type PublicCampaign = {
   subtitulo?: string | null
   temLanding?: boolean | null
   titulo?: string | null
+  textoUrgencia?: string | null
+  videoFile?: unknown
+  videoUrl?: string | null
 }
 
 type CampaignPayload = {

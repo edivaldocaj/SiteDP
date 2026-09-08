@@ -3188,3 +3188,224 @@ h2 {
 .campaign-page .campaign-text-panel { border-radius: 12px; }
 .campaign-page #formulario { scroll-margin-top: 100px; }
 @media(max-width: 640px) { .campaign-page .campaign-hero-actions { display: grid; } .campaign-page .button { min-height: 52px; } }
+
+/* Blocos editoriais opcionais das campanhas (vídeo, aviso e FAQ) */
+.campaign-page .campaign-hero {
+  background: #f8f4ed;
+  color: #24221e;
+  min-height: 590px;
+}
+
+.campaign-page .campaign-copy {
+  padding: clamp(2rem, 5vw, 4.5rem);
+}
+
+.campaign-page .campaign-copy h1 {
+  font-size: clamp(2.35rem, 4.6vw, 4.5rem);
+  max-width: 17ch;
+  text-wrap: balance;
+}
+
+.campaign-page .campaign-copy > p:not(.eyebrow) {
+  color: #575248;
+  font-size: 18px;
+}
+
+.campaign-page .campaign-copy .eyebrow { color: #785622; }
+.campaign-page .campaign-hero .button-on-dark { color: #302b23; border-color: #8e7858; }
+.campaign-page .campaign-visual-fallback {
+  background: radial-gradient(ellipse at center, #f4e7d2, #e4d4bb);
+  border-color: #d9c8ab;
+}
+.campaign-page .campaign-fallback-photo { height: auto; width: 100%; max-height: 650px; }
+.campaign-page .campaign-intro-strip { background: #eee4d3; }
+.campaign-page .campaign-intro-strip span { font-size: 18px; }
+.campaign-page .campaign-blocks { display: grid; grid-template-columns: 1fr; max-width: 1000px; gap: 24px; }
+.campaign-page .campaign-text-panel { background: #fff; padding: clamp(24px, 4vw, 44px); border-radius: 6px; border-top: 3px solid #ba975f; }
+.campaign-page .campaign-text-panel h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+.campaign-rich-text { font-size: 18px; line-height: 1.8; }
+.campaign-rich-text p + p { margin-top: 1rem; }
+.campaign-rich-text ul, .campaign-rich-text ol { padding-left: 1.4rem; }
+.campaign-page .campaign-form-band { background: #eee7dc; color: #302b23; }
+.campaign-page .question-preview { color: #302b23; }
+.campaign-page .question-preview li { border-color: #bfae91; }
+.campaign-page .question-preview li strong { color: #302b23; font-size: 18px; }
+.campaign-page .question-preview li small { color: #715123; }
+.campaign-page .landing-side p, .campaign-page .question-preview small { color: #575248; }
+.campaign-page .campaign-faq-list summary { min-height: 48px; }
+.campaign-page .campaign-faq-list summary:focus-visible { outline: 3px solid #8c662d; outline-offset: 4px; }
+@media (max-width: 900px) {
+  .campaign-page .campaign-hero { min-height: auto; }
+  .campaign-page .campaign-visual-fallback { min-height: 280px; max-height: 400px; }
+  .campaign-page .campaign-fallback-photo { max-height: 400px; }
+}
+
+.campaign-urgency-bar {
+  align-items: center;
+  background: #f0dfba;
+  color: var(--black);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  padding: 0.85rem 1.25rem;
+}
+
+.campaign-urgency-bar span {
+  align-items: center;
+  background: var(--black);
+  border-radius: 999px;
+  color: var(--gold);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-weight: 900;
+  height: 1.65rem;
+  justify-content: center;
+  width: 1.65rem;
+}
+
+.campaign-urgency-bar p {
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin: 0;
+  text-align: center;
+}
+
+.campaign-text-panel-guidance {
+  background: #f2f5f4;
+  border-left: 3px solid var(--gold-dark);
+}
+
+.campaign-video-band,
+.campaign-faq-band {
+  background: var(--cream-2);
+  padding: clamp(3.4rem, 7vw, 5.5rem) clamp(1rem, 4vw, 2rem);
+}
+
+.campaign-video-layout,
+.campaign-faq-layout {
+  align-items: start;
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.75rem);
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+}
+
+.campaign-video-layout h2,
+.campaign-faq-layout h2 {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.05;
+  margin-top: 0.5rem;
+  max-width: 12ch;
+}
+
+.campaign-video-layout > div:first-child p,
+.campaign-faq-layout > div:first-child p {
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 38ch;
+}
+
+.campaign-video-frame {
+  aspect-ratio: 16 / 9;
+  background: var(--black);
+  border: 1px solid rgba(143, 102, 46, 0.25);
+  border-radius: 8px;
+  box-shadow: 0 18px 50px rgba(33, 29, 24, 0.12);
+  overflow: hidden;
+}
+
+.campaign-video-frame iframe,
+.campaign-video-frame video {
+  border: 0;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.campaign-faq-band {
+  background: var(--paper);
+}
+
+.campaign-faq-list {
+  background: var(--cream-2);
+  border: 1px solid rgba(143, 102, 46, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 14px 44px rgba(33, 29, 24, 0.06);
+}
+
+.campaign-faq-list details {
+  padding: 1.15rem 1.35rem;
+}
+
+.campaign-faq-list details + details {
+  border-top: 1px solid rgba(143, 102, 46, 0.14);
+}
+
+.campaign-faq-list summary {
+  cursor: pointer;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.35;
+  padding-right: 1.5rem;
+}
+
+.campaign-faq-list details p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0.85rem 0 0;
+}
+
+.campaign-contact-card {
+  background: var(--cream-2);
+  border: 1px solid rgba(189, 141, 69, 0.34);
+  border-radius: 8px;
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.24);
+  color: var(--text);
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.15rem, 4vw, 1.8rem);
+}
+
+.campaign-contact-card > span {
+  color: var(--gold-dark);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.campaign-contact-card h2 {
+  font-size: clamp(1.8rem, 4vw, 2.35rem);
+}
+
+.campaign-contact-card p {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+@media (max-width: 900px) {
+  .campaign-video-layout,
+  .campaign-faq-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .campaign-video-layout h2,
+  .campaign-faq-layout h2 {
+    max-width: 18ch;
+  }
+}
+
+@media (max-width: 640px) {
+  .campaign-urgency-bar {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .campaign-urgency-bar p {
+    text-align: left;
+  }
+
+  .campaign-faq-list details {
+    padding-inline: 1rem;
+  }
+}
