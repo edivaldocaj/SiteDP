@@ -91,7 +91,7 @@ export function ContactForm({ consentimentoTexto, consentimentoVersao }: Contact
   }
 
   return (
-    <form className="contact-form-card" onSubmit={submit}>
+    <form className="contact-form-card" id="formulario-agendamento" onSubmit={submit}>
       <div>
         <h2>Envie sua mensagem</h2>
         <p>Preencha os dados abaixo para entrarmos em contato.</p>

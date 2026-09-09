@@ -53,7 +53,7 @@ export default function AgendarPage() {
           <p>O contato inicial será usado apenas para organizar o retorno e a confirmação do atendimento.</p>
         </div>
         <div className="actions">
-          <Link className="button button-primary" href="/contato">
+          <Link className="button button-primary" href="/contato#formulario-agendamento">
             Enviar pedido de horário
           </Link>
           <WhatsAppButton href="/ir/whatsapp?o=agendamento" />
