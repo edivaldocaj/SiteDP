@@ -4,7 +4,6 @@ import * as migration_20260908_092127_campanhas_editoriais from './20260908_0921
 import * as migration_20260908_100000_conteudo_editorial from './20260908_100000_conteudo_editorial';
 import * as migration_20260909_020022 from './20260909_020022';
 import * as migration_20260909_030000_site_content_baseline from './20260909_030000_site_content_baseline';
-import * as migration_20260909_040000_site_content_arrays from './20260909_040000_site_content_arrays';
 
 export const migrations = [
   {
@@ -37,12 +36,8 @@ export const migrations = [
     down: migration_20260909_030000_site_content_baseline.down,
     name: '20260909_030000_site_content_baseline',
   },
-  {
-    up: migration_20260909_040000_site_content_arrays.up,
-    down: migration_20260909_040000_site_content_arrays.down,
-    name: '20260909_040000_site_content_arrays',
-  },
 ];
+
 
 
 
