@@ -173,7 +173,7 @@ async function seedCampaigns(client) {
         const category = campaign.campaignCode.startsWith('TRAB-') ? 'trabalhista'
           : campaign.campaignCode.startsWith('PREV-') ? 'previdenciario' : 'assistencial'
         await client.query(
-          "update campaigns set categoria = case when categoria = 'previdenciario' and $1 = 'trabalhista' then $1 else categoria end, video_url = coalesce(video_url, $2), updated_at = now() where campaign_code = $3",
+          "update campaigns set categoria = case when categoria = 'previdenciario' and $1 = 'trabalhista' then 'trabalhista'::enum_campaigns_categoria else categoria end, video_url = coalesce(video_url, $2), updated_at = now() where campaign_code = $3",
           [category, campaign.videoUrl || null, campaign.campaignCode],
         )
         continue // Conteúdo existente pertence ao CMS.
