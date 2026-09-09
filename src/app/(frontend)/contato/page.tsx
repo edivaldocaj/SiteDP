@@ -66,7 +66,7 @@ export default async function ContactPage() {
               fill
               priority
               sizes="(max-width: 900px) 100vw, 48vw"
-              src={mediaURL(page.heroImagem) || ''}
+              src={mediaURL(page.heroImagem) || '/imagens/deila/deila-perfil.webp'}
               unoptimized
             />
           </div>

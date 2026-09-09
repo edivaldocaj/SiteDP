@@ -60,7 +60,7 @@ export default async function HomePage() {
               fill
               priority
               sizes="(max-width: 900px) 96vw, 48vw"
-              src={mediaURL(page.heroImagem) || ''}
+              src={mediaURL(page.heroImagem) || '/imagens/deila/deila-hero.webp'}
               unoptimized
             />
           </div>
@@ -104,7 +104,7 @@ export default async function HomePage() {
               alt="Dra. Deila Pinto"
               fill
               sizes="(max-width: 900px) 92vw, 34vw"
-              src={mediaURL(page.sobreImagem) || ''}
+              src={mediaURL(page.sobreImagem) || '/imagens/deila/deila-perfil.webp'}
               unoptimized
             />
           </div>

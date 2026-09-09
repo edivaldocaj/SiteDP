@@ -38,7 +38,7 @@ export default async function AreasPage() {
               fill
               priority
               sizes="(max-width: 900px) 100vw, 48vw"
-              src={mediaURL(page.heroImagem) || ''}
+              src={mediaURL(page.heroImagem) || '/imagens/hero-consultoria-dp.webp'}
               unoptimized
             />
           </div>
@@ -58,7 +58,7 @@ export default async function AreasPage() {
               alt="Dra. Deila Pinto"
               fill
               sizes="(max-width: 900px) 92vw, 34vw"
-              src={mediaURL(page.editorialImagem) || ''}
+              src={mediaURL(page.editorialImagem) || '/imagens/deila/deila-hero.webp'}
               unoptimized
             />
           </div>

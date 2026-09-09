@@ -42,7 +42,7 @@ export default async function SobrePage() {
               alt="Dra. Deila Pinto"
               fill
               sizes="(max-width: 900px) 92vw, 34vw"
-              src={mediaURL(page.bioImagem) || ''}
+              src={mediaURL(page.bioImagem) || '/imagens/deila/deila-livro.webp'}
               unoptimized
             />
           </div>
