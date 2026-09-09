@@ -4,6 +4,7 @@ import * as migration_20260908_092127_campanhas_editoriais from './20260908_0921
 import * as migration_20260908_100000_conteudo_editorial from './20260908_100000_conteudo_editorial';
 import * as migration_20260909_020022 from './20260909_020022';
 import * as migration_20260909_030000_site_content_baseline from './20260909_030000_site_content_baseline';
+import * as migration_20260909_121000_replace_site_content_placeholders from './20260909_121000_replace_site_content_placeholders';
 
 export const migrations = [
   { up: migration_20260909_040500_site_content_arrays.up, down: migration_20260909_040500_site_content_arrays.down, name: '20260909_040500_site_content_arrays' },
@@ -36,6 +37,11 @@ export const migrations = [
     up: migration_20260909_030000_site_content_baseline.up,
     down: migration_20260909_030000_site_content_baseline.down,
     name: '20260909_030000_site_content_baseline',
+  },
+  {
+    up: migration_20260909_121000_replace_site_content_placeholders.up,
+    down: migration_20260909_121000_replace_site_content_placeholders.down,
+    name: '20260909_121000_replace_site_content_placeholders',
   },
 ];
 
