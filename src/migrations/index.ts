@@ -2,6 +2,7 @@ import * as migration_20260824_201158_inicial_site_dp from './20260824_201158_in
 import * as migration_20260824_232954_campanhas_e_formulario from './20260824_232954_campanhas_e_formulario';
 import * as migration_20260908_092127_campanhas_editoriais from './20260908_092127_campanhas_editoriais';
 import * as migration_20260908_100000_conteudo_editorial from './20260908_100000_conteudo_editorial';
+import * as migration_20260909_020022 from './20260909_020022';
 
 export const migrations = [
   {
@@ -17,11 +18,16 @@ export const migrations = [
   {
     up: migration_20260908_092127_campanhas_editoriais.up,
     down: migration_20260908_092127_campanhas_editoriais.down,
-    name: '20260908_092127_campanhas_editoriais'
+    name: '20260908_092127_campanhas_editoriais',
   },
   {
     up: migration_20260908_100000_conteudo_editorial.up,
     down: migration_20260908_100000_conteudo_editorial.down,
     name: '20260908_100000_conteudo_editorial',
+  },
+  {
+    up: migration_20260909_020022.up,
+    down: migration_20260909_020022.down,
+    name: '20260909_020022'
   },
 ];
