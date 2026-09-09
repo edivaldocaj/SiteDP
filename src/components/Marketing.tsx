@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import { areaSummaries } from '@/lib/marketingContent'
+import type { AreaSummary } from '@/lib/marketingContent'
 
 import { BrandIcon, type BrandIconName } from './BrandIcons'
 import { WhatsAppIcon } from './WhatsAppIcon'
@@ -13,6 +13,7 @@ type HeroProps = {
   eyebrow: string
   image?: 'hero' | 'livro' | 'perfil'
   imageAlt?: string
+  imageSrc?: string | null
   label?: string
   splitTitle?: { accent: string; after?: string; before: string }
   text: string
@@ -41,7 +42,7 @@ export function Eyebrow({ children }: { children: React.ReactNode }) {
 }
 
 export function WhatsAppButton({
-  children = 'Fale comigo no WhatsApp',
+  children,
   className = '',
   href = '/ir/whatsapp',
 }: {
@@ -78,6 +79,7 @@ export function PageHero({
   eyebrow,
   image = 'hero',
   imageAlt = 'Dra. Deila Pinto',
+  imageSrc,
   label,
   splitTitle,
   text,
@@ -108,7 +110,7 @@ export function PageHero({
             fill
             priority
             sizes="(max-width: 900px) 100vw, 48vw"
-            src={imageMap[image]}
+            src={imageSrc || imageMap[image]}
             unoptimized
           />
         </div>
@@ -137,10 +139,10 @@ export function SectionHeading({
   )
 }
 
-export function AreaCards({ compact = false }: { compact?: boolean }) {
+export function AreaCards({ areas = [], compact = false }: { areas?: AreaSummary[]; compact?: boolean }) {
   return (
     <div className={`area-grid ${compact ? 'area-grid-compact' : ''}`.trim()}>
-      {areaSummaries.map((area) => (
+      {areas.map((area) => (
         <Link className="area-card" href={area.href} key={area.href}>
           <BrandIcon name={area.icon} />
           <h3>{area.title}</h3>
@@ -205,10 +207,12 @@ export function ProcessSteps({
 }
 
 export function CtaSection({
-  eyebrow = 'Contato',
-  text = 'Atendimento online para todo o Brasil.',
+  buttonLabel,
+  eyebrow,
+  text,
   title,
 }: {
+  buttonLabel?: string
   eyebrow?: string
   text?: string
   title: string
@@ -221,7 +225,7 @@ export function CtaSection({
           <h2>{title}</h2>
           <p>{text}</p>
         </div>
-        <WhatsAppButton />
+        <WhatsAppButton>{buttonLabel}</WhatsAppButton>
       </Container>
     </section>
   )

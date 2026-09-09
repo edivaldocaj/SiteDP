@@ -1,7 +1,6 @@
 import React from 'react'
 
 import type { DetailCard, Faq } from '@/lib/areaPages'
-import { homeSteps, institutionalSteps } from '@/lib/marketingContent'
 
 import { BrandIcon, type BrandIconName } from './BrandIcons'
 import { FaqAccordion } from './FaqAccordion'
@@ -27,6 +26,19 @@ type AreaPageTemplateProps = {
   heroIcon: BrandIconName
   processTitle?: string
   services?: DetailCard[]
+  processItems: Array<{ description: string; title: string }>
+  heroNote?: string
+  servicesEyebrow: string
+  servicesTitle: string
+  audienceTitle?: string
+  processEyebrow: string
+  extrasEyebrow?: string
+  extrasTitle?: string
+  faqEyebrow: string
+  faqTitle: string
+  ctaEyebrow: string
+  ctaText?: string
+  ctaButton?: string
   title: string
 }
 
@@ -43,8 +55,20 @@ export function AreaPageTemplate({
   processTitle = 'Como funciona o atendimento',
   services,
   title,
+  processItems,
+  heroNote,
+  servicesEyebrow,
+  servicesTitle,
+  audienceTitle,
+  processEyebrow,
+  extrasEyebrow,
+  extrasTitle,
+  faqEyebrow,
+  faqTitle,
+  ctaEyebrow,
+  ctaText,
+  ctaButton,
 }: AreaPageTemplateProps) {
-  const processItems = title.includes('Licitações') ? institutionalSteps : homeSteps
 
   return (
     <div className="site-shell area-detail-page">
@@ -64,8 +88,8 @@ export function AreaPageTemplate({
             </h1>
             <p>{description}</p>
             <div className="actions">
-              <WhatsAppButton />
-              <span className="hero-note">Atendimento humanizado e sigiloso</span>
+              <WhatsAppButton>{ctaButton}</WhatsAppButton>
+              {heroNote ? <span className="hero-note">{heroNote}</span> : null}
             </div>
           </div>
           <div className="area-hero-icon" aria-hidden="true">
@@ -77,14 +101,8 @@ export function AreaPageTemplate({
       <section className="section-white">
         <Container>
           <div className="section-title">
-            <Eyebrow>{title.includes('Licitações') ? 'Nossa atuação' : 'Como podemos ajudar'}</Eyebrow>
-            <h2>
-              {title.includes('Licitações')
-                ? 'Como podemos assessorar'
-                : title.includes('Previdenciário')
-                  ? 'Soluções para cada momento da sua vida'
-                  : 'Como posso te ajudar'}
-            </h2>
+            <Eyebrow>{servicesEyebrow}</Eyebrow>
+            <h2>{servicesTitle}</h2>
           </div>
           <ServiceGrid items={cards} />
         </Container>
@@ -96,7 +114,7 @@ export function AreaPageTemplate({
         <section className="section-ivory">
           <Container>
             <div className="section-title">
-              <h2>Quem pode ter direito?</h2>
+              <h2>{audienceTitle}</h2>
             </div>
             <ServiceGrid items={audience} />
           </Container>
@@ -105,7 +123,7 @@ export function AreaPageTemplate({
 
       <section className="section-white">
         <Container>
-          <Eyebrow>{title.includes('Licitações') ? 'Etapas da assessoria' : 'Como funciona'}</Eyebrow>
+          <Eyebrow>{processEyebrow}</Eyebrow>
           <ProcessSteps items={processItems} title={processTitle} />
         </Container>
       </section>
@@ -114,8 +132,8 @@ export function AreaPageTemplate({
         <section className="section-ivory">
           <Container>
             <div className="section-title">
-              <Eyebrow>O que fazemos</Eyebrow>
-              <h2>Serviços mais procurados</h2>
+              <Eyebrow>{extrasEyebrow}</Eyebrow>
+              <h2>{extrasTitle}</h2>
             </div>
             <ServiceGrid items={services} />
           </Container>
@@ -125,14 +143,14 @@ export function AreaPageTemplate({
       <section className="faq-section">
         <Container className="faq-inner">
           <div>
-            <Eyebrow>Dúvidas frequentes</Eyebrow>
-            <h2>Perguntas comuns</h2>
+            <Eyebrow>{faqEyebrow}</Eyebrow>
+            <h2>{faqTitle}</h2>
           </div>
           <FaqAccordion items={faq} />
         </Container>
       </section>
 
-      <CtaSection eyebrow="Fale comigo" title={ctaTitle} />
+      <CtaSection buttonLabel={ctaButton} eyebrow={ctaEyebrow} text={ctaText} title={ctaTitle} />
     </div>
   )
 }

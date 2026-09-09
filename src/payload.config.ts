@@ -9,7 +9,9 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { LeadSubmissions } from './collections/LeadSubmissions'
 import { Campaigns } from './collections/Campaigns'
+import { Articles } from './collections/Articles'
 import { SiteConfig } from './globals/SiteConfig'
+import { SiteContent } from './globals/SiteContent'
 import { assertExpectedDatabase } from './lib/dbGuard'
 
 const filename = fileURLToPath(import.meta.url)
@@ -23,8 +25,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, LeadSubmissions, Campaigns],
-  globals: [SiteConfig],
+  collections: [Users, Media, LeadSubmissions, Campaigns, Articles],
+  globals: [SiteConfig, SiteContent],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

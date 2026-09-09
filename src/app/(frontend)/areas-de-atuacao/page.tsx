@@ -11,7 +11,7 @@ import {
   WhatsAppButton,
 } from '@/components/Marketing'
 import { BrandIcon } from '@/components/BrandIcons'
-import { homeSteps } from '@/lib/marketingContent'
+import { getSiteContent, iconName, listValues, mediaURL } from '@/lib/siteContent'
 
 export const metadata: Metadata = {
   description:
@@ -19,18 +19,18 @@ export const metadata: Metadata = {
   title: 'Áreas de Atuação',
 }
 
-export default function AreasPage() {
+export default async function AreasPage() {
+  const content = await getSiteContent(); const page = content?.areas || {}
+  const areaCards = listValues<any>(content?.paginasArea).map((area) => ({ description: area.descricao, href: `/areas-de-atuacao/${area.slug}`, icon: iconName(area.icone), shortTitle: area.chapeu, title: area.titulo }))
+  const homeSteps = listValues<any>(page.processoEtapas).map((item) => ({ title: item.titulo, description: item.descricao }))
   return (
     <div className="site-shell areas-page">
       <section className="areas-hero" aria-labelledby="areas-title">
         <Container className="areas-hero-inner">
           <div>
-            <Eyebrow>Atendimento humanizado e especializado</Eyebrow>
-            <h1 id="areas-title">Áreas de atuação</h1>
-            <p>
-              Atuação jurídica com clareza, atenção e responsabilidade para proteger
-              seus direitos e trazer tranquilidade.
-            </p>
+            <Eyebrow>{page.heroChapeu}</Eyebrow>
+            <h1 id="areas-title">{page.heroTitulo}</h1>
+            <p>{page.heroTexto}</p>
           </div>
           <div className="areas-hero-art" aria-hidden="true">
             <Image
@@ -38,7 +38,7 @@ export default function AreasPage() {
               fill
               priority
               sizes="(max-width: 900px) 100vw, 48vw"
-              src="/imagens/hero-consultoria-dp.webp"
+              src={mediaURL(page.heroImagem) || ''}
               unoptimized
             />
           </div>
@@ -47,7 +47,7 @@ export default function AreasPage() {
 
       <section className="section-white">
         <Container>
-          <AreaCards />
+          <AreaCards areas={areaCards} />
         </Container>
       </section>
 
@@ -58,22 +58,16 @@ export default function AreasPage() {
               alt="Dra. Deila Pinto"
               fill
               sizes="(max-width: 900px) 92vw, 34vw"
-              src="/imagens/deila/deila-hero.webp"
+              src={mediaURL(page.editorialImagem) || ''}
               unoptimized
             />
           </div>
           <div className="about-copy">
-            <Eyebrow>Atuação que faz a diferença</Eyebrow>
-            <h2>Assessoria jurídica feita para entender você e o seu caso</h2>
-            <p>
-              Cada pessoa tem uma história e cada caso exige atenção aos detalhes.
-              Por isso, a conversa inicial organiza informações e documentos antes
-              de qualquer providência.
-            </p>
+            <Eyebrow>{page.editorialChapeu}</Eyebrow>
+            <h2>{page.editorialTitulo}</h2>
+            <p>{page.editorialTexto}</p>
             <div className="feature-row">
-              <span><BrandIcon name="search" />Escuta e análise</span>
-              <span><BrandIcon name="document" />Clareza em cada etapa</span>
-              <span><BrandIcon name="checklist" />Acompanhamento</span>
+              {listValues<any>(page.destaques).map((item) => <span key={item.id || item.texto}><BrandIcon name={iconName(item.icone)} />{item.texto}</span>)}
             </div>
           </div>
         </Container>
@@ -81,15 +75,15 @@ export default function AreasPage() {
 
       <section className="section-white">
         <Container>
-          <Eyebrow>Como funciona</Eyebrow>
-          <ProcessSteps items={homeSteps} title="Um atendimento em 3 passos" />
+          <Eyebrow>{page.processoChapeu}</Eyebrow>
+          <ProcessSteps items={homeSteps} title={page.processoTitulo} />
           <div className="center-action">
-            <WhatsAppButton />
+            <WhatsAppButton>{page.cta?.botao}</WhatsAppButton>
           </div>
         </Container>
       </section>
 
-      <CtaSection title="Dê o primeiro passo para proteger seus direitos." />
+      <CtaSection buttonLabel={page.cta?.botao} eyebrow={page.cta?.chapeu} text={page.cta?.texto} title={page.cta?.titulo || ''} />
     </div>
   )
 }

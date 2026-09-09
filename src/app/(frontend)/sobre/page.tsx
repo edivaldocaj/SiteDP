@@ -13,22 +13,26 @@ import {
   ServiceGrid,
   WhatsAppButton,
 } from '@/components/Marketing'
-import { institutionalSteps, values } from '@/lib/marketingContent'
+import { getSiteContent, iconName, listValues, mediaURL } from '@/lib/siteContent'
 
 export const metadata: Metadata = {
   description: 'Conheça a atuação da Deila Pinto Advocacia e Consultoria.',
   title: 'Sobre',
 }
 
-export default function SobrePage() {
+export default async function SobrePage() {
+  const content = await getSiteContent(); const page = content?.sobre || {}
+  const areas = listValues<any>(content?.paginasArea).map((area) => ({ description: area.descricao, href: `/areas-de-atuacao/${area.slug}`, icon: iconName(area.icone), shortTitle: area.chapeu, title: area.titulo }))
+  const values = listValues<any>(page.valores).map((item) => ({ title: item.titulo, description: item.descricao, icon: iconName(item.icone) }))
+  const institutionalSteps = listValues<any>(page.processoEtapas).map((item) => ({ title: item.titulo, description: item.descricao }))
   return (
     <div className="site-shell about-page">
       <PageHero
-        eyebrow="Sobre"
-        image="hero"
+        eyebrow={page.heroChapeu}
         label="sobre-title"
-        text="Conheça a trajetória, os valores e o propósito que guiam cada atendimento."
-        title="Sobre"
+        imageSrc={mediaURL(page.heroImagem)}
+        text={page.heroTexto}
+        title={page.heroTitulo}
       />
 
       <section className="section-white">
@@ -38,25 +42,17 @@ export default function SobrePage() {
               alt="Dra. Deila Pinto"
               fill
               sizes="(max-width: 900px) 92vw, 34vw"
-              src="/imagens/deila/deila-perfil.webp"
+              src={mediaURL(page.bioImagem) || ''}
               unoptimized
             />
           </div>
           <div className="about-copy">
-            <Eyebrow>Quem é Deila Pinto</Eyebrow>
-            <h2>Advocacia com propósito, escuta e excelência.</h2>
-            <p>
-              Deila Pinto é advogada inscrita na OAB/RN 22.940, com atuação em
-              Direito Previdenciário, BPC/LOAS, Direito do Trabalho, Licitações e
-              Contratos.
-            </p>
-            <p>
-              A proposta do atendimento é unir técnica, clareza e cuidado na
-              organização das informações, documentos e próximos passos.
-            </p>
+            <Eyebrow>{page.bioChapeu}</Eyebrow>
+            <h2>{page.bioTitulo}</h2>
+            {listValues<any>(page.bioParagrafos).map((item) => <p key={item.id || item.texto}>{item.texto}</p>)}
             <div className="actions">
-              <WhatsAppButton />
-              <OutlineButton href="/contato">Agendar atendimento</OutlineButton>
+              <WhatsAppButton>{page.cta?.botao}</WhatsAppButton>
+              <OutlineButton href="/contato">{page.bioBotaoSecundario}</OutlineButton>
             </div>
           </div>
         </Container>
@@ -65,8 +61,8 @@ export default function SobrePage() {
       <section className="section-ivory">
         <Container>
           <div className="section-title">
-            <Eyebrow>Nossos valores</Eyebrow>
-            <h2>Princípios que orientam cada passo</h2>
+            <Eyebrow>{page.valoresChapeu}</Eyebrow>
+            <h2>{page.valoresTitulo}</h2>
           </div>
           <ServiceGrid items={values} />
         </Container>
@@ -74,8 +70,8 @@ export default function SobrePage() {
 
       <section className="section-white">
         <Container>
-          <Eyebrow>Nossa forma de atuar</Eyebrow>
-          <ProcessSteps items={institutionalSteps} title="Um atendimento próximo e estratégico" />
+          <Eyebrow>{page.processoChapeu}</Eyebrow>
+          <ProcessSteps items={institutionalSteps} title={page.processoTitulo} />
         </Container>
       </section>
 
@@ -83,16 +79,16 @@ export default function SobrePage() {
         <Container>
           <div className="section-heading">
             <div>
-              <Eyebrow>Áreas de atuação</Eyebrow>
-              <h2>Atuação especializada com atenção aos detalhes</h2>
+              <Eyebrow>{page.areasChapeu}</Eyebrow>
+              <h2>{page.areasTitulo}</h2>
             </div>
-            <OutlineButton href="/areas-de-atuacao">Ver todas as áreas</OutlineButton>
+            <OutlineButton href="/areas-de-atuacao">{page.areasBotao}</OutlineButton>
           </div>
-          <AreaCards compact />
+          <AreaCards areas={areas} compact />
         </Container>
       </section>
 
-      <CtaSection title="Vamos conversar sobre o seu caso?" />
+      <CtaSection buttonLabel={page.cta?.botao} eyebrow={page.cta?.chapeu} text={page.cta?.texto} title={page.cta?.titulo || ''} />
     </div>
   )
 }

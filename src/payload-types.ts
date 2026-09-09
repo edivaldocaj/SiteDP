@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     'lead-submissions': LeadSubmission;
     campaigns: Campaign;
+    articles: Article;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     'lead-submissions': LeadSubmissionsSelect<false> | LeadSubmissionsSelect<true>;
     campaigns: CampaignsSelect<false> | CampaignsSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -93,9 +95,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-config': SiteConfig;
+    'site-content': SiteContent;
   };
   globalsSelect: {
     'site-config': SiteConfigSelect<false> | SiteConfigSelect<true>;
+    'site-content': SiteContentSelect<false> | SiteContentSelect<true>;
   };
   locale: null;
   widgets: {
@@ -223,10 +227,42 @@ export interface Campaign {
    * Código criado primeiro no EspoCRM. Copie de lá.
    */
   campaignCode: string;
+  /**
+   * Categoria editorial exibida na listagem e na landing.
+   */
+  categoria: 'previdenciario' | 'assistencial' | 'trabalhista' | 'licitacoes';
   slug: string;
   temLanding?: boolean | null;
   titulo?: string | null;
   subtitulo?: string | null;
+  apresentacao?: {
+    blocoDorTitulo?: string | null;
+    blocoProvaTitulo?: string | null;
+    blocoOrientacaoTitulo?: string | null;
+    videoEyebrow?: string | null;
+    videoTitulo?: string | null;
+    videoDescricao?: string | null;
+    faqEyebrow?: string | null;
+    faqTitulo?: string | null;
+    faqDescricao?: string | null;
+    notaCuidado?: string | null;
+    etapasContato?:
+      | {
+          titulo: string;
+          id?: string | null;
+        }[]
+      | null;
+    ctaFormulario?: string | null;
+    ctaWhatsapp?: string | null;
+    formularioTituloWhatsapp?: string | null;
+    formularioTextoWhatsapp?: string | null;
+    triagemEyebrow?: string | null;
+    triagemTitulo?: string | null;
+    triagemVaziaTitulo?: string | null;
+    triagemVaziaTexto?: string | null;
+    midiaFallback?: (number | null) | Media;
+    seloMarca?: (number | null) | Media;
+  };
   midiaTopo?: (number | null) | Media;
   blocoDor?: {
     root: {
@@ -327,6 +363,39 @@ export interface Campaign {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles".
+ */
+export interface Article {
+  id: number;
+  title: string;
+  slug: string;
+  category: string;
+  excerpt: string;
+  author: string;
+  publishedAt?: string | null;
+  readingTime?: string | null;
+  coverImage?: (number | null) | Media;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -364,6 +433,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'campaigns';
         value: number | Campaign;
+      } | null)
+    | ({
+        relationTo: 'articles';
+        value: number | Article;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -495,10 +568,41 @@ export interface LeadSubmissionsSelect<T extends boolean = true> {
  */
 export interface CampaignsSelect<T extends boolean = true> {
   campaignCode?: T;
+  categoria?: T;
   slug?: T;
   temLanding?: T;
   titulo?: T;
   subtitulo?: T;
+  apresentacao?:
+    | T
+    | {
+        blocoDorTitulo?: T;
+        blocoProvaTitulo?: T;
+        blocoOrientacaoTitulo?: T;
+        videoEyebrow?: T;
+        videoTitulo?: T;
+        videoDescricao?: T;
+        faqEyebrow?: T;
+        faqTitulo?: T;
+        faqDescricao?: T;
+        notaCuidado?: T;
+        etapasContato?:
+          | T
+          | {
+              titulo?: T;
+              id?: T;
+            };
+        ctaFormulario?: T;
+        ctaWhatsapp?: T;
+        formularioTituloWhatsapp?: T;
+        formularioTextoWhatsapp?: T;
+        triagemEyebrow?: T;
+        triagemTitulo?: T;
+        triagemVaziaTitulo?: T;
+        triagemVaziaTexto?: T;
+        midiaFallback?: T;
+        seloMarca?: T;
+      };
   midiaTopo?: T;
   blocoDor?: T;
   blocoProva?: T;
@@ -535,6 +639,24 @@ export interface CampaignsSelect<T extends boolean = true> {
         descricao?: T;
         ogImage?: T;
       };
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles_select".
+ */
+export interface ArticlesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  category?: T;
+  excerpt?: T;
+  author?: T;
+  publishedAt?: T;
+  readingTime?: T;
+  coverImage?: T;
+  body?: T;
   status?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -636,6 +758,278 @@ export interface SiteConfig {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-content".
+ */
+export interface SiteContent {
+  id: number;
+  seedAplicado?: boolean | null;
+  compartilhados: {
+    logoAlt: string;
+    whatsappBotao: string;
+    menu?:
+      | {
+          rotulo: string;
+          link: string;
+          mostrarAreas?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    rodapeResumo: string;
+    rodapeAreasTitulo: string;
+    rodapeInstitucionalTitulo: string;
+    rodapeAtendimentoTitulo: string;
+    rodapeHorarioTitulo: string;
+    rodapeLocais?:
+      | {
+          texto: string;
+          id?: string | null;
+        }[]
+      | null;
+    cta: {
+      chapeu: string;
+      titulo: string;
+      texto: string;
+      botao: string;
+    };
+  };
+  home: {
+    heroChapeu: string;
+    heroLinha1: string;
+    heroLinha2Antes: string;
+    heroLinha2Destaque: string;
+    heroLinha3: string;
+    heroTexto: string;
+    heroNota: string;
+    heroImagem?: (number | null) | Media;
+    areasChapeu: string;
+    areasTitulo: string;
+    bannersChapeu: string;
+    bannersTitulo: string;
+    sobreChapeu: string;
+    sobreTitulo: string;
+    sobreParagrafos?:
+      | {
+          texto: string;
+          id?: string | null;
+        }[]
+      | null;
+    sobreBotao: string;
+    sobreImagem?: (number | null) | Media;
+    processoChapeu: string;
+    processoTitulo: string;
+    processoEtapas?:
+      | {
+          titulo: string;
+          descricao: string;
+          id?: string | null;
+        }[]
+      | null;
+    cta: {
+      chapeu: string;
+      titulo: string;
+      texto: string;
+      botao: string;
+    };
+  };
+  sobre: {
+    heroChapeu: string;
+    heroTitulo: string;
+    heroTexto: string;
+    heroImagem?: (number | null) | Media;
+    bioChapeu: string;
+    bioTitulo: string;
+    bioParagrafos?:
+      | {
+          texto: string;
+          id?: string | null;
+        }[]
+      | null;
+    bioImagem?: (number | null) | Media;
+    bioBotaoSecundario: string;
+    valoresChapeu: string;
+    valoresTitulo: string;
+    valores?:
+      | {
+          titulo: string;
+          descricao: string;
+          /**
+           * Nome do ícone da identidade visual (ex.: protection, document, checklist).
+           */
+          icone?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    processoChapeu: string;
+    processoTitulo: string;
+    processoEtapas?:
+      | {
+          titulo: string;
+          descricao: string;
+          id?: string | null;
+        }[]
+      | null;
+    areasChapeu: string;
+    areasTitulo: string;
+    areasBotao: string;
+    cta: {
+      chapeu: string;
+      titulo: string;
+      texto: string;
+      botao: string;
+    };
+  };
+  contato: {
+    heroChapeu: string;
+    heroTitulo: string;
+    heroTexto: string;
+    heroNota: string;
+    heroImagem?: (number | null) | Media;
+    metodosTitulo: string;
+    whatsappTitulo: string;
+    whatsappAcao: string;
+    emailTitulo: string;
+    localizacaoTitulo: string;
+    localizacaoFallback: string;
+    horarioTitulo: string;
+    horarioFallback: string;
+    areasChapeu: string;
+    areasTitulo: string;
+    faqChapeu: string;
+    faqTitulo: string;
+    faq?:
+      | {
+          pergunta: string;
+          resposta: string;
+          id?: string | null;
+        }[]
+      | null;
+    segurancaChapeu: string;
+    segurancaTitulo: string;
+  };
+  areas: {
+    heroChapeu: string;
+    heroTitulo: string;
+    heroTexto: string;
+    heroImagem?: (number | null) | Media;
+    editorialChapeu: string;
+    editorialTitulo: string;
+    editorialTexto: string;
+    editorialImagem?: (number | null) | Media;
+    destaques?:
+      | {
+          texto: string;
+          icone: string;
+          id?: string | null;
+        }[]
+      | null;
+    processoChapeu: string;
+    processoTitulo: string;
+    processoEtapas?:
+      | {
+          titulo: string;
+          descricao: string;
+          id?: string | null;
+        }[]
+      | null;
+    cta: {
+      chapeu: string;
+      titulo: string;
+      texto: string;
+      botao: string;
+    };
+  };
+  paginasArea?:
+    | {
+        slug: 'direito-previdenciario' | 'bpc-loas' | 'direito-do-trabalho' | 'licitacoes-e-contratos';
+        titulo: string;
+        tituloDestaque?: string | null;
+        chapeu: string;
+        descricao: string;
+        icone: string;
+        notaHero: string;
+        servicosChapeu: string;
+        servicosTitulo: string;
+        servicos?:
+          | {
+              titulo: string;
+              descricao: string;
+              /**
+               * Nome do ícone da identidade visual (ex.: protection, document, checklist).
+               */
+              icone?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        publicoTitulo?: string | null;
+        publicos?:
+          | {
+              titulo: string;
+              descricao: string;
+              /**
+               * Nome do ícone da identidade visual (ex.: protection, document, checklist).
+               */
+              icone?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        processoChapeu: string;
+        processoTitulo: string;
+        processoEtapas?:
+          | {
+              titulo: string;
+              descricao: string;
+              id?: string | null;
+            }[]
+          | null;
+        extrasChapeu?: string | null;
+        extrasTitulo?: string | null;
+        extras?:
+          | {
+              titulo: string;
+              descricao: string;
+              /**
+               * Nome do ícone da identidade visual (ex.: protection, document, checklist).
+               */
+              icone?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        faqChapeu: string;
+        faqTitulo: string;
+        faq?:
+          | {
+              pergunta: string;
+              resposta: string;
+              id?: string | null;
+            }[]
+          | null;
+        cta: {
+          chapeu: string;
+          titulo: string;
+          texto: string;
+          botao: string;
+        };
+        situacoes?:
+          | {
+              texto: string;
+              id?: string | null;
+            }[]
+          | null;
+        documentosTitulo?: string | null;
+        documentos?:
+          | {
+              texto: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-config_select".
  */
 export interface SiteConfigSelect<T extends boolean = true> {
@@ -680,6 +1074,286 @@ export interface SiteConfigSelect<T extends boolean = true> {
         logo?: T;
         logoClaro?: T;
         favicon?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-content_select".
+ */
+export interface SiteContentSelect<T extends boolean = true> {
+  seedAplicado?: T;
+  compartilhados?:
+    | T
+    | {
+        logoAlt?: T;
+        whatsappBotao?: T;
+        menu?:
+          | T
+          | {
+              rotulo?: T;
+              link?: T;
+              mostrarAreas?: T;
+              id?: T;
+            };
+        rodapeResumo?: T;
+        rodapeAreasTitulo?: T;
+        rodapeInstitucionalTitulo?: T;
+        rodapeAtendimentoTitulo?: T;
+        rodapeHorarioTitulo?: T;
+        rodapeLocais?:
+          | T
+          | {
+              texto?: T;
+              id?: T;
+            };
+        cta?:
+          | T
+          | {
+              chapeu?: T;
+              titulo?: T;
+              texto?: T;
+              botao?: T;
+            };
+      };
+  home?:
+    | T
+    | {
+        heroChapeu?: T;
+        heroLinha1?: T;
+        heroLinha2Antes?: T;
+        heroLinha2Destaque?: T;
+        heroLinha3?: T;
+        heroTexto?: T;
+        heroNota?: T;
+        heroImagem?: T;
+        areasChapeu?: T;
+        areasTitulo?: T;
+        bannersChapeu?: T;
+        bannersTitulo?: T;
+        sobreChapeu?: T;
+        sobreTitulo?: T;
+        sobreParagrafos?:
+          | T
+          | {
+              texto?: T;
+              id?: T;
+            };
+        sobreBotao?: T;
+        sobreImagem?: T;
+        processoChapeu?: T;
+        processoTitulo?: T;
+        processoEtapas?:
+          | T
+          | {
+              titulo?: T;
+              descricao?: T;
+              id?: T;
+            };
+        cta?:
+          | T
+          | {
+              chapeu?: T;
+              titulo?: T;
+              texto?: T;
+              botao?: T;
+            };
+      };
+  sobre?:
+    | T
+    | {
+        heroChapeu?: T;
+        heroTitulo?: T;
+        heroTexto?: T;
+        heroImagem?: T;
+        bioChapeu?: T;
+        bioTitulo?: T;
+        bioParagrafos?:
+          | T
+          | {
+              texto?: T;
+              id?: T;
+            };
+        bioImagem?: T;
+        bioBotaoSecundario?: T;
+        valoresChapeu?: T;
+        valoresTitulo?: T;
+        valores?:
+          | T
+          | {
+              titulo?: T;
+              descricao?: T;
+              icone?: T;
+              id?: T;
+            };
+        processoChapeu?: T;
+        processoTitulo?: T;
+        processoEtapas?:
+          | T
+          | {
+              titulo?: T;
+              descricao?: T;
+              id?: T;
+            };
+        areasChapeu?: T;
+        areasTitulo?: T;
+        areasBotao?: T;
+        cta?:
+          | T
+          | {
+              chapeu?: T;
+              titulo?: T;
+              texto?: T;
+              botao?: T;
+            };
+      };
+  contato?:
+    | T
+    | {
+        heroChapeu?: T;
+        heroTitulo?: T;
+        heroTexto?: T;
+        heroNota?: T;
+        heroImagem?: T;
+        metodosTitulo?: T;
+        whatsappTitulo?: T;
+        whatsappAcao?: T;
+        emailTitulo?: T;
+        localizacaoTitulo?: T;
+        localizacaoFallback?: T;
+        horarioTitulo?: T;
+        horarioFallback?: T;
+        areasChapeu?: T;
+        areasTitulo?: T;
+        faqChapeu?: T;
+        faqTitulo?: T;
+        faq?:
+          | T
+          | {
+              pergunta?: T;
+              resposta?: T;
+              id?: T;
+            };
+        segurancaChapeu?: T;
+        segurancaTitulo?: T;
+      };
+  areas?:
+    | T
+    | {
+        heroChapeu?: T;
+        heroTitulo?: T;
+        heroTexto?: T;
+        heroImagem?: T;
+        editorialChapeu?: T;
+        editorialTitulo?: T;
+        editorialTexto?: T;
+        editorialImagem?: T;
+        destaques?:
+          | T
+          | {
+              texto?: T;
+              icone?: T;
+              id?: T;
+            };
+        processoChapeu?: T;
+        processoTitulo?: T;
+        processoEtapas?:
+          | T
+          | {
+              titulo?: T;
+              descricao?: T;
+              id?: T;
+            };
+        cta?:
+          | T
+          | {
+              chapeu?: T;
+              titulo?: T;
+              texto?: T;
+              botao?: T;
+            };
+      };
+  paginasArea?:
+    | T
+    | {
+        slug?: T;
+        titulo?: T;
+        tituloDestaque?: T;
+        chapeu?: T;
+        descricao?: T;
+        icone?: T;
+        notaHero?: T;
+        servicosChapeu?: T;
+        servicosTitulo?: T;
+        servicos?:
+          | T
+          | {
+              titulo?: T;
+              descricao?: T;
+              icone?: T;
+              id?: T;
+            };
+        publicoTitulo?: T;
+        publicos?:
+          | T
+          | {
+              titulo?: T;
+              descricao?: T;
+              icone?: T;
+              id?: T;
+            };
+        processoChapeu?: T;
+        processoTitulo?: T;
+        processoEtapas?:
+          | T
+          | {
+              titulo?: T;
+              descricao?: T;
+              id?: T;
+            };
+        extrasChapeu?: T;
+        extrasTitulo?: T;
+        extras?:
+          | T
+          | {
+              titulo?: T;
+              descricao?: T;
+              icone?: T;
+              id?: T;
+            };
+        faqChapeu?: T;
+        faqTitulo?: T;
+        faq?:
+          | T
+          | {
+              pergunta?: T;
+              resposta?: T;
+              id?: T;
+            };
+        cta?:
+          | T
+          | {
+              chapeu?: T;
+              titulo?: T;
+              texto?: T;
+              botao?: T;
+            };
+        situacoes?:
+          | T
+          | {
+              texto?: T;
+              id?: T;
+            };
+        documentosTitulo?: T;
+        documentos?:
+          | T
+          | {
+              texto?: T;
+              id?: T;
+            };
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

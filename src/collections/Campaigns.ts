@@ -6,11 +6,61 @@ import { hasRenderableRichText, richTextToPlainText } from '../lib/richText'
 
 const campaignCodeDescription = 'Código criado primeiro no EspoCRM. Copie de lá.'
 
+export const CAMPAIGN_PRESENTATION_DEFAULTS = {
+  blocoDorTitulo: 'Entenda a situação',
+  blocoProvaTitulo: 'O que ajuda na análise',
+  blocoOrientacaoTitulo: 'Como podemos orientar',
+  videoEyebrow: 'Conteúdo da campanha',
+  videoTitulo: 'Uma explicação rápida para começar',
+  videoDescricao: 'Veja a explicação e anote suas dúvidas para conversar com a equipe.',
+  faqEyebrow: 'Dúvidas comuns',
+  faqTitulo: 'Perguntas frequentes',
+  faqDescricao: 'As respostas são gerais. A análise do seu caso depende das informações e documentos apresentados.',
+  notaCuidado: 'Uma conversa para entender sua necessidade. Cada caso passa por análise individual.',
+  etapasContato: [
+    { titulo: 'Escolha como conversar' },
+    { titulo: 'Conte apenas o essencial' },
+    { titulo: 'Receba orientação da equipe' },
+  ],
+  ctaFormulario: 'Solicitar atendimento',
+  ctaWhatsapp: 'Abrir WhatsApp',
+  formularioTituloWhatsapp: 'Conte o que aconteceu pelo WhatsApp',
+  formularioTextoWhatsapp: 'Informe apenas o essencial para a primeira conversa. A equipe orientará os próximos passos.',
+  triagemEyebrow: 'Triagem inicial',
+  triagemTitulo: 'Perguntas desta campanha',
+  triagemVaziaTitulo: 'Comece pelo WhatsApp',
+  triagemVaziaTexto: 'O atendimento fará as perguntas necessárias conforme o relato enviado.',
+} as const
+
+/** Baseline for an idempotent content migration. Merge only missing fields. */
+export const CAMPAIGN_EDITORIAL_BASELINE = {
+  'PREV-EXIGENCIA': 'previdenciario',
+  'PREV-BPC': 'assistencial',
+  'PREV-RURAL': 'previdenciario',
+  'PREV-INCAPACIDADE': 'previdenciario',
+  'TRAB-RESCISAO': 'trabalhista',
+  'PREV-PENSAO': 'previdenciario',
+  'PREV-MATERNIDADE': 'previdenciario',
+  'TRAB-HORAS': 'trabalhista',
+  'TRAB-JUSTACAUSA': 'trabalhista',
+  'TRAB-INDIRETA': 'trabalhista',
+  'TRAB-INSALUBRE': 'trabalhista',
+  'PREV-REVISAO': 'previdenciario',
+} as const
+
+export const CAMPAIGN_EDITORIAL_BASELINE_WITH_PRESENTATION = Object.fromEntries(
+  Object.entries(CAMPAIGN_EDITORIAL_BASELINE).map(([campaignCode, categoria]) => [campaignCode, {
+    categoria,
+    apresentacao: CAMPAIGN_PRESENTATION_DEFAULTS,
+  }]),
+)
+
 type CampaignDraft = {
   blocoDor?: unknown
   blocoOrientacao?: unknown
   blocoProva?: unknown
   campaignCode?: string
+  categoria?: string
   id?: string | number
   perguntas?: Array<{ tipo?: string | null }>
   slug?: string
@@ -161,6 +211,20 @@ export const Campaigns: CollectionConfig = {
           : 'Use o codigo criado no EspoCRM, como PREV-BPC.',
     },
     {
+      name: 'categoria',
+      label: 'Categoria',
+      type: 'select',
+      required: true,
+      defaultValue: 'previdenciario',
+      options: [
+        { label: 'Previdenciário', value: 'previdenciario' },
+        { label: 'Assistencial', value: 'assistencial' },
+        { label: 'Trabalhista', value: 'trabalhista' },
+        { label: 'Licitações e Contratos', value: 'licitacoes' },
+      ],
+      admin: { description: 'Categoria editorial exibida na listagem e na landing.' },
+    },
+    {
       name: 'slug',
       type: 'text',
       required: true,
@@ -178,6 +242,34 @@ export const Campaigns: CollectionConfig = {
     {
       name: 'subtitulo',
       type: 'textarea',
+    },
+    {
+      name: 'apresentacao',
+      label: 'Apresentação da campanha',
+      type: 'group',
+      fields: [
+        { name: 'blocoDorTitulo', label: 'Título do bloco de situação', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.blocoDorTitulo },
+        { name: 'blocoProvaTitulo', label: 'Título do bloco de análise', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.blocoProvaTitulo },
+        { name: 'blocoOrientacaoTitulo', label: 'Título do bloco de orientação', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.blocoOrientacaoTitulo },
+        { name: 'videoEyebrow', label: 'Etiqueta do vídeo', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.videoEyebrow },
+        { name: 'videoTitulo', label: 'Título do vídeo', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.videoTitulo },
+        { name: 'videoDescricao', label: 'Descrição do vídeo', type: 'textarea', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.videoDescricao },
+        { name: 'faqEyebrow', label: 'Etiqueta do FAQ', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.faqEyebrow },
+        { name: 'faqTitulo', label: 'Título do FAQ', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.faqTitulo },
+        { name: 'faqDescricao', label: 'Descrição do FAQ', type: 'textarea', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.faqDescricao },
+        { name: 'notaCuidado', label: 'Nota de cuidado', type: 'textarea', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.notaCuidado },
+        { name: 'etapasContato', label: 'Etapas do primeiro contato', type: 'array', maxRows: 3, defaultValue: [...CAMPAIGN_PRESENTATION_DEFAULTS.etapasContato], fields: [{ name: 'titulo', label: 'Título da etapa', type: 'text', required: true }] },
+        { name: 'ctaFormulario', label: 'Botão do formulário', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.ctaFormulario },
+        { name: 'ctaWhatsapp', label: 'Botão do WhatsApp', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.ctaWhatsapp },
+        { name: 'formularioTituloWhatsapp', label: 'Título do cartão WhatsApp', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.formularioTituloWhatsapp },
+        { name: 'formularioTextoWhatsapp', label: 'Texto do cartão WhatsApp', type: 'textarea', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.formularioTextoWhatsapp },
+        { name: 'triagemEyebrow', label: 'Etiqueta da triagem', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.triagemEyebrow },
+        { name: 'triagemTitulo', label: 'Título da triagem', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.triagemTitulo },
+        { name: 'triagemVaziaTitulo', label: 'Título sem perguntas', type: 'text', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.triagemVaziaTitulo },
+        { name: 'triagemVaziaTexto', label: 'Texto sem perguntas', type: 'textarea', defaultValue: CAMPAIGN_PRESENTATION_DEFAULTS.triagemVaziaTexto },
+        { name: 'midiaFallback', label: 'Imagem fallback', type: 'upload', relationTo: 'media', filterOptions: { mimeType: { contains: 'image/' } } },
+        { name: 'seloMarca', label: 'Selo da marca', type: 'upload', relationTo: 'media', filterOptions: { mimeType: { contains: 'image/' } } },
+      ],
     },
     {
       name: 'midiaTopo',

@@ -8,6 +8,7 @@ import { FaqAccordion } from '@/components/FaqAccordion'
 import { FraudWarning } from '@/components/FraudWarning'
 import { Container, Eyebrow, WhatsAppButton } from '@/components/Marketing'
 import { getPublicSiteConfig, getPublicText, type PublicSiteConfig } from '@/lib/siteConfig'
+import { getSiteContent, listValues, mediaURL } from '@/lib/siteContent'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,6 +32,7 @@ function formatAddress(address: NonNullable<PublicSiteConfig['endereco']>[number
 
 export default async function ContactPage() {
   const config = await getPublicSiteConfig()
+  const content = await getSiteContent(); const page = content?.contato || {}
   const primaryEmail = getPublicText(config?.emails?.[0]?.email)
   const primaryAddress = config?.endereco?.find((address) => getPublicText(formatAddress(address)))
   const addressText = primaryAddress ? formatAddress(primaryAddress) : null
@@ -46,12 +48,12 @@ export default async function ContactPage() {
       <section className="contact-hero" aria-labelledby="contact-title">
         <Container className="contact-hero-inner">
           <div className="contact-hero-copy">
-            <Eyebrow>Vamos conversar?</Eyebrow>
-            <h1 id="contact-title">Contato</h1>
-            <p>Estamos aqui para ouvir você e encontrar o melhor caminho para o seu caso.</p>
+            <Eyebrow>{page.heroChapeu}</Eyebrow>
+            <h1 id="contact-title">{page.heroTitulo}</h1>
+            <p>{page.heroTexto}</p>
             <div className="actions">
-              <WhatsAppButton href="/ir/whatsapp?o=contato" />
-              <span className="hero-note">Atendimento humanizado e sigiloso.</span>
+              <WhatsAppButton href="/ir/whatsapp?o=contato">{content?.compartilhados?.whatsappBotao}</WhatsAppButton>
+              <span className="hero-note">{page.heroNota}</span>
             </div>
           </div>
           <div className="contact-hero-photo" aria-hidden="true">
@@ -60,7 +62,7 @@ export default async function ContactPage() {
               fill
               priority
               sizes="(max-width: 900px) 100vw, 48vw"
-              src="/imagens/deila/deila-hero.webp"
+              src={mediaURL(page.heroImagem) || ''}
               unoptimized
             />
           </div>
@@ -75,12 +77,12 @@ export default async function ContactPage() {
           />
 
           <aside className="contact-methods">
-            <h2>Outras formas de contato</h2>
+            <h2>{page.metodosTitulo}</h2>
             <a className="contact-method-row" href="/ir/whatsapp?o=contato">
               <BrandIcon name="phone" />
               <span>
-                <strong>Atendimento via WhatsApp</strong>
-                <small>Iniciar conversa</small>
+                <strong>{page.whatsappTitulo}</strong>
+                <small>{page.whatsappAcao}</small>
               </span>
               <b aria-hidden="true">→</b>
             </a>
@@ -88,7 +90,7 @@ export default async function ContactPage() {
               <a className="contact-method-row" href={`mailto:${primaryEmail}`}>
                 <BrandIcon name="email" />
                 <span>
-                  <strong>E-mail</strong>
+                  <strong>{page.emailTitulo}</strong>
                   <small>{primaryEmail}</small>
                 </span>
               </a>
@@ -96,15 +98,15 @@ export default async function ContactPage() {
             <div className="contact-method-row">
               <BrandIcon name="location" />
               <span>
-                <strong>Localização</strong>
-                <small>{addressText || 'Endereço confirmado pelo atendimento.'}</small>
+                <strong>{page.localizacaoTitulo}</strong>
+                <small>{addressText || page.localizacaoFallback}</small>
               </span>
             </div>
             <div className="contact-method-row">
               <BrandIcon name="clock" />
               <span>
-                <strong>Horário de atendimento</strong>
-                <small>{horario || 'Mediante agendamento.'}</small>
+                <strong>{page.horarioTitulo}</strong>
+                <small>{horario || page.horarioFallback}</small>
               </span>
             </div>
           </aside>
@@ -116,8 +118,8 @@ export default async function ContactPage() {
           <Container>
             <div className="section-heading">
               <div>
-                <Eyebrow>Áreas</Eyebrow>
-                <h2 id="contact-areas-title">Assuntos atendidos</h2>
+                <Eyebrow>{page.areasChapeu}</Eyebrow>
+                <h2 id="contact-areas-title">{page.areasTitulo}</h2>
               </div>
             </div>
             <div className="contact-area-list">
@@ -132,24 +134,11 @@ export default async function ContactPage() {
       <section className="section-white">
         <Container className="faq-inner">
           <div>
-            <Eyebrow>Dúvidas frequentes</Eyebrow>
-            <h2>Antes do primeiro contato</h2>
+            <Eyebrow>{page.faqChapeu}</Eyebrow>
+            <h2>{page.faqTitulo}</h2>
           </div>
           <FaqAccordion
-            items={[
-              {
-                answer: 'O atendimento inicial organiza o relato e os documentos para avaliar os próximos passos.',
-                question: 'Como funciona o atendimento online?',
-              },
-              {
-                answer: 'Nome, telefone, assunto, mensagem e documentos relacionados podem ajudar na conversa.',
-                question: 'Quais informações preciso enviar inicialmente?',
-              },
-              {
-                answer: 'O retorno depende da agenda e da complexidade das informações enviadas.',
-                question: 'Qual o prazo para retorno?',
-              },
-            ]}
+            items={listValues<any>(page.faq).map((item) => ({ answer: item.resposta, question: item.pergunta }))}
           />
         </Container>
       </section>
@@ -157,8 +146,8 @@ export default async function ContactPage() {
       <section className="contact-security" aria-label="Aviso de segurança">
         <Container className="split">
           <div>
-            <Eyebrow>Segurança</Eyebrow>
-            <h2>Antes de enviar qualquer dado sensível.</h2>
+            <Eyebrow>{page.segurancaChapeu}</Eyebrow>
+            <h2>{page.segurancaTitulo}</h2>
           </div>
           <FraudWarning />
         </Container>

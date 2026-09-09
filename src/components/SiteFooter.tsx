@@ -2,21 +2,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import { areaSummaries } from '@/lib/marketingContent'
+import type { ContentCard } from '@/lib/siteContent'
 import { getPublicSiteConfig, getPublicText } from '@/lib/siteConfig'
 
 import { FraudWarning } from './FraudWarning'
 import { WhatsAppIcon } from './WhatsAppIcon'
 
-const fallbackAreas = areaSummaries.map((area) => area.title)
-
-export async function SiteFooter() {
+export async function SiteFooter({ content, areas = [] }: { content?: any; areas?: ContentCard[] }) {
   const config = await getPublicSiteConfig()
-  const configuredAreas =
-    config?.areasDeAtuacao
-      ?.map((area) => getPublicText(area.nome))
-      .filter((area): area is string => Boolean(area)) || []
-  const areas = configuredAreas.length ? configuredAreas : fallbackAreas
   const email = getPublicText(config?.emails?.[0]?.email)
   const horario = getPublicText(config?.horarioAtendimento)
 
@@ -34,47 +27,38 @@ export async function SiteFooter() {
       />
       <div className="site-footer-main">
         <Image
-          alt="Deila Pinto Advocacia e Consultoria"
+        alt={content?.logoAlt || ''}
           height={54}
           src="/marca/dp-horizontal-claro.png"
           style={{ height: 'auto', width: 'min(240px, 70vw)' }}
           unoptimized
           width={240}
         />
-        <p>Advocacia com propósito, técnica e sensibilidade para defender o que é seu por direito.</p>
+        <p>{content?.rodapeResumo}</p>
       </div>
       <div className="site-footer-column">
-        <strong>Áreas de atuação</strong>
-        {areaSummaries.map((area) => (
-          <Link href={area.href} key={area.href}>
-            {area.title}
+        <strong>{content?.rodapeAreasTitulo}</strong>
+        {areas.map((area) => (
+          <Link href={area.link || '/areas-de-atuacao'} key={area.link || area.titulo}>
+            {area.titulo}
           </Link>
         ))}
-        {configuredAreas.length
-          ? areas
-              .filter((area) => !fallbackAreas.includes(area))
-              .map((area) => <span key={area}>{area}</span>)
-          : null}
       </div>
       <div className="site-footer-column">
-        <strong>Institucional</strong>
-        <Link href="/sobre">Sobre</Link>
-        <Link href="/#como-funciona">Como Funciona</Link>
-        <Link href="/blog">Blog</Link>
-        <Link href="/contato">Contato</Link>
+        <strong>{content?.rodapeInstitucionalTitulo}</strong>
+        {(content?.menu || []).filter((item: any) => !item.mostrarAreas).map((item: any) => <Link href={item.link || '/'} key={item.link}>{item.rotulo}</Link>)}
       </div>
       <div className="site-footer-column">
-        <strong>Atendimento</strong>
+        <strong>{content?.rodapeAtendimentoTitulo}</strong>
         {email ? <a href={`mailto:${email}`}>{email}</a> : null}
-        <span>Goianinha/RN</span>
-        <span>Atendimento também em Natal/RN</span>
+        {(content?.rodapeLocais || []).map((local: any) => <span key={local.texto}>{local.texto}</span>)}
       </div>
       <div className="site-footer-column">
-        <strong>Horário de atendimento</strong>
-        {horario ? <span>{horario}</span> : <span>Atendimento mediante agendamento.</span>}
+        <strong>{content?.rodapeHorarioTitulo}</strong>
+        {horario ? <span>{horario}</span> : null}
         <Link className="footer-whatsapp" href="/ir/whatsapp">
           <WhatsAppIcon />
-          Fale no WhatsApp
+          {content?.whatsappBotao}
         </Link>
       </div>
       <FraudWarning className="footer-warning" />

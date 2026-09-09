@@ -5,6 +5,7 @@ import { UtmTracker } from './UtmTracker'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { UrgencyShortcut } from '@/components/UrgencyShortcut'
+import { getSiteContent, listValues, type ContentCard } from '@/lib/siteContent'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -43,14 +44,17 @@ export const metadata = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
+  const content = await getSiteContent()
+  const shared = content?.compartilhados
+  const areas = listValues<any>(content?.paginasArea).map((area) => ({ titulo: area.titulo, link: `/areas-de-atuacao/${area.slug}` })) as ContentCard[]
 
   return (
     <html lang="pt-BR">
       <body className={`${playfair.variable} ${inter.variable}`}>
         <UtmTracker />
-        <SiteHeader />
+        <SiteHeader areas={areas} logoAlt={shared?.logoAlt} menu={shared?.menu} whatsappLabel={shared?.whatsappBotao} />
         <main>{children}</main>
-        <SiteFooter />
+        <SiteFooter content={shared} areas={areas} />
         <UrgencyShortcut />
       </body>
     </html>

@@ -14,7 +14,7 @@ import {
 } from '@/components/Marketing'
 import { BrandIcon } from '@/components/BrandIcons'
 import { getPublishedLandingCampaigns, type PublicCampaign } from '@/lib/campaigns'
-import { areaSummaries, homeSteps } from '@/lib/marketingContent'
+import { getSiteContent, iconName, listValues, mediaURL } from '@/lib/siteContent'
 import { getPublicText } from '@/lib/siteConfig'
 
 import './styles.css'
@@ -29,6 +29,10 @@ function campaignArea(campaign: PublicCampaign) {
 
 export default async function HomePage() {
   const campaigns = await getPublishedLandingCampaigns()
+  const content = await getSiteContent()
+  const page = content?.home || {}
+  const areaSummaries = listValues<any>(content?.paginasArea).map((area) => ({ description: area.descricao, href: `/areas-de-atuacao/${area.slug}`, icon: iconName(area.icone), shortTitle: area.chapeu, title: area.titulo }))
+  const homeSteps = listValues<any>(page.processoEtapas).map((item) => ({ title: item.titulo, description: item.descricao }))
   const featuredCampaigns = campaigns.slice(0, 6)
 
   return (
@@ -36,22 +40,18 @@ export default async function HomePage() {
       <section className="home-hero" aria-labelledby="titulo-home">
         <Container className="home-hero-inner">
           <div className="home-hero-copy">
-            <Eyebrow>Advocacia com propósito</Eyebrow>
+            <Eyebrow>{page.heroChapeu}</Eyebrow>
             <h1 id="titulo-home">
-              <span className="hero-title-line">Orientação jurídica</span>
+              <span className="hero-title-line">{page.heroLinha1}</span>
               <span className="hero-title-line">
-                com <em>clareza, atenção</em>
+                {page.heroLinha2Antes} <em>{page.heroLinha2Destaque}</em>
               </span>
-              <span className="hero-title-line">e responsabilidade</span>
+              <span className="hero-title-line">{page.heroLinha3}</span>
             </h1>
-            <p>
-              Atendimento em Direito Previdenciário, BPC/LOAS, Direito do Trabalho,
-              Licitações e Contratos para organizar informações, orientar decisões e
-              oferecer atendimento jurídico próximo e responsável.
-            </p>
+            <p>{page.heroTexto}</p>
             <div className="actions">
-              <WhatsAppButton />
-              <span className="hero-note">Atendimento humanizado e sigiloso</span>
+              <WhatsAppButton>{page.cta?.botao}</WhatsAppButton>
+              <span className="hero-note">{page.heroNota}</span>
             </div>
           </div>
           <div className="home-hero-portrait" aria-hidden="true">
@@ -60,7 +60,7 @@ export default async function HomePage() {
               fill
               priority
               sizes="(max-width: 900px) 96vw, 48vw"
-              src="/imagens/deila/deila-perfil.webp"
+              src={mediaURL(page.heroImagem) || ''}
               unoptimized
             />
           </div>
@@ -69,16 +69,16 @@ export default async function HomePage() {
 
       <section className="home-areas" id="areas" aria-labelledby="areas-title">
         <Container>
-          <SectionHeading eyebrow="Áreas de atuação" title="Como posso te ajudar" />
-          <AreaCards />
+          <SectionHeading eyebrow={page.areasChapeu} title={page.areasTitulo} />
+          <AreaCards areas={areaSummaries} />
         </Container>
       </section>
 
       <section className="home-area-banners" aria-labelledby="area-banners-title">
         <Container>
           <div className="section-title section-title-left">
-            <Eyebrow>Atendimento por área</Eyebrow>
-            <h2 id="area-banners-title">Caminhos de orientação</h2>
+            <Eyebrow>{page.bannersChapeu}</Eyebrow>
+            <h2 id="area-banners-title">{page.bannersTitulo}</h2>
           </div>
           <div className="area-banner-grid">
             {areaSummaries.map((area, index) => (
@@ -104,30 +104,23 @@ export default async function HomePage() {
               alt="Dra. Deila Pinto"
               fill
               sizes="(max-width: 900px) 92vw, 34vw"
-              src="/imagens/deila/deila-perfil.webp"
+              src={mediaURL(page.sobreImagem) || ''}
               unoptimized
             />
           </div>
           <div className="about-copy">
-            <Eyebrow>Quem vai atender você</Eyebrow>
-            <h2 id="sobre-title">Prazer, eu sou Deila Pinto</h2>
-            <p>
-              Advogada inscrita na OAB/RN 22.940, com atuação voltada a demandas
-              previdenciárias, assistenciais, trabalhistas, licitações e contratos.
-            </p>
-            <p>
-              A primeira conversa busca entender o caso com linguagem clara, cuidado
-              com documentos e respeito ao momento de cada pessoa.
-            </p>
-            <OutlineButton href="/sobre">Me conhecer melhor</OutlineButton>
+            <Eyebrow>{page.sobreChapeu}</Eyebrow>
+            <h2 id="sobre-title">{page.sobreTitulo}</h2>
+            {listValues<any>(page.sobreParagrafos).map((item) => <p key={item.id || item.texto}>{item.texto}</p>)}
+            <OutlineButton href="/sobre">{page.sobreBotao}</OutlineButton>
           </div>
         </Container>
       </section>
 
       <section className="home-steps" id="como-funciona" aria-labelledby="steps-title">
         <Container>
-          <Eyebrow>Como funciona</Eyebrow>
-          <ProcessSteps items={homeSteps} title="Um atendimento em 3 passos" />
+          <Eyebrow>{page.processoChapeu}</Eyebrow>
+          <ProcessSteps items={homeSteps} title={page.processoTitulo} />
         </Container>
       </section>
 
@@ -162,11 +155,7 @@ export default async function HomePage() {
         </section>
       ) : null}
 
-      <CtaSection
-        eyebrow="Vamos conversar?"
-        title="Inicie pelo caminho mais simples."
-        text="O WhatsApp preserva o assunto escolhido e facilita a continuidade da conversa."
-      />
+      <CtaSection buttonLabel={page.cta?.botao} eyebrow={page.cta?.chapeu} title={page.cta?.titulo || ''} text={page.cta?.texto} />
     </div>
   )
 }

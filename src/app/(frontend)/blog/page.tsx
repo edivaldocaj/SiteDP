@@ -4,17 +4,23 @@ import React from 'react'
 
 import { BrandIcon } from '@/components/BrandIcons'
 import { Container, Eyebrow, PageHero, WhatsAppButton } from '@/components/Marketing'
-import { blogArticles } from '@/lib/blogContent'
-import { blogCategories } from '@/lib/marketingContent'
+import { getPublishedArticleCategories, getPublishedArticles } from '@/lib/blogContent'
 
 export const metadata: Metadata = {
   description: 'Conteúdos jurídicos claros e atualizados para informar e orientar.',
   title: 'Blog',
 }
 
-export default function BlogPage() {
-  const featured = blogArticles[0]
-  const recent = blogArticles.slice(1)
+type BlogPageProps = { searchParams: Promise<{ q?: string }> }
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const { q } = await searchParams
+  const [articles, blogCategories] = await Promise.all([
+    getPublishedArticles(q),
+    getPublishedArticleCategories(),
+  ])
+  const featured = articles[0]
+  const recent = articles.slice(1)
 
   return (
     <div className="site-shell blog-page">
@@ -65,10 +71,7 @@ export default function BlogPage() {
               <div className="empty-state">
                 <Eyebrow>Blog</Eyebrow>
                 <h2>Conteúdo em preparação.</h2>
-                <p>
-                  A página já está preparada para receber artigos reais, categorias,
-                  busca e artigos relacionados sem publicar conteúdo fictício.
-                </p>
+                  <p>Nenhum artigo publicado corresponde à busca.</p>
               </div>
             )}
 

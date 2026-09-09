@@ -4,20 +4,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
-import { areaSummaries } from '@/lib/marketingContent'
+import type { ContentCard } from '@/lib/siteContent'
 
 import { WhatsAppIcon } from './WhatsAppIcon'
 
-const navItems = [
-  { href: '/', label: 'Início' },
-  { href: '/sobre', label: 'Sobre' },
-  { href: '/areas-de-atuacao', label: 'Áreas de Atuação', withDropdown: true },
-  { href: '/#como-funciona', label: 'Como Funciona' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/contato', label: 'Contato' },
-]
+type HeaderProps = { areas?: ContentCard[]; logoAlt?: string; menu?: Array<{ link?: string | null; mostrarAreas?: boolean | null; rotulo?: string | null }>; whatsappLabel?: string }
 
-export function SiteHeader() {
+export function SiteHeader({ areas = [], logoAlt = '', menu = [], whatsappLabel = '' }: HeaderProps) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -25,7 +18,7 @@ export function SiteHeader() {
       <div className="header-inner">
         <Link className="brand" href="/" aria-label="Página inicial">
           <Image
-            alt="Deila Pinto Advocacia e Consultoria"
+            alt={logoAlt}
             height={64}
             priority
             src="/marca/dp-horizontal-claro.png"
@@ -51,29 +44,29 @@ export function SiteHeader() {
           className={open ? 'nav-open' : ''}
           id="site-navigation"
         >
-          {navItems.map((item) =>
-            item.withDropdown ? (
-              <div className="nav-dropdown" key={item.href}>
-                <Link href={item.href} onClick={() => setOpen(false)}>
-                  {item.label}
+          {menu.map((item) =>
+            item.mostrarAreas ? (
+              <div className="nav-dropdown" key={item.link}>
+                <Link href={item.link || '/'} onClick={() => setOpen(false)}>
+                  {item.rotulo}
                 </Link>
                 <div className="nav-dropdown-panel">
-                  {areaSummaries.map((area) => (
-                    <Link href={area.href} key={area.href} onClick={() => setOpen(false)}>
-                      {area.title}
+                  {areas.map((area) => (
+                    <Link href={area.link || '/areas-de-atuacao'} key={area.link || area.titulo} onClick={() => setOpen(false)}>
+                      {area.titulo}
                     </Link>
                   ))}
                 </div>
               </div>
             ) : (
-              <Link href={item.href} key={item.href} onClick={() => setOpen(false)}>
-                {item.label}
+              <Link href={item.link || '/'} key={item.link} onClick={() => setOpen(false)}>
+                {item.rotulo}
               </Link>
             ),
           )}
           <Link className="nav-action" href="/ir/whatsapp" onClick={() => setOpen(false)}>
             <WhatsAppIcon />
-            Fale no WhatsApp
+            {whatsappLabel}
           </Link>
         </nav>
       </div>

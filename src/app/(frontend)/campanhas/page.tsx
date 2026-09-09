@@ -3,7 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import React from 'react'
 
-import { getPublishedLandingCampaigns, type PublicCampaign } from '@/lib/campaigns'
+import { campaignCategoryLabel, getPublishedLandingCampaigns } from '@/lib/campaigns'
 import { getPublicText } from '@/lib/siteConfig'
 
 export const dynamic = 'force-dynamic'
@@ -12,12 +12,6 @@ export const metadata: Metadata = {
   description:
     'Campanhas de orientacao inicial sobre temas previdenciarios, assistenciais e trabalhistas.',
   title: 'Campanhas | Deila Pinto Advocacia',
-}
-
-function campaignArea(campaign: PublicCampaign) {
-  if (campaign.campaignCode === 'PREV-BPC') return 'Assistencial'
-  if (campaign.campaignCode.startsWith('TRAB-')) return 'Trabalhista'
-  return 'Previdenciário'
 }
 
 export default async function CampaignsPage() {
@@ -63,7 +57,7 @@ export default async function CampaignsPage() {
                 return (
                   <article className="campaign-card" key={campaign.id}>
                     <div className="campaign-card-meta">
-                      <span>{campaignArea(campaign)}</span>
+                      <span>{campaignCategoryLabel(campaign.categoria)}</span>
                       <small>Primeiro contato</small>
                     </div>
                     <h3>{titulo}</h3>

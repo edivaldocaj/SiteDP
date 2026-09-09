@@ -7,7 +7,7 @@ import { CampaignLeadForm } from '@/components/CampaignLeadForm'
 import { FraudWarning } from '@/components/FraudWarning'
 import { CampaignRichText } from '@/components/CampaignRichText'
 import { WhatsAppIcon } from '@/components/WhatsAppIcon'
-import { getPublishedCampaignBySlug, isPublicLandingCampaign } from '@/lib/campaigns'
+import { campaignCategoryLabel, getCampaignPresentation, getPublishedCampaignBySlug, isPublicLandingCampaign } from '@/lib/campaigns'
 import { getVideoEmbedUrl } from '@/lib/campaignVideo'
 import { richTextToPlainText } from '@/lib/richText'
 import { getPublicSiteConfig, getPublicText } from '@/lib/siteConfig'
@@ -22,12 +22,6 @@ function getMediaUrl(value: unknown) {
   if (!value || typeof value !== 'object') return null
   const media = value as { url?: string | null }
   return media.url || null
-}
-
-function campaignArea(campaignCode: string) {
-  if (campaignCode === 'PREV-BPC') return 'Assistencial'
-  if (campaignCode.startsWith('TRAB-')) return 'Trabalhista'
-  return 'Previdenciário'
 }
 
 function questionTypeLabel(type?: string | null) {
@@ -79,6 +73,7 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
   }
 
   const currentCampaign = campaign
+  const presentation = getCampaignPresentation(currentCampaign)
   const siteConfig = await getPublicSiteConfig()
   const titulo = getPublicText(currentCampaign.titulo)
   const subtitulo = getPublicText(currentCampaign.subtitulo)
@@ -87,6 +82,8 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
   const hasProva = getPublicText(richTextToPlainText(currentCampaign.blocoProva))
   const hasOrientacao = getPublicText(richTextToPlainText(currentCampaign.blocoOrientacao))
   const urgencyText = getPublicText(currentCampaign.textoUrgencia)
+  const fallbackMediaUrl = getMediaUrl(presentation.midiaFallback) || '/imagens/deila/deila-hero.webp'
+  const sealMediaUrl = getMediaUrl(presentation.seloMarca) || '/marca/dp-simbolo.png'
   const videoFileUrl = getMediaUrl(currentCampaign.videoFile)
   const videoEmbedUrl = getVideoEmbedUrl(currentCampaign.videoUrl)
   const faqItems = (currentCampaign.faq || [])
@@ -106,19 +103,19 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
     <div className="site-shell campaign-page">
       <section className="campaign-hero" aria-labelledby="campaign-title">
         <div className="campaign-copy">
-          <p className="eyebrow">{campaignArea(currentCampaign.campaignCode)} · Informação jurídica</p>
+          <p className="eyebrow">{campaignCategoryLabel(currentCampaign.categoria)} · Informação jurídica</p>
           {titulo ? <h1 id="campaign-title">{titulo}</h1> : null}
           {subtitulo ? <p>{subtitulo}</p> : null}
           <div className="campaign-hero-actions">
             <a className="button button-primary" href={whatsappHref}>
               <WhatsAppIcon />
-              Abrir WhatsApp
+              {presentation.ctaWhatsapp}
             </a>
             {showForm ? <a className="button button-secondary button-on-dark" href="#formulario">
-              Solicitar atendimento
+              {presentation.ctaFormulario}
             </a> : null}
           </div>
-          <p className="campaign-care-note">Uma conversa para entender sua necessidade. Cada caso passa por análise individual.</p>
+          <p className="campaign-care-note">{presentation.notaCuidado}</p>
         </div>
         {mediaUrl ? (
           <Image
@@ -136,13 +133,13 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
               className="campaign-fallback-photo"
               height={899}
               priority
-              src="/imagens/deila/deila-hero.webp"
+              src={fallbackMediaUrl}
               unoptimized
               width={989}
             />
             <div className="campaign-fallback-seal">
-              <Image alt="" height={72} src="/marca/dp-simbolo.png" unoptimized width={72} />
-              <span>{campaignArea(currentCampaign.campaignCode)}</span>
+              <Image alt="" height={72} src={sealMediaUrl} unoptimized width={72} />
+              <span>{campaignCategoryLabel(currentCampaign.categoria)}</span>
             </div>
           </div>
         )}
@@ -156,18 +153,7 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
       ) : null}
 
       <section className="campaign-intro-strip" aria-label="Como funciona o primeiro contato">
-        <div>
-          <strong>1</strong>
-          <span>Escolha como conversar</span>
-        </div>
-        <div>
-          <strong>2</strong>
-          <span>Conte apenas o essencial</span>
-        </div>
-        <div>
-          <strong>3</strong>
-          <span>Receba orientação da equipe</span>
-        </div>
+        {presentation.etapasContato.map((etapa, index) => <div key={`${etapa.titulo}-${index}`}><strong>{index + 1}</strong><span>{etapa.titulo}</span></div>)}
       </section>
 
       {hasDor || hasProva || hasOrientacao ? (
@@ -175,19 +161,19 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
           <div className="section-inner campaign-blocks">
             {hasDor ? (
               <article className="campaign-text-panel">
-                <h2>Entenda a situação</h2>
+                <h2>{presentation.blocoDorTitulo}</h2>
                 <CampaignRichText value={currentCampaign.blocoDor} />
               </article>
             ) : null}
             {hasProva ? (
               <article className="campaign-text-panel campaign-text-panel-accent">
-                <h2>O que ajuda na análise</h2>
+                <h2>{presentation.blocoProvaTitulo}</h2>
                 <CampaignRichText value={currentCampaign.blocoProva} />
               </article>
             ) : null}
             {hasOrientacao ? (
               <article className="campaign-text-panel campaign-text-panel-guidance">
-                <h2>Como podemos orientar</h2>
+                <h2>{presentation.blocoOrientacaoTitulo}</h2>
                 <CampaignRichText value={currentCampaign.blocoOrientacao} />
               </article>
             ) : null}
@@ -199,9 +185,9 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
         <section className="campaign-video-band" aria-labelledby="campaign-video-title">
           <div className="section-inner campaign-video-layout">
             <div>
-              <span className="eyebrow">Conteúdo da campanha</span>
-              <h2 id="campaign-video-title">Uma explicação rápida para começar</h2>
-              <p>Veja a explicação e anote suas dúvidas para conversar com a equipe.</p>
+              <span className="eyebrow">{presentation.videoEyebrow}</span>
+              <h2 id="campaign-video-title">{presentation.videoTitulo}</h2>
+              <p>{presentation.videoDescricao}</p>
             </div>
             <div className="campaign-video-frame">
               {!videoFileUrl && videoEmbedUrl ? (
@@ -227,9 +213,9 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
         <section className="campaign-faq-band" aria-labelledby="campaign-faq-title">
           <div className="section-inner campaign-faq-layout">
             <div>
-              <span className="eyebrow">Dúvidas comuns</span>
-              <h2 id="campaign-faq-title">Perguntas frequentes</h2>
-              <p>As respostas são gerais. A análise do seu caso depende das informações e documentos apresentados.</p>
+              <span className="eyebrow">{presentation.faqEyebrow}</span>
+              <h2 id="campaign-faq-title">{presentation.faqTitulo}</h2>
+              <p>{presentation.faqDescricao}</p>
             </div>
             <div className="campaign-faq-list">
               {faqItems.map((item, index) => (
@@ -255,8 +241,8 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
           ) : (
             <article className="campaign-contact-card">
               <span>Primeiro contato</span>
-              <h2>Conte o que aconteceu pelo WhatsApp</h2>
-              <p>Informe apenas o essencial para a primeira conversa. A equipe orientará os próximos passos.</p>
+              <h2>{presentation.formularioTituloWhatsapp}</h2>
+              <p>{presentation.formularioTextoWhatsapp}</p>
               <a className="button button-gold" href={whatsappHref}>
                 <WhatsAppIcon />
                 Conversar com a equipe
@@ -266,8 +252,8 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
           <div className="landing-side" id="perguntas">
             {qualificationQuestions.length ? (
               <article className="question-preview">
-                <span>Triagem inicial</span>
-                <h2>Perguntas desta campanha</h2>
+                <span>{presentation.triagemEyebrow}</span>
+                <h2>{presentation.triagemTitulo}</h2>
                 <ol>
                   {qualificationQuestions.map((question, index) => (
                     <li key={question.id || `${question.pergunta}-${index}`}>
@@ -279,15 +265,15 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
               </article>
             ) : (
               <article className="question-preview">
-                <span>Triagem inicial</span>
-                <h2>Comece pelo WhatsApp</h2>
-                <p>O atendimento fará as perguntas necessárias conforme o relato enviado.</p>
+                <span>{presentation.triagemEyebrow}</span>
+                <h2>{presentation.triagemVaziaTitulo}</h2>
+                <p>{presentation.triagemVaziaTexto}</p>
               </article>
             )}
             {showForm ? (
               <a className="button button-gold" href={whatsappHref}>
                 <WhatsAppIcon />
-                Conversar com a equipe
+                {presentation.ctaWhatsapp}
               </a>
             ) : null}
             <FraudWarning />
