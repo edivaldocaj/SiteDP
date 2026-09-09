@@ -12,7 +12,6 @@ const migrationsDir = path.resolve(dirname, '../src/migrations')
 const dryRun = process.argv.includes('--dry-run')
 const shouldSeedCampaigns = process.env.SEED_CAMPAIGNS_ON_START !== 'false'
 const shouldSeedSiteTexts = process.env.SEED_SITE_TEXTS_ON_START !== 'false'
-const shouldSeedSiteContent = process.env.SEED_SITE_CONTENT_ON_START !== 'false'
 
 function fail(message) {
   console.error(message)
@@ -244,15 +243,6 @@ async function seedSiteTexts(client) {
   }
 }
 
-async function seedSiteContent(client) {
-  if (!shouldSeedSiteContent) return
-  const result = await client.query("select coalesce(data, '{}'::jsonb) as data from site_content limit 1")
-  if (!result.rows.length || result.rows[0].data?.seed_aplicado === true) return
-  const baseline = JSON.parse(await fs.readFile(path.join(dirname, 'site-content-baseline.json'), 'utf8'))
-  // Payload stores the global root as a single row; update only the empty baseline.
-  await client.query('update site_content set seed_aplicado = true, updated_at = now()')
-  console.log('SiteContent schema presente; baseline marcado para edição pelo CMS')
-}
 
 async function run() {
   const connectionString = assertExpectedDatabase()
@@ -312,7 +302,6 @@ async function run() {
     if (shouldSeedSiteTexts) {
       await seedSiteTexts(client)
     }
-    await seedSiteContent(client)
   } finally {
     await client.query('select pg_advisory_unlock(26090801)')
     client.release()
