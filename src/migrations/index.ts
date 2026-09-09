@@ -6,6 +6,7 @@ import * as migration_20260909_020022 from './20260909_020022';
 import * as migration_20260909_030000_site_content_baseline from './20260909_030000_site_content_baseline';
 
 export const migrations = [
+  { up: migration_20260909_040500_site_content_arrays.up, down: migration_20260909_040500_site_content_arrays.down, name: '20260909_040500_site_content_arrays' },
   {
     up: migration_20260824_201158_inicial_site_dp.up,
     down: migration_20260824_201158_inicial_site_dp.down,
@@ -39,5 +40,9 @@ export const migrations = [
 ];
 
 
+
+
+
+import * as migration_20260909_040500_site_content_arrays from './20260909_040500_site_content_arrays';
 
 
