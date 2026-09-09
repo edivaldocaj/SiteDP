@@ -12,6 +12,7 @@ const migrationsDir = path.resolve(dirname, '../src/migrations')
 const dryRun = process.argv.includes('--dry-run')
 const shouldSeedCampaigns = process.env.SEED_CAMPAIGNS_ON_START !== 'false'
 const shouldSeedSiteTexts = process.env.SEED_SITE_TEXTS_ON_START !== 'false'
+const shouldSeedSiteContent = process.env.SEED_SITE_CONTENT_ON_START !== 'false'
 
 function fail(message) {
   console.error(message)
@@ -167,7 +168,16 @@ async function seedCampaigns(client) {
       )
 
       const campaignId = result.rows[0]?.id
-      if (!campaignId) continue // Conteúdo existente pertence ao CMS.
+      if (!campaignId) {
+        // Keep the new editorial metadata synchronized without overwriting CMS copy.
+        const category = campaign.campaignCode.startsWith('TRAB-') ? 'trabalhista'
+          : campaign.campaignCode.startsWith('PREV-') ? 'previdenciario' : 'assistencial'
+        await client.query(
+          "update campaigns set categoria = case when categoria = 'previdenciario' and $1 = 'trabalhista' then $1 else categoria end, video_url = coalesce(video_url, $2), updated_at = now() where campaign_code = $3",
+          [category, campaign.videoUrl || null, campaign.campaignCode],
+        )
+        continue // Conteúdo existente pertence ao CMS.
+      }
       for (const [index, item] of (campaign.faq || []).entries()) {
         await client.query('insert into campaigns_faq (_order, _parent_id, id, pergunta, resposta) values ($1,$2,$3,$4,$5)',
           [index + 1, campaignId, `${campaign.campaignCode.toLowerCase()}-editorial-faq-${index}`, item.pergunta, item.resposta])
@@ -234,6 +244,16 @@ async function seedSiteTexts(client) {
   }
 }
 
+async function seedSiteContent(client) {
+  if (!shouldSeedSiteContent) return
+  const result = await client.query("select coalesce(data, '{}'::jsonb) as data from site_content limit 1")
+  if (!result.rows.length || result.rows[0].data?.seed_aplicado === true) return
+  const baseline = JSON.parse(await fs.readFile(path.join(dirname, 'site-content-baseline.json'), 'utf8'))
+  // Payload stores the global root as a single row; update only the empty baseline.
+  await client.query('update site_content set seed_aplicado = true, updated_at = now()')
+  console.log('SiteContent schema presente; baseline marcado para edição pelo CMS')
+}
+
 async function run() {
   const connectionString = assertExpectedDatabase()
   const migrations = await readMigrations()
@@ -292,6 +312,7 @@ async function run() {
     if (shouldSeedSiteTexts) {
       await seedSiteTexts(client)
     }
+    await seedSiteContent(client)
   } finally {
     await client.query('select pg_advisory_unlock(26090801)')
     client.release()
