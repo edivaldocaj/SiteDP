@@ -298,6 +298,15 @@ export const legacyCampaigns = [
   },
 ]
 
+export const campaignVideoUrls = {
+  'PREV-BPC': 'https://www.youtube.com/watch?v=vqGzq2EZmaY',
+  'PREV-RURAL': 'https://www.youtube.com/watch?v=FxGR4oB99Cg',
+  'PREV-PENSAO': 'https://www.youtube.com/watch?v=V1g5Gk2y1hw',
+  'PREV-MATERNIDADE': 'https://www.youtube.com/watch?v=VEJzJxJNQ94',
+  'TRAB-RESCISAO': 'https://www.youtube.com/watch?v=Zpl50swu_Tc',
+  'TRAB-HORAS': 'https://www.youtube.com/watch?v=Zpl50swu_Tc',
+}
+
 export const campaigns = legacyCampaigns.map((campaign) => ({
   ...campaign,
   ...editorialCopy[campaign.campaignCode],
@@ -310,6 +319,7 @@ export const campaigns = legacyCampaigns.map((campaign) => ({
       descricao: editorialCopy[campaign.campaignCode].subtitulo,
     },
   } : {}),
+  ...(campaignVideoUrls[campaign.campaignCode] ? { videoUrl: campaignVideoUrls[campaign.campaignCode] } : {}),
 }))
 
 export function richTextFromText(text) {
