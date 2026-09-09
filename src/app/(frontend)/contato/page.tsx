@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import React from 'react'
 
 import { BrandIcon } from '@/components/BrandIcons'
@@ -53,6 +54,9 @@ export default async function ContactPage() {
             <p>{page.heroTexto}</p>
             <div className="actions">
               <WhatsAppButton href="/ir/whatsapp?o=contato">{content?.compartilhados?.whatsappBotao}</WhatsAppButton>
+              <Link className="button button-primary" href="/agendar">
+                Solicitar horário
+              </Link>
               <span className="hero-note">{page.heroNota}</span>
             </div>
           </div>

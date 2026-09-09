@@ -28,6 +28,9 @@ export default async function CampaignsPage() {
               Escolha um tema, veja as informações iniciais e decida se quer continuar
               pelo formulário ou pelo WhatsApp.
             </p>
+            <Link className="button button-primary" href="/agendar">
+              Solicitar horário de atendimento
+            </Link>
           </div>
           <div className="listing-hero-mark" aria-hidden="true">
             <Image alt="" height={360} priority src="/marca/dp-simbolo.png" unoptimized width={360} />
