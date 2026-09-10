@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { getStoredUtm } from '@/lib/integration/clientUtm'
 
 type ContactFormProps = {
@@ -25,7 +26,12 @@ const initialForm: FormState = {
 }
 
 export function ContactForm({ consentimentoTexto, consentimentoVersao }: ContactFormProps) {
-  const [form, setForm] = useState(initialForm)
+  const searchParams = useSearchParams()
+  const horarioParam = searchParams.get('horario')
+  const horarioPreferido = horarioParam && !Number.isNaN(new Date(horarioParam).getTime())
+    ? new Intl.DateTimeFormat('pt-BR', { dateStyle: 'full', timeStyle: 'short', timeZone: 'America/Sao_Paulo' }).format(new Date(horarioParam))
+    : null
+  const [form, setForm] = useState(() => ({ ...initialForm, mensagem: horarioPreferido ? `Preferência de horário: ${horarioPreferido}.\n\n` : '' }))
   const [website, setWebsite] = useState('')
   const [formularioIniciadoEm] = useState(() => new Date().toISOString())
   const [idempotencia] = useState(() => crypto.randomUUID())
