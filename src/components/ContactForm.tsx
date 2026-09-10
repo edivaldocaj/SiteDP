@@ -32,7 +32,6 @@ export function ContactForm({ consentimentoTexto, consentimentoVersao }: Contact
     ? new Intl.DateTimeFormat('pt-BR', { dateStyle: 'full', timeStyle: 'short', timeZone: 'America/Sao_Paulo' }).format(new Date(horarioParam))
     : null
   const [form, setForm] = useState(() => ({ ...initialForm, mensagem: horarioPreferido ? `Preferência de horário: ${horarioPreferido}.\n\n` : '' }))
-  const [website, setWebsite] = useState('')
   const [formularioIniciadoEm] = useState(() => new Date().toISOString())
   const [idempotencia] = useState(() => crypto.randomUUID())
   const [consentAceito, setConsentAceito] = useState(false)
@@ -58,7 +57,6 @@ export function ContactForm({ consentimentoTexto, consentimentoVersao }: Contact
         consentEm: new Date().toISOString(),
         consentVersao: consentimentoVersao || 'contato-v1',
         email: form.email || undefined,
-        website,
         formularioIniciadoEm,
         idempotencia,
         nome: form.nome,
@@ -107,9 +105,7 @@ export function ContactForm({ consentimentoTexto, consentimentoVersao }: Contact
         className="honeypot"
         aria-hidden="true"
         name="website"
-        onChange={(event) => setWebsite(event.target.value)}
         tabIndex={-1}
-        value={website}
       />
       <div className="contact-form-grid">
         <label>
