@@ -11,6 +11,8 @@
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
+    "preflight:production": "node scripts/production-preflight.cjs",
+    "release:check": "node scripts/release-check.cjs",
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:status": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:status",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",

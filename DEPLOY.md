@@ -133,3 +133,29 @@ pnpm seed:site-textos
 
 Os textos de campanha sao provisiorios de teste e devem ser revisados antes de
 trafego publico.
+
+## Preflight, smoke e rollback
+
+Antes de qualquer publicacao, execute no diretorio do projeto:
+
+```bash
+npm run release:check
+```
+
+O comando interrompe antes do build se `DATABASE_URL`, `PAYLOAD_SECRET` ou
+`NEXT_PUBLIC_SITE_URL` estiverem ausentes ou invalidos. Com o ambiente pronto,
+valide somente leitura:
+
+```bash
+curl -fsS "$NEXT_PUBLIC_SITE_URL/api/live"
+curl -fsS "$NEXT_PUBLIC_SITE_URL/api/health"
+curl -fsSI "$NEXT_PUBLIC_SITE_URL/"
+curl -fsSI "$NEXT_PUBLIC_SITE_URL/robots.txt"
+curl -fsSI "$NEXT_PUBLIC_SITE_URL/sitemap.xml"
+```
+
+Publique primeiro o DP em homologacao, confirme as rotas e a campanha piloto,
+e so entao avance para producao. Registre commit, content version, data e
+resultado do smoke. Em regressao, reverta para a imagem/commit anterior do
+servico e repita `api/live`, `api/health` e as paginas-chave. Nao use reset,
+limpeza generica ou seed demo como mecanismo de rollback.

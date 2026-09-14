@@ -19,27 +19,20 @@ type LeadRecord = {
   nome?: string | null
   tentativas?: number | null
 }
+const activeDeliveries = new Set<string>()
 
 export function getNextStatus(tentativas: number, retryable: boolean) {
   if (!retryable) return 'entregue'
   return tentativas >= RETRY_DELAYS_MS.length ? 'falha' : 'pendente'
 }
 
-export function scheduleLeadDelivery(record: LeadRecord, delayOverride?: number) {
-  const tentativaAtual = record.tentativas || 0
-  const delay = delayOverride ?? RETRY_DELAYS_MS[Math.min(tentativaAtual, RETRY_DELAYS_MS.length - 1)]
-
-  setTimeout(() => {
-    void deliverLead(record.id)
-  }, delay)
-}
-
 export async function deliverLead(id: string | number) {
-  const payload = (await getPayloadClient()) as unknown as UntypedPayload
-  const record = await payload.findByID({
-    collection: 'lead-submissions',
-    id,
-  })
+  const lockKey = String(id)
+  if (activeDeliveries.has(lockKey)) return
+  activeDeliveries.add(lockKey)
+  try {
+    const payload = (await getPayloadClient()) as unknown as UntypedPayload
+    const record = await payload.findByID({ collection: 'lead-submissions', id })
 
   if (
     !record ||
@@ -49,8 +42,8 @@ export async function deliverLead(id: string | number) {
     !record.consentAceito ||
     !record.nome
   ) {
-    return
-  }
+      return
+    }
 
   const tentativas = (record.tentativas || 0) + 1
   const result = await sendLeadToN8n(record).catch((error: unknown) => ({
@@ -73,7 +66,8 @@ export async function deliverLead(id: string | number) {
     overrideAccess: true,
   })
 
-  if (status === 'pendente') {
-    scheduleLeadDelivery({ id, tentativas })
+    // Redrive autenticado retoma pendências após falha ou reinício do processo.
+  } finally {
+    activeDeliveries.delete(lockKey)
   }
 }

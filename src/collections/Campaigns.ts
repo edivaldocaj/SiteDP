@@ -420,5 +420,21 @@ export const Campaigns: CollectionConfig = {
       ],
       required: true,
     },
+    {
+      name: 'publicationChecklist',
+      type: 'group',
+      label: 'Checklist de publicação',
+      access: { read: ({ req }: { req: { user?: unknown } }) => Boolean(req.user) },
+      admin: { description: 'Confirmações internas editoriais; não representam resultado comercial.' },
+      fields: [
+        { name: 'contentReviewed', type: 'checkbox', label: 'Conteúdo específico revisado' },
+        { name: 'identityReviewed', type: 'checkbox', label: 'Identidade do escritório conferida' },
+        { name: 'ctaTested', type: 'checkbox', label: 'CTA e formulário testados' },
+        { name: 'seoReviewed', type: 'checkbox', label: 'SEO e mídia conferidos' },
+        { name: 'noDemoContent', type: 'checkbox', label: 'Sem conteúdo demonstrativo' },
+        { name: 'reviewedAt', type: 'date', label: 'Revisado em' },
+        { name: 'reviewer', type: 'text', label: 'Revisor responsável' },
+      ],
+    },
   ],
 }
