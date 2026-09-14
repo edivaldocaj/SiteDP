@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 
 if (fs.existsSync('.env')) dotenv.config({ path: '.env' })
 
-const required = ['DATABASE_URL', 'PAYLOAD_SECRET', 'NEXT_PUBLIC_SITE_URL']
+const required = ['DATABASE_URI', 'PAYLOAD_SECRET', 'NEXT_PUBLIC_SITE_URL']
 const recommended = ['CRON_SECRET', 'REVALIDATE_SECRET', 'NEXT_PUBLIC_WHATSAPP_NUMBER']
 let hasError = false
 

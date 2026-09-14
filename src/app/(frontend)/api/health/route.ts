@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
-const requiredEnv = ['DATABASE_URL', 'PAYLOAD_SECRET', 'NEXT_PUBLIC_SITE_URL'] as const
+const requiredEnv = ['DATABASE_URI', 'PAYLOAD_SECRET', 'NEXT_PUBLIC_SITE_URL'] as const
 
 function envStatus() {
   return requiredEnv.map((name) => ({ name, configured: Boolean(process.env[name]) }))

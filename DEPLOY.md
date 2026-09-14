@@ -142,7 +142,7 @@ Antes de qualquer publicacao, execute no diretorio do projeto:
 npm run release:check
 ```
 
-O comando interrompe antes do build se `DATABASE_URL`, `PAYLOAD_SECRET` ou
+O comando interrompe antes do build se `DATABASE_URI`, `PAYLOAD_SECRET` ou
 `NEXT_PUBLIC_SITE_URL` estiverem ausentes ou invalidos. Com o ambiente pronto,
 valide somente leitura:
 
