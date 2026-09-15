@@ -12,10 +12,10 @@ export const metadata: Metadata = {
 
 async function horariosLivres() {
   try {
-    const response = await fetch('https://n8n.cavalcantealbuquerque.com.br/webhook/disponibilidade-dp', { next: { revalidate: 300 } })
+    const response = await fetch('https://n8n.cavalcantealbuquerque.com.br/webhook/disponibilidade-dp', { cache: 'no-store' })
     const data = await response.json()
     const horarios = Array.isArray(data) ? data : data?.horarios
-    return Array.isArray(horarios) ? horarios.slice(0, 9) : []
+    return Array.isArray(horarios) ? horarios : []
   } catch { return [] }
 }
 
