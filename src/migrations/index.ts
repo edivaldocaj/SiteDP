@@ -5,6 +5,7 @@ import * as migration_20260908_100000_conteudo_editorial from './20260908_100000
 import * as migration_20260909_020022 from './20260909_020022';
 import * as migration_20260909_030000_site_content_baseline from './20260909_030000_site_content_baseline';
 import * as migration_20260909_121000_replace_site_content_placeholders from './20260909_121000_replace_site_content_placeholders';
+import * as migration_20260914_160000_fix_home_hero_duplicate from './20260914_160000_fix_home_hero_duplicate';
 import * as migration_20260914_200000_add_campaign_publication_checklist from './20260914_200000_add_campaign_publication_checklist';
 import * as migration_20260915_023000_sec_rbac from './20260915_023000_sec_rbac';
 import * as migration_20260915_024000_primeiro_relato_campanhas from './20260915_024000_primeiro_relato_campanhas';
@@ -45,6 +46,11 @@ export const migrations = [
     up: migration_20260909_121000_replace_site_content_placeholders.up,
     down: migration_20260909_121000_replace_site_content_placeholders.down,
     name: '20260909_121000_replace_site_content_placeholders',
+  },
+  {
+    up: migration_20260914_160000_fix_home_hero_duplicate.up,
+    down: migration_20260914_160000_fix_home_hero_duplicate.down,
+    name: '20260914_160000_fix_home_hero_duplicate',
   },
   {
     up: migration_20260914_200000_add_campaign_publication_checklist.up,

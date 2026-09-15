@@ -12,7 +12,6 @@ import {
   SectionHeading,
   WhatsAppButton,
 } from '@/components/Marketing'
-import { BrandIcon } from '@/components/BrandIcons'
 import { getPublishedLandingCampaigns, type PublicCampaign } from '@/lib/campaigns'
 import { getSiteContent, iconName, listValues, mediaURL } from '@/lib/siteContent'
 import { getPublicText } from '@/lib/siteConfig'
@@ -71,29 +70,6 @@ export default async function HomePage() {
         <Container>
           <SectionHeading eyebrow={page.areasChapeu} title={page.areasTitulo} />
           <AreaCards areas={areaSummaries} />
-        </Container>
-      </section>
-
-      <section className="home-area-banners" aria-labelledby="area-banners-title">
-        <Container>
-          <div className="section-title section-title-left">
-            <Eyebrow>{page.bannersChapeu}</Eyebrow>
-            <h2 id="area-banners-title">{page.bannersTitulo}</h2>
-          </div>
-          <div className="area-banner-grid">
-            {areaSummaries.map((area, index) => (
-              <Link
-                className={`area-banner-card ${index % 2 === 0 ? 'area-banner-card-dark' : ''}`}
-                href={area.href}
-                key={area.href}
-              >
-                <span>{area.shortTitle}</span>
-                <h3>{area.title}</h3>
-                <p>{area.description}</p>
-                <BrandIcon name={area.icon} />
-              </Link>
-            ))}
-          </div>
         </Container>
       </section>
 
