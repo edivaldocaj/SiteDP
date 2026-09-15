@@ -57,7 +57,10 @@ export function CampaignLeadForm({
     }
   })
 
-  const visibleQuestions = useMemo(() => perguntas.slice(0, 4), [perguntas])
+  // A landing page captures only the initial account. Further qualification is
+  // contextual and happens in the assisted conversation, where prior answers
+  // can be preserved instead of repeating a rigid questionnaire.
+  const visibleQuestions = useMemo(() => perguntas.slice(0, 1), [perguntas])
   const totalSteps = visibleQuestions.length ? 4 : 3
 
   useEffect(() => {
@@ -173,7 +176,7 @@ export function CampaignLeadForm({
       {step === 1 && (
         <div className="form-step">
           <p className="form-step-lead">
-            Comece pelo telefone. Depois aparecem as perguntas da campanha.
+            Comece pelo telefone. Em seguida, conte brevemente o que está acontecendo.
           </p>
           <label htmlFor="telefone">Telefone</label>
           <input
@@ -221,7 +224,7 @@ export function CampaignLeadForm({
 
       {step === 3 && (
         <div className="form-step">
-          <p className="form-step-lead">Responda as perguntas abaixo com calma.</p>
+          <p className="form-step-lead">Conte apenas o essencial para a primeira conversa.</p>
           {visibleQuestions.map((question, index) => (
             <label className="question-field" key={question.id || `${question.pergunta}-${index}`}>
               <span>{question.pergunta}</span>

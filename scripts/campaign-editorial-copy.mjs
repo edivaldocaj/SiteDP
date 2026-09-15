@@ -1,7 +1,7 @@
 // Conteúdo inicial: depois da migração, a edição pertence ao CMS.
 export const editorialQuestions = {
-  'PREV-BPC': ['O benefício seria para você ou outra pessoa da família?', 'Qual é a idade dessa pessoa?', 'Ela tem alguma doença ou deficiência? Qual?', 'Quantas pessoas moram na mesma casa, contando com ela?'],
-  'PREV-RURAL': ['Qual é a sua idade?', 'Por quantos anos trabalhou na roça, aproximadamente?', 'Tem algum documento antigo desse trabalho?', 'Já fez algum pedido ao INSS?'],
+  'PREV-BPC': ['Conte brevemente qual é sua dúvida sobre o BPC ou o que está acontecendo.'],
+  'PREV-RURAL': ['Conte brevemente sua dúvida sobre aposentadoria rural ou sua história de trabalho.'],
   'PREV-INCAPACIDADE': ['Qual problema de saúde está impedindo o trabalho?', 'Desde quando está assim?', 'Está trabalhando agora ou precisou parar?', 'Já passou por perícia ou tem uma marcada?'],
   'TRAB-RESCISAO': ['Quando você saiu da empresa?', 'Qual era o nome da empresa?', 'A carteira era assinada?', 'Recebeu algum acerto? Qual valor aproximado?'],
   'PREV-PENSAO': ['Quando a pessoa faleceu?', 'Qual era seu parentesco com ela?', 'Ela recebia benefício ou estava trabalhando?', 'Já pediu a pensão ao INSS?'],
