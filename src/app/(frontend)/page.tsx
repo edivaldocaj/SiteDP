@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import type { Metadata } from 'next'
 
 import {
   AreaCards,
@@ -19,6 +20,10 @@ import { getPublicText } from '@/lib/siteConfig'
 import './styles.css'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 function campaignArea(campaign: PublicCampaign) {
   if (campaign.campaignCode === 'PREV-BPC') return 'Assistencial'

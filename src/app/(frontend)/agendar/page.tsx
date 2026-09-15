@@ -8,6 +8,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   description: 'Envie sua preferência de horário para atendimento com Deila Pinto Advocacia e Consultoria.',
   title: 'Solicitar horário',
+  alternates: { canonical: '/agendar' },
 }
 
 async function horariosLivres() {
