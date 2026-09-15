@@ -6,6 +6,7 @@ import * as migration_20260909_020022 from './20260909_020022';
 import * as migration_20260909_030000_site_content_baseline from './20260909_030000_site_content_baseline';
 import * as migration_20260909_121000_replace_site_content_placeholders from './20260909_121000_replace_site_content_placeholders';
 import * as migration_20260914_200000_add_campaign_publication_checklist from './20260914_200000_add_campaign_publication_checklist';
+import * as migration_20260915_023000_sec_rbac from './20260915_023000_sec_rbac';
 
 export const migrations = [
   { up: migration_20260909_040500_site_content_arrays.up, down: migration_20260909_040500_site_content_arrays.down, name: '20260909_040500_site_content_arrays' },
@@ -48,6 +49,11 @@ export const migrations = [
     up: migration_20260914_200000_add_campaign_publication_checklist.up,
     down: migration_20260914_200000_add_campaign_publication_checklist.down,
     name: '20260914_200000_add_campaign_publication_checklist',
+  },
+  {
+    up: migration_20260915_023000_sec_rbac.up,
+    down: migration_20260915_023000_sec_rbac.down,
+    name: '20260915_023000_sec_rbac',
   },
 ];
 

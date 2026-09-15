@@ -1,8 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { CAMPAIGN_CODE_REGEX } from '../lib/integration/constants'
-
-const adminOnly = ({ req }: { req: { user?: unknown } }) => Boolean(req.user)
+import { adminOnly } from '../access'
 
 export const LeadSubmissions: CollectionConfig = {
   slug: 'lead-submissions',
