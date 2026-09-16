@@ -9,6 +9,7 @@ import { getPublicText } from '@/lib/siteConfig'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/campanhas' },
   description:
     'Campanhas de orientacao inicial sobre temas previdenciarios, assistenciais e trabalhistas.',
   title: 'Campanhas | Deila Pinto Advocacia',
